@@ -2,6 +2,11 @@
 
 Just a collection of hacks to make rendering in Foundry VTT more performant.
 
+Going from\
+![before - 55 fps](img/before.png)\
+to\
+ ![after - 110 fps](img/after.png)
+
 ## DISCLAIMER
 
 This should be save and has been tested to the best of my ability. BUT foundry might just switch around stuff in future updates that makes these hacks obsolete (which would be the best case) or just breaks the module.
