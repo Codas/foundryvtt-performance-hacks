@@ -2,6 +2,20 @@
 
 Just a collection of hacks to make rendering in Foundry VTT more performant.
 
+## DISCLAIMER
+
+This should be save and has been tested to the best of my ability. BUT foundry might just switch around stuff in future updates that makes these hacks obsolete (which would be the best case) or just breaks the module.
+
+Please use this module on your own risk and if you notice visual glitches (names, ressource bars not working or other token-related stuff) please let me know and jsut disable the module.
+
+This module never saves anything to tokens, so a simple reload with the module disabled should in theroy fix everything :)
+
+## Expected performance gains
+
+The exact value or increase in performance is very difficult to estimate! All it really does is greatly reduce or even elimate the overhead each token has on the performance in a scene. With >20 tokens, each wich certain effect, nameplates visible etc, the improvement might very well be a doubling in framerate. In other very complex scenes with only 4-5 tokens and without token UI elements visible, the performance improvement might not even be noticable.
+
+My observation so far was: Performance improved (soometimes greatly) where needed and was good enough anyway otherwise.
+
 ## Settings
 
 This module provides some individual settings to activate certain hacks that aim to improve performance by optimizing the token drawing pipeline in Foundry.
@@ -94,7 +108,7 @@ and the complete UI, which is then "just" set atop the background layer.
 It turns out, the main bottleneck is an eras step in which after a token UI is drawn, parts of it can be erased by an overlapping token. For example, the kobold UI in the top left is almost completely by the dragon wing.
 ![alt text](img/default-foundry/10-dragon-token-ui.webp)
 
-But this step is done for every token, brakes batching in the rendering pipeline (switch from paint to erase or back is always a separate step) and most of the token simply arent covered by any token!
+But this step is done for every token, brakes batching in the rendering pipeline (switch from paint to erase or back is always a separate step) and most of the UI elements simply arent covered by any tokens!
 
 #### Batching erase calls
 
