@@ -53,7 +53,6 @@ export default defineConfig(({ command: _buildOrServe }) => ({
 	},
 
 	plugins: [
-		checker({ typescript: true }),
 		tsconfigPaths(),
 		resolve({
 			browser: true,
