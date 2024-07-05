@@ -1,0 +1,44 @@
+{
+	"id": "fvtt-perf-optim",
+	"title": "FVTT Performance Hacks",
+	"version": "0.1.0",
+	"description": "Provides a collection of unofficial performance optimizations and hacks for foundry vtt.",
+	"esmodules": ["dist/fvtt-perf-optim.js"],
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "lang/en.json",
+			"flags": {}
+		}
+	],
+	"compatibility": {
+		"minimum": "12.324",
+		"verified": "12.324",
+		"maximum": "12"
+	},
+	"relationships": {
+		"requires": [],
+		"systems": [
+			{
+				"id": "pf2e",
+				"type": "system",
+				"compatibility": {
+					"minimum": "6.0.1"
+				}
+			}
+		]
+	},
+	"authors": [
+		{
+			"name": "Codas",
+			"discord": "Codas"
+		}
+	],
+	"url": "https://github.com/Codas/foundryvtt-performance-hacks",
+	"bugs": "https://github.com/Codas/foundryvtt-performance-hacks/issues",
+	"readme": "https://github.com/Codas/foundryvtt-performance-hacks/blob/main/README.md",
+	"changelog": "https://github.com/Codas/foundryvtt-performance-hacks/blob/main/CHANGELOG.md",
+	"manifest": "https://raw.githubusercontent.com/Codas/foundryvtt-performance-hacks/main/module.json",
+	"download": "https://github.com/Codas/foundryvtt-performance-hacks/archive/refs/heads/main.zip"
+}

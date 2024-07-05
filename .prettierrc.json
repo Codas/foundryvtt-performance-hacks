@@ -1,0 +1,29 @@
+{
+	"printWidth": 120,
+	"tabWidth": 2,
+	"useTabs": true,
+	"singleQuote": true,
+	"overrides": [
+		{
+			"files": ["*.scss", "*.css"],
+			"options": {
+				"requirePragma": false,
+				"parser": "scss"
+			}
+		},
+		{
+			"files": ["*.yml"],
+			"options": {
+				"tabWidth": 2
+			}
+		},
+		{
+			"files": "*.html",
+			"options": {
+				"requirePragma": false,
+				"parser": "html",
+				"htmlWhitespaceSensitivity": "ignore"
+			}
+		}
+	]
+}

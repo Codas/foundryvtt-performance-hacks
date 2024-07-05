@@ -1,0 +1,2 @@
+packs/** binary
+*.lockb binary diff=lockb
