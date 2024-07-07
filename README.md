@@ -104,13 +104,13 @@ Why the canvas is erased becomes clear when the next token, the dragon is drawn:
 ![alt text](img/default-foundry/10-dragon-token-ui.webp)
 
 and the complete UI, which is then "just" set atop the background layer.
-![alt text](img/default-foundry/13-complete-ui.png)
+![alt text](img/default-foundry/13-complete-ui.webp)
 
 </details>
 
 ### The problem
 
-It turns out, the main bottleneck is an eras step in which after a token UI is drawn, parts of it can be erased by an overlapping token. For example, the kobold UI in the top left is almost completely by the dragon wing.
+It turns out, the main bottleneck is an erase step in which after a token UI is drawn, parts of it can be erased by an overlapping token. For example, the kobold UI in the top left is almost completely covered by the dragon wing.
 ![alt text](img/default-foundry/10-dragon-token-ui.webp)
 
 But this step is done for every token, brakes batching in the rendering pipeline (switch from paint to erase or back is always a separate step) and most of the UI elements simply arent covered by any tokens!

@@ -1,4 +1,4 @@
-import { getSetting, SETTINGS } from 'src/settings.ts';
+import { SETTINGS, getSetting } from 'src/settings.ts';
 import { wrapFunction, wrapFunctionManual } from 'src/utils.ts';
 
 function getOverdrawTokens(): Set<PrimarySpriteMesh> {
@@ -12,9 +12,6 @@ function getOverdrawTokens(): Set<PrimarySpriteMesh> {
 				const collidingToken = data.t.object;
 				if (!(data.t instanceof PrimarySpriteMesh) || !(collidingToken instanceof Token) || data.t.object === token) {
 					return false;
-				}
-				if (token?.name === 'Zombie Shambler (1)') {
-					debugger;
 				}
 				return (
 					token.document.elevation <= collidingToken.document.elevation &&
@@ -36,7 +33,7 @@ function getOverdrawTokens(): Set<PrimarySpriteMesh> {
 			return;
 		}
 		token.children.forEach((interfaceObject) => {
-			const ilb: PIXI.Rectangle = (interfaceObject as any)._localBoundsRect ?? interfaceObject.getLocalBounds();
+			const ilb: PIXI.Rectangle = (interfaceObject as any)._localBoundsRect ?? interfaceObject?.getLocalBounds();
 			if (
 				ilb == null ||
 				auras.includes(interfaceObject) ||
