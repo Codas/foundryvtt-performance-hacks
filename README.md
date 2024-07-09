@@ -118,12 +118,14 @@ It turns out, the main bottleneck is an erase step in which after a token UI is 
 3. draw other UI elements.
 
 The result after the goblin and dragon have been drawn then looks something like this:
-![alt text](img/short-version/01-goblin-ui.webp)
+
+<img src="img/short-version/01-goblin-ui.webp" alt="Drawing Goblin UI" style="max-width:300px;"/>
 
 Next, UI is cleared behind the dragon token. Final image is overlayed to make the clearing more visible:
-![alt text](img/short-version/02-erase-dragon-image.webp)
 
-Erasing something sadly always breaks batching, meaning that a new call to the GPU to erase part of the image has to be made. In a perfect world, drawing all token UI elements for all tokens would just be 1-2 calls to the GPU in total, whereas it is curerntly 2-5 GPU calls per token. this is a major bottleneck in rendering and incurs additional load to both CPU and GPU.
+<img src="img/short-version/02-erase-dragon-image.webp" alt="Erase UI behind dragon wing" style="max-width:300px;"/>
+
+Switching from drawing to erasing sadly always breaks batching, meaning that a new call to the GPU to erase part of the image has to be made. In a perfect world, drawing all token UI elements for all tokens would just be 1-2 calls to the GPU in total, whereas it is curerntly 2-5 GPU calls per token. this is a major bottleneck in rendering and incurs additional load to both CPU and GPU.
 
 ### The solution
 
