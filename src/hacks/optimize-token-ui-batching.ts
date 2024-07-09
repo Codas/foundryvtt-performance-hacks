@@ -110,6 +110,7 @@ function optimizeTokenUiBatching() {
 				this.__interfaceRenderBatches.push(new TokenRenderBatch())
 			}
 
+			const currentBatch = this.__interfaceRenderBatches.at(-1)
 			// test child elements. If all are in expected render order, we can batch them!
 			for (let i = 0; i < defaultRenderOrder.length; i++) {
 				const key = defaultRenderOrder[i]
@@ -121,7 +122,7 @@ function optimizeTokenUiBatching() {
 				}
 
 				if (key === 'other') {
-					const other = tokenElement.children.slice(i + 1)
+					const other = tokenElement.children.slice(i)
 					if (other.length > 0) {
 						this.__interfaceRenderBatches.push(new TokenRenderBatch(other))
 					}
@@ -136,11 +137,20 @@ function optimizeTokenUiBatching() {
 					this.__interfaceRenderBatches.push(new TokenRenderBatch([uiElement]))
 				}
 			}
-			const lastBatch = this.__interfaceRenderBatches.at(-1)
-			if (lastBatch && !lastBatch?.other.includes(tokenElement)) {
-				lastBatch.container.push(tokenElement)
+			if (currentBatch && !currentBatch?.other.includes(tokenElement)) {
+				currentBatch.container.push(tokenElement)
 			}
 		})
+
+		// const batchNames = this.__interfaceRenderBatches
+		// 	.map(({ container, other }) => {
+		// 		const containerNames = container.map(c => c.name || c.__proto__.constructor.name || 'unknown').join(', ')
+		// 		const otherNames = other.map(o => o.name || o.__proto__.constructor.name || 'unknown').join(', ')
+		// 		return [containerNames, otherNames].filter(s => !!s).join(',')
+		// 	})
+		// 	.join(' | ')
+		// console.log(batchNames)
+		// console.log(this.__interfaceRenderBatches.slice())
 	}
 
 	wrapFunctionManual(
