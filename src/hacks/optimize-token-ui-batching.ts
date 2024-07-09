@@ -71,6 +71,9 @@ function optimizeTokenUiBatching() {
 		const isolatedTokens = new Set<PlaceableObject>()
 		this.objects.sortChildren()
 		this.objects.children.forEach((tokenElement) => {
+			if (!tokenElement.visible || !tokenElement.worldAlpha || !tokenElement.alpha) {
+				return
+			}
 			// if child is not a Token object, just add it to be rendered on its own
 			if (!(tokenElement instanceof CONFIG.Token.objectClass)) {
 				this.__interfaceRenderBatches.push(new TokenRenderBatch([tokenElement]))
