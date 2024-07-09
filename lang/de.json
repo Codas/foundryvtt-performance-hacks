@@ -1,0 +1,18 @@
+{
+	"fvtt-perf-optim": {
+		"settings": {
+			"optimize-interface-layer-clipping": {
+				"name": "Optimiere Render-Reihenfolge von Token UI-Elementen",
+				"hint": "Optimiert, in welcher Reihenfolge die Token UI Elemente gerendert werden für verbessertes Draw Call Batching. Keine optimische Beeinflussung der Tokens zu erwarten. Wird benötigt, damit die anderen Einstellunge einen merkbaren Einfluss haben."
+			},
+			"token-bars-caching": {
+				"name": "Token-Ressourceleisten cachen",
+				"hint": "Cacht die Token-Ressourcenleisten Draw Batching zu verbessern. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität der haben."
+			},
+			"token-effects-caching": {
+				"name": "Token-Efekte cachen",
+				"hint": "Cacht die Token-Effektleiste. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität haben."
+			}
+		}
+	}
+}

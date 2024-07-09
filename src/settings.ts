@@ -1,35 +1,34 @@
-import { NAMESPACE } from './constants.ts';
+import { NAMESPACE } from './constants.ts'
 
-export const enum SETTINGS {
-	OptimizeInterfaceClipping = 'optimize-interface-layer-clipping',
-	NameplateCaching = 'nameplate-caching',
+export enum SETTINGS {
+	OptimizeTokenUiBatching = 'optimize-interface-layer-clipping',
+	EffectsCaching = 'token-effects-caching',
 	TokenBarsCaching = 'token-bars-caching',
-	DebugSpriteSheet = 'debug-sprite-sheet',
 }
 
-export const getSetting = (settings: SETTINGS): unknown => {
-	return game.settings.get(NAMESPACE, settings);
-};
+export function getSetting(settings: SETTINGS): unknown {
+	return game.settings.get(NAMESPACE, settings)
+}
 
 Hooks.on('init', () => {
-	game.settings.register(NAMESPACE, SETTINGS.OptimizeInterfaceClipping, {
-		name: `${NAMESPACE}.settings.${SETTINGS.OptimizeInterfaceClipping}.name`,
-		hint: `${NAMESPACE}.settings.${SETTINGS.OptimizeInterfaceClipping}.hint`,
+	game.settings.register(NAMESPACE, SETTINGS.OptimizeTokenUiBatching, {
+		name: `${NAMESPACE}.settings.${SETTINGS.OptimizeTokenUiBatching}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.OptimizeTokenUiBatching}.hint`,
 		scope: 'client',
 		config: true,
 		requiresReload: true,
 		type: Boolean,
 		default: true,
-	});
-	game.settings.register(NAMESPACE, SETTINGS.NameplateCaching, {
-		name: `${NAMESPACE}.settings.${SETTINGS.NameplateCaching}.name`,
-		hint: `${NAMESPACE}.settings.${SETTINGS.NameplateCaching}.hint`,
+	})
+	game.settings.register(NAMESPACE, SETTINGS.EffectsCaching, {
+		name: `${NAMESPACE}.settings.${SETTINGS.EffectsCaching}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.EffectsCaching}.hint`,
 		scope: 'client',
 		config: true,
 		requiresReload: true,
 		type: Boolean,
 		default: true,
-	});
+	})
 	game.settings.register(NAMESPACE, SETTINGS.TokenBarsCaching, {
 		name: `${NAMESPACE}.settings.${SETTINGS.TokenBarsCaching}.name`,
 		hint: `${NAMESPACE}.settings.${SETTINGS.TokenBarsCaching}.hint`,
@@ -38,14 +37,5 @@ Hooks.on('init', () => {
 		requiresReload: true,
 		type: Boolean,
 		default: true,
-	});
-	// game.settings.register(NAMESPACE, SETTINGS.DebugSpriteSheet, {
-	// 	name: `${NAMESPACE}.settings.${SETTINGS.DebugSpriteSheet}.name`,
-	// 	hint: `${NAMESPACE}.settings.${SETTINGS.DebugSpriteSheet}.hint`,
-	// 	scope: 'client',
-	// 	config: true,
-	// 	requiresReload: true,
-	// 	type: Boolean,
-	// 	default: false,
-	// });
-});
+	})
+})

@@ -2,20 +2,16 @@
 	"fvtt-perf-optim": {
 		"settings": {
 			"optimize-interface-layer-clipping": {
-				"name": "Optimize interface clipping",
-				"hint": "Optimizes the way interface elements are erased for overlapping tokens. No visual degredation expected."
-			},
-			"nameplate-caching": {
-				"name": "Cache token nameplates",
-				"hint": "Caches nameplates to textures. No visual degradataion expected."
+				"name": "Optimize Token UI Render Batching",
+				"hint": "Optimizes render batching of Token UI elements. No visual degredation expected. Needed in order for the other settings to have a noticable impact."
 			},
 			"token-bars-caching": {
 				"name": "Cache token ressource bars",
-				"hint": "Caches token Ressource bars to textures. Very minor visual degradataion expected."
+				"hint": "Caches token Ressource bars to textures. Very minor visual degradataion on high zoom levels expected."
 			},
-			"debug-sprite-sheet": {
-				"name": "debug-sprite-sheet-name",
-				"hint": "debug-sprite-sheet-hint"
+			"token-effects-caching": {
+				"name": "Cache token effects",
+				"hint": "Caches the token effects bar. Very minor visual degradataion on high zoom levels expected."
 			}
 		}
 	}

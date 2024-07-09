@@ -1,9 +1,9 @@
-import overrideInterfaceClipping from './optimized-interface-clipping.ts';
-import enableNameplateCaching from './nameplate-caching.ts';
-import enableTokenBarsCaching from './token-bars-caching.ts';
+import enableEffectsCaching from './effects-caching.ts'
+import optimizeTokenUiBatching from './optimize-token-ui-batching.ts'
+import enableTokenBarsCaching from './token-bars-caching.ts'
 
-Hooks.once('ready', () => {
-	overrideInterfaceClipping();
-	enableNameplateCaching();
-	enableTokenBarsCaching();
-});
+Hooks.once('setup', () => {
+	optimizeTokenUiBatching()
+	enableEffectsCaching()
+	enableTokenBarsCaching()
+})

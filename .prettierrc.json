@@ -3,6 +3,7 @@
 	"tabWidth": 2,
 	"useTabs": true,
 	"singleQuote": true,
+	"semi": false,
 	"overrides": [
 		{
 			"files": ["*.scss", "*.css"],

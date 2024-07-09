@@ -1,12 +1,26 @@
-# 0.1.2
+## 0.2.0
+
+- New setting! Optimize Token UI Render Batching. Has the same impact as the old
+  Optimize Interface Clipping option, but is more generall applicable,
+  performant and does not require as many hacks and workarounds.
+- New setting! Cache Token Effects. This enables texture caching for token effect
+  icons and improves the batch rendering.
+- Remove Cache Token Nameplate setting. It turns out text rendering can be efficiently
+  batched on its own.
+- Remove Optimize Interface Clipping setting as the new Token UI Render Batchinging setting
+  is a much cleaner solution and just as fast and with fewer problems.
+- Add German localization.
+- This module should now work for all systems and was for PF2e and D&D 5e specifically.
+
+## 0.1.2
 
 - More fixes for errors that might result in a black canvas.
 
-# 0.1.1
+## 0.1.1
 
 - Fix token dragging sometimes rersulting in a black canvas.
 
-# 0.1.0
+## 0.1.0
 
 Initial Release!
 
