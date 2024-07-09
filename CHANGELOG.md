@@ -1,3 +1,7 @@
+## 0.2.2
+
+- Fix blank canvas after deleting a token
+
 ## 0.2.1
 
 - Fix token ui elements being drawn when token itself should be invisible

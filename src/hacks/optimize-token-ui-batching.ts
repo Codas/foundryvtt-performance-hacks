@@ -306,5 +306,10 @@ function optimizeTokenUiBatching() {
 	wrapFunction(CONFIG.Token.objectClass.prototype, '_onUpdate', function (this: TokenOverride) {
 		this.__updateInterfaceQuadtree()
 	})
+
+	wrapFunction(CONFIG.Token.objectClass.prototype, '_onDelete', function (this: TokenOverride) {
+		this.layer.__interfaceQuadTree?.remove(this)
+		this.layer.__updateInterfaceRenderBatches()
+	})
 }
 export default optimizeTokenUiBatching
