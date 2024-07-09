@@ -110,33 +110,66 @@ and the complete UI, which is then "just" set atop the background layer.
 
 ### The problem
 
-It turns out, the main bottleneck is an erase step in which after a token UI is drawn, parts of it can be erased by an overlapping token. For example, the kobold UI in the top left is almost completely covered by the dragon wing.
-![alt text](img/default-foundry/10-dragon-token-ui.webp)
+It turns out, the main bottleneck is an erase step in which after a token UI is drawn, parts of it can be erased by an overlapping token. For example, the kobold UI in the top left is almost completely covered by the dragon wing. For this to be possible, Foundry VTT clears the region behind a tokens graphic before its interface is drawn. So the process is:
+**For every token:**
 
-But this step is done for every token, brakes batching in the rendering pipeline (switch from paint to erase or back is always a separate step) and most of the UI elements simply arent covered by any tokens!
+1. Draw token selection border if selected
+2. erase everything that has previously been drawn that is behind the current tokens image
+3. draw other UI elements.
 
-#### Batching erase calls
+The result after the goblin and dragon have been drawn then looks something like this:
+![alt text](img/short-version/01-goblin-ui.webp)
 
-The solution in principle is quite simple: Clear the grid in one go, so that the grid does not overlay large tokens for example. Then draw the ui layer and only ever switch to erasing if the token actually covers ui elements!
+Next, UI is cleared behind the dragon token. Final image is overlayed to make the clearing more visible:
+![alt text](img/short-version/02-erase-dragon-image.webp)
 
-This simple change means that many erase operations can be done at once and we have to break the batch drawing pipeline only twice. Once for the dragon, once for the mephit near the dragon.
+Erasing something sadly always breaks batching, meaning that a new call to the GPU to erase part of the image has to be made. In a perfect world, drawing all token UI elements for all tokens would just be 1-2 calls to the GPU in total, whereas it is curerntly 2-5 GPU calls per token. this is a major bottleneck in rendering and incurs additional load to both CPU and GPU.
 
-But now we face another problem: Drawing the nameplates and hp bars also break the pipeline since we switch from drawing background graphics for the status icons to drawing the status icon textures (each one a separate texture), to drawing text for the nameplates and again graphics for the hp bar.
+### The solution
 
-#### Texture atlas for status effect icons
+Instead of this loop of drawing UI elements, clearing something behind the token, drawing more ui elements, ... we can in certain cases reorder the operations and make use of batching!
 
-To really be able to make the UI draw in one call, we have to elimate these context switches and also reduce the amount of textures for the status icons we have to draw. Reducing the amount of textures is easy. We just write each status effect icon texture once to a large texture in the background and instead of 10 different textures for all the small icons we have one large texture and just draw a slice of it. This way, we only have to upload one texture to the GPU and pass some information on where to draw certain pieces of it.
+#### Batching draw operations
 
-Even better, we can combine the background and border drawing into this cached texture! This comes with really no downsides in image quality, so a pure win overall.
+The calls to erase and draw ui elements normally are done in sequence, per token and looks roughly like this:
 
-#### More caching!
+1. Erase behind Token 1 (new call)
+1. Draw Token 1 UI (new call)
+1. Erase behind Token 2 (new call)
+1. Draw Token 2 UI (new call)
+1. Erase behind Token 3 (new call)
+1. Draw Token 3 UI (new call)
+1. etc ...
 
-Since we already have this spritesheet we create at runtime whenever needed, we can just extend this a little bit to allow for updates and erasures and also cache the nameplates and hp bars. For the nameplates, there is also no perceivable downgrade in image quality, as fonts are always rendered at a fixed maximum resolution, which we just match.
-HP Bars on the other hand are vector graphics and caching these means, that on the greates zoom level one might notice a very slight image quality downgrade.
+In caess where token UI elements are not covered by other tokens however, we can simply do this:
+
+1. Erase behind Token 1 (new call)
+1. Erase behind Token 2
+1. Erase behind Token 3
+1. etc ...
+1. Draw Token 1 UI (new call)
+1. Draw Token 2 UI
+1. Draw Token 3 UI
+1. etc ...
+
+Lets say drawing the token UI takes just two calls in total for: erase behind token, UI. This reordering changes the amount of total GPU calls needed from the Number of tokens \* 2 to simply 2, as no more switching between erasing and painting per token is needed.
+
+However, the world is not perfect and sometimes tokens overlap. If we just batch all these calls, token UI elements of tokens that are covered by other tokens would suddenly appear over each other again. No good!
+To remidy this, break the batch at the point in the token rendering order where we detect overlap and start another batch.
+
+This means that in the case that every token overlaps every other token, we have gained nothing. But in the common case where we have a few overlapping tokens and many that are completely separated, we could arrive at 4-6 GPU calls for 20+ tokens instead of 40-60!
+
+But now we face another problem: Drawing the hp bars and token effect isons also break the pipeline since we switch from drawing simple complex graphics to simple textures to graphics again. To make matters worse, every token effect icon has its own, separate texture which can someteimes be too much to batch in one go.
+
+#### Simple bitmap caching for token effects and ressource bars
+
+Luckily, enabling caching for ressource bars and effect icons is as simple as telling the graphics library foundry uses to enable caching. This just means that whenever one of the ressources (HP, legendary actions, ...) of a token changes, we redraw the UI element once and then write this result to a texture. In later draw operations, no complicated graphics are drawn again. Instead, the texture cache is used to almost instantly (and batchable!) show the same image again.
+
+The same strategy can be used to cache the status efect icon rows, which most of the time change even less frequently.
 
 #### the result
 
 After all these steps, what have we gained? With all these optimizations in place and in a scene with only static light sources with many tokens and effects (typcal late-stage encounter), we go from 85 draw calls, 1092 individual webgl commands and
-55 max FPS to 36 draw calls, 440 WebGL commands and 100 FPS! Which means theses optimizations save about 8ms per frame!
+55 max FPS to 36 draw calls, 440 WebGL commands and 100+ FPS! Which means theses optimizations save about 8ms per frame!
 
 In more complex scenes the absolute gains in FPS might be lower and also depend very much on the hardware.
