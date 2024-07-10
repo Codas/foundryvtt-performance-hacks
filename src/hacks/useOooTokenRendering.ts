@@ -109,7 +109,7 @@ class TokenRenderBatch {
 				const child = token.children[i]
 				if (child) {
 					const cullable = child.cullable
-					child.cullable = true
+					child.cullable = cullable ?? token.cullable
 					child.render(renderer)
 					child.cullable = cullable
 				}
