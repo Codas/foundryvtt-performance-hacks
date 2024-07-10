@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Enable culling when rendering children in batches
+
 ## 0.3.0
 
 - More intelligent batching by grouping tokens in sets of token that don't overlap with eachother

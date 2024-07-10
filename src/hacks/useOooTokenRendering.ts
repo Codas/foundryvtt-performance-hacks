@@ -108,12 +108,17 @@ class TokenRenderBatch {
 
 				const child = token.children[i]
 				if (child) {
+					const cullable = child.cullable
+					child.cullable = true
 					child.render(renderer)
+					child.cullable = cullable
 				}
 			})
 		}
 		// render everything else just as normal
-		this.#unslicable.forEach((token) => token.render(renderer))
+		this.#unslicable.forEach((token) => {
+			token.render(renderer)
+		})
 	}
 }
 
