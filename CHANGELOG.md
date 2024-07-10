@@ -1,3 +1,7 @@
+## 0.3.0
+
+- More intelligent batching by grouping tokens in sets of token that don't overlap with eachother
+
 ## 0.2.2
 
 - Fix blank canvas after deleting a token

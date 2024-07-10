@@ -3,8 +3,7 @@ export function wrapFunction<THIS>(object: any, path: string, callback: (this: T
 	object[path] = function (this: THIS, ...args: any[]) {
 		const res = origFn.apply(this, args)
 		if (res instanceof Promise) {
-			return res.then(() =>
-				callback.apply(this, args))
+			return res.then(() => callback.apply(this, args))
 		} else {
 			return callback.apply(this, args)
 		}
