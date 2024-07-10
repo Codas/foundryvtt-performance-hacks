@@ -2,59 +2,53 @@ import { SETTINGS, getSetting } from 'src/settings.ts'
 import { wrapFunction } from 'src/utils.ts'
 
 /**
- * Better batching:
+ * Principles behind out of order token rendering
  *
- * Divide UI level children in groups divided only by elements
- * that are one of:
- *  - not tokens
- *  - tokens with masks or filter on the container
- * Everything else should be save to batch in one way or another
- * [Token, Token, Other, Token, MaskedToken, Token, Token, Other]
- * => [[Token, Token], [Other], [Token], [MaskedToken] [Token, Token], [Other]]
+ * tokens consist of many different ui element types and void meshes
+ * (erase blend mode) that break batch rendering of multiple tokens.
+ * Batching can be greatly improved by not rendering one token at a time
+ * but rendering the token container children out of order, so that
+ * first every token border is drawn in one batch, then every void mesh,
+ * all nameplates, ... etc. This greatly improves batching potential but
+ * is challenging! This is only save to do for tokens that do not have
+ * masks or filters (in this case rendering in order is probably faster)
+ * and that do not overlap each other either in their void meshes or UI
+ * elements.
  *
- * withing each group:
+ * Fortunately, testing for overlap with quadtrees is quite fast!
  *
- * if other or masked token, just use default render.
- * In principle, we should only epect one batch group as those cases are rare, but happen...
+ * To actually build a list of tokens that can be batched out of order, we
+ * first divide the token layer children in segments divided only by elements
+ * that are not tokens at all. This should not happen, but modules are known
+ * to mess with the layer objects in certain instances...
  *
- * Within each batch group, we can do some fancy stuff!
+ * This means a token layer looking like this:
+ * [Token, Token, Other, Token, Token, Other] will be sectioned like this:
+ * => [[Token, Token], [Other], [Token, Token], [Other]]
  *
- * Further sub-divide to check for overlaps.
+ * withing each section we now split the tokens into layers of tokens
+ * that do not interact with eachother.
+ * This is done by testing each token for overlap and moving those
+ * that do not overlap anything or only tokens from a previous batch into
+ * a new render batch. This is done until there are on tokens left.
  *
- * [Token1, Token2, Token3, Token4, Token5, Token6, Token 7]
+ * Now that we have our batches of non-interfering tokens we are free to
+ * reorder rendering them as we whish!
+ * The first thing to do is moving all those tokens that have masks or
+ * filter defined into a separate group and rendering them in the end.
+ * All other tokens (should be the vast majority) are now also rendered,
+ * but not in order, token by token, but sliced by their child elements,
+ * meaning for Token1, Token2, Token3 we render
+ * Child1(T1), Child1(T2), Child1(T3)
+ * Child2(T1), Child2(T2), Child2(T3) and so on, which means
+ * that instead of switching between painting graphics, erasing with a
+ * different blend mode, drawing text etc we erase everything in one go
+ * (no new draw call because drawing mode does not change), drawing
+ * nameplates in batches etc.
  *
- * Tokens are sorted by elevation etc anyway, so no token n-epison can overlap token n
- * Token 1, 4, 6 have no overlap.
- * 2 overlaps 1
- * 3 overlaps 1
- * 5 overlaps 4 an 2
- * 7 overlaps 5.
- *
- * It turns out, we can render everything as a one batch that only overlap tokens
- * of the previous batch.
- * Getting these levels might work like this:
- *
- * create an array of refined batches
- * create set of all processed nodes
- * While there are still entries in the open tokens list, build array of tokens as fallow
- *  - Test for overlap with other tokens. Ignore overlap with tokens in the processed nodes list
- *  - Add tokens to processed tokens list and push array to refined batches array
- *  - continue while there are still nodes in the open tokens list.
- *
- * This gets us a still sorted list of token batches:
- * [[Token1, Token4, Token6], [Token2, Token3], [Token5], [Token7]]
- *
- * Within each token list in the refined batches array, we are now free to reorder rendering as we want!
- * This means we can render Tokens not as encapsulated containers
- * Token1(child1, child2), Token2(child1, child2) but isntead as slices of their children:
- * child1(Token1, Token2), child2(Token1, Token2), which allows for better batching as more elements
- * of the same kind are drawn in sequence.
- * For (more or less) optimal batching, sort items to the front that have the known children
- * in the expected order.
- * After the unproblematic tokens have been sorted to the front, we just `zip` the children lists.
- * for Token: Token3(child1, child2, child3), Token4(otherChild1, child2) we are left with:
- * [[child1(T1), otherChild1(T2)], [child2(T1), child2(T2)], [child3(T2)]] and just render them in order.
- *
+ * This can effectively reduce draw calls from 40+ for 10 tokens
+ * that each show hp bars, nameplate etc to as little as 2-3 if all
+ * individual child painting operations are batchable!
  *
  */
 
