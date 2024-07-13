@@ -1,7 +1,7 @@
 {
 	"id": "fvtt-perf-optim",
 	"title": "FVTT Performance Hacks",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"description": "Provides a collection of unofficial performance optimizations and hacks for foundry vtt.",
 	"esmodules": ["dist/fvtt-perf-optim.js"],
 	"languages": [
@@ -32,5 +32,5 @@
 	"readme": "https://github.com/Codas/foundryvtt-performance-hacks/blob/main/README.md",
 	"changelog": "https://github.com/Codas/foundryvtt-performance-hacks/blob/main/CHANGELOG.md",
 	"manifest": "https://raw.githubusercontent.com/Codas/foundryvtt-performance-hacks/main/module.json",
-	"download": "https://github.com/Codas/foundryvtt-performance-hacks/archive/refs/heads/main.zip"
+	"download": "https://github.com/Codas/foundryvtt-performance-hacks/aaprchive/refs/heads/main.zip"
 }

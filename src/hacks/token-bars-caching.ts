@@ -11,7 +11,7 @@ let enableTokenBarsCaching = () => {
 	wrapFunction(CONFIG.Token.objectClass.prototype, 'drawBars', function (this: Token, ...args: any[]) {
 		;(['bar1', 'bar2'] as const).forEach((b) => {
 			this.bars[b].cacheAsBitmap = false
-			this.effects.cacheAsBitmapResolution = getBitmapCacheResolution()
+			this.bars[b].cacheAsBitmapResolution = getBitmapCacheResolution()
 			this.bars[b].cacheAsBitmap = true
 		})
 	})

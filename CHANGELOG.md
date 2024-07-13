@@ -1,3 +1,7 @@
+## 0.3.3
+
+- Fix token hp bar resolution not scaling based on performance setting
+
 ## 0.3.2
 
 - Fix Token effect caching being enabled even for dorako UX radial token hud, leading to lower than expected fidelity.
