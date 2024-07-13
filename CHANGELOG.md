@@ -1,3 +1,8 @@
+## 0.3.2
+
+- Fix Token effect caching being enabled even for dorako UX radial token hud, leading to lower than expected fidelity.
+- Make texture cache resolution depend on performance setting. Increases fidelity on medium and maximum settings.
+
 ## 0.3.1
 
 - Enable culling when rendering children in batches
