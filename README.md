@@ -27,7 +27,7 @@ This module provides some individual settings to activate certain hacks that aim
 
 ---
 
-**Optimize interface clipping**\
+**Optimize Token UI Render Batching**\
 Optimizes how token UI elements are erased by overlapping token images.
 Gives the highest performance gains in most scenarios when only few token names or hp bars are shown.
 
