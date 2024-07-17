@@ -1,3 +1,7 @@
+## 0.3.5
+
+- Update module compatibility fields
+
 ## 0.3.4
 
 - Rename Module
