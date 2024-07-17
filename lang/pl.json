@@ -1,0 +1,18 @@
+{
+	"fvtt-perf-optim": {
+		"settings": {
+			"optimize-interface-layer-clipping": {
+				"name": "Optymalizacja wsadowego renderowania Token UI",
+				"hint": "Optymalizuje renderowanie elementów interfejsu użytkownika Tokena. Nie przewiduje się pogorszenia wyglądu. Wymagane, aby inne ustawienia miały zauważalny wpływ."
+			},
+			"token-bars-caching": {
+				"name": "Paski zasobów tokenów w pamięci podręcznej",
+				"hint": "Paski zasobów tokenów w pamięci podręcznej do tekstur. Oczekiwana bardzo niewielka degradacja wizualna na wysokich poziomach powiększenia."
+			},
+			"token-effects-caching": {
+				"name": "Efekty tokenów w pamięci podręcznej",
+				"hint": "Przechowuje w pamięci podręcznej pasek efektów tokenów. Oczekiwana bardzo niewielka degradacja wizualna na wysokich poziomach powiększenia."
+			}
+		}
+	}
+}

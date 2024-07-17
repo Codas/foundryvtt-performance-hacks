@@ -1,3 +1,7 @@
+## 0.3.6
+
+- Add polish translation. Thank you @Lioheart!
+
 ## 0.3.5
 
 - Update module compatibility fields
