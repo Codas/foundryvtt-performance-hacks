@@ -1,3 +1,7 @@
+## 0.3.7
+
+- Add french translation. Thank you @Dolgrenn!
+
 ## 0.3.6
 
 - Add polish translation. Thank you @Lioheart!

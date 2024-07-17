@@ -1,0 +1,18 @@
+{
+	"fvtt-perf-optim": {
+		"settings": {
+			"optimize-interface-layer-clipping": {
+				"name": "Optimise le rendu de l'IU des tokens",
+				"hint": "Optimise le rendu des éléments de l'IU des jetons. Aucune dégradation visuelle n'est attendue. Nécessaire pour que les autres paramètres aient un impact notable."
+			},
+			"token-bars-caching": {
+				"name": "Mise en cache des barres de ressources des tokens",
+				"hint": "Met en cache les barres de ressources des jetons dans les textures. Une très légère dégradation visuelle est attendue à des niveaux de zoom élevés."
+			},
+			"token-effects-caching": {
+				"name": "mise en cache des effets de token",
+				"hint": "Mise en cache de la barre d'effets de token. Une dégradation visuelle très mineure est attendue pour les niveaux de zoom élevés."
+			}
+		}
+	}
+}
