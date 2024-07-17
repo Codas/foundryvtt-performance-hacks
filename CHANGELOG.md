@@ -1,3 +1,7 @@
+## 0.3.4
+
+- Rename Module
+
 ## 0.3.3
 
 - Fix token hp bar resolution not scaling based on performance setting

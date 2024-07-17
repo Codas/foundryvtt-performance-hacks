@@ -1,19 +1,25 @@
-# Unofficial FoundryVTT optimization hacks
+# Foundry VTT Prime Performance
 
-Just a collection of hacks to make rendering in Foundry VTT more performant.
+Increases your Foundry VTT Performance by your favorite prime number![^1][^2] Without impact on the visual fidelity[^3]
 
 Going from\
 ![before - 55 fps](img/before.png)\
 to\
  ![after - 110 fps](img/after.png)
 
+[^1]: If you favorite prime number is one of 2, 3, 5 or somewhere inbetween
+
+[^2]: Greatest speedup in scenes with many tokens, ressource bars and status effects
+
+[^3]: HP bars and status effects might look a bit blurry on lowest foundry performance settings.
+
 ## DISCLAIMER
 
 This should be save and has been tested to the best of my ability. BUT foundry might just switch around stuff in future updates that makes these hacks obsolete (which would be the best case) or just breaks the module.
 
-Please use this module on your own risk and if you notice visual glitches (names, ressource bars not working or other token-related stuff) please let me know and jsut disable the module.
+Please use this module on your own risk and if you notice visual glitches (names, ressource bars not working or other token-related stuff) please let me know so I can fix the issues :)
 
-This module never saves anything to tokens, so a simple reload with the module disabled should in theroy fix everything :)
+This module does not persist any data except for settings, so a simple reload with the module disabled should revert everything back to normal.
 
 ## Expected performance gains
 

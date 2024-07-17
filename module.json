@@ -1,7 +1,7 @@
 {
 	"id": "fvtt-perf-optim",
-	"title": "FVTT Performance Hacks",
-	"version": "0.3.3",
+	"title": "Prime Performance",
+	"version": "0.3.4",
 	"description": "Provides a collection of unofficial performance optimizations and hacks for foundry vtt.",
 	"esmodules": ["dist/fvtt-perf-optim.js"],
 	"languages": [
@@ -9,6 +9,12 @@
 			"lang": "en",
 			"name": "English",
 			"path": "lang/en.json",
+			"flags": {}
+		},
+		{
+			"lang": "de",
+			"name": "Deutsch",
+			"path": "lang/de.json",
 			"flags": {}
 		}
 	],
