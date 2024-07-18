@@ -6,8 +6,8 @@
 				"hint": "Optimizes render batching of Token UI elements. No visual degredation expected. Needed in order for the other settings to have a noticable impact."
 			},
 			"token-bars-caching": {
-				"name": "Cache token ressource bars",
-				"hint": "Caches token Ressource bars to textures. Very minor visual degradataion on high zoom levels expected."
+				"name": "Cache token resource bars",
+				"hint": "Caches token resource bars to textures. Very minor visual degradataion on high zoom levels expected."
 			},
 			"token-effects-caching": {
 				"name": "Cache token effects",
