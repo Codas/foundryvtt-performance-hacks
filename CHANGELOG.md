@@ -1,3 +1,7 @@
+## 0.3.8
+
+- Fix typos in readme and english translation
+
 ## 0.3.7
 
 - Add french translation. Thank you @Dolgrenn!

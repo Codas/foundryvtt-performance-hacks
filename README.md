@@ -9,7 +9,7 @@ to\
 
 [^1]: If you favorite prime number is one of 2, 3, 5 or somewhere inbetween
 
-[^2]: Greatest speedup in scenes with many tokens, ressource bars and status effects
+[^2]: Greatest speedup in scenes with many tokens, resource bars and status effects
 
 [^3]: HP bars and status effects might look a bit blurry on lowest foundry performance settings.
 
@@ -17,7 +17,7 @@ to\
 
 This should be save and has been tested to the best of my ability. BUT foundry might just switch around stuff in future updates that makes these hacks obsolete (which would be the best case) or just breaks the module.
 
-Please use this module on your own risk and if you notice visual glitches (names, ressource bars not working or other token-related stuff) please let me know so I can fix the issues :)
+Please use this module on your own risk and if you notice visual glitches (names, resource bars not working or other token-related stuff) please let me know so I can fix the issues :)
 
 This module does not persist any data except for settings, so a simple reload with the module disabled should revert everything back to normal.
 
@@ -40,12 +40,12 @@ Gives the highest performance gains in most scenarios when only few token names 
 **Cache token nameplates**\
 Caches token nameplates to textures, allowing for better batching of the UI elements.
 
-**Cache token ressource bars**\
-Caches token ressource bars to textures, allowing for better batching of the UI elements. This can result in slightly blockier hp bars in very high zoom levels.
+**Cache token resource bars**\
+Caches token resource bars to textures, allowing for better batching of the UI elements. This can result in slightly blockier hp bars in very high zoom levels.
 
 ---
 
-All Settings are considered save and activated by default. If only very few names or ressource bars are shown by default (only on hover for example for every token), the caching of token nameplates and ressource bars can be disabled.
+All Settings are considered save and activated by default. If only very few names or resource bars are shown by default (only on hover for example for every token), the caching of token nameplates and resource bars can be disabled.
 
 This module is currently expected to be used with Dorako UX's "adjust token effect hud" setting which includes some performance optimizations. A dedicated setting for the default foundry effect textures might come in the future.
 
@@ -169,9 +169,9 @@ This means that in the case that every token overlaps every other token, we have
 
 But now we face another problem: Drawing the hp bars and token effect isons also break the pipeline since we switch from drawing simple complex graphics to simple textures to graphics again. To make matters worse, every token effect icon has its own, separate texture which can someteimes be too much to batch in one go.
 
-#### Simple bitmap caching for token effects and ressource bars
+#### Simple bitmap caching for token effects and resource bars
 
-Luckily, enabling caching for ressource bars and effect icons is as simple as telling the graphics library foundry uses to enable caching. This just means that whenever one of the ressources (HP, legendary actions, ...) of a token changes, we redraw the UI element once and then write this result to a texture. In later draw operations, no complicated graphics are drawn again. Instead, the texture cache is used to almost instantly (and batchable!) show the same image again.
+Luckily, enabling caching for resource bars and effect icons is as simple as telling the graphics library foundry uses to enable caching. This just means that whenever one of the resources (HP, legendary actions, ...) of a token changes, we redraw the UI element once and then write this result to a texture. In later draw operations, no complicated graphics are drawn again. Instead, the texture cache is used to almost instantly (and batchable!) show the same image again.
 
 The same strategy can be used to cache the status efect icon rows, which most of the time change even less frequently.
 
