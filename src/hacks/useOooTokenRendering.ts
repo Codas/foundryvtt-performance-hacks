@@ -74,7 +74,10 @@ class TokenRenderBatch {
 				this.#maxChildCount = Math.max(this.#maxChildCount, token.children.length)
 			}
 		})
-		// lets reorder the slicables first so that tokens
+		// sort sliceables so that those with dynamic token ring are rendered together.
+		// This minimizes breaking the void mesh drawing batch because dynamic token rings
+		// currently break batching because of their custom shader
+		this.#sliceable.sort((a, b) => +a.hasDynamicRing - +b.hasDynamicRing)
 	}
 
 	get tokens(): Token[] {

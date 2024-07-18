@@ -1,5 +1,7 @@
-## 0.3.8
+## 0.4.0
 
+- Batch tokens with dynamic token ring together to minimize draw calls in void mesh
+  drawing phase
 - Fix typos in readme and english translation
 
 ## 0.3.7

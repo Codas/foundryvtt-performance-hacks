@@ -3,9 +3,11 @@
 Increases your Foundry VTT Performance by your favorite prime number![^1][^2] Without impact on the visual fidelity[^3]
 
 Going from\
-![before - 55 fps](img/before.png)\
+![28 fps](img/before.png)\
 to\
- ![after - 110 fps](img/after.png)
+ ![120 fps](img/after.png)
+
+In certain scenes with many tokens with resource bars, status effects etc visible.
 
 [^1]: If you favorite prime number is one of 2, 3, 5 or somewhere inbetween
 
