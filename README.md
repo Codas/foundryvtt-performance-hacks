@@ -96,7 +96,7 @@ It turns out,
 
 8 Calls for the grid, which I don't exactly know why, but then its on to the tokens. And each token in foundry takes about 5 draw calls to complete if nameplates, hp bars and status icons are shown! All in all, just the token UI takes about 45 calls to complete. Lets count the steps for one token:
 
-Preparation: Create a new transparent image to draw everything, then lets look at the poor Kobold in the top left that is behind the dragons wing:
+Preparation: Create a new transparent image to draw everything, then lets look at the poor goblin in the top left that is behind the dragons wing:
 
 1. Clear the canvas below the token image. Why will become clear very soon. Since switching from painting to clearing breaks batching, this takes one call
 1. Paint HP Bars
@@ -118,7 +118,7 @@ and the complete UI, which is then "just" set atop the background layer.
 
 ### The problem
 
-It turns out, the main bottleneck is an erase step in which after a token UI is drawn, parts of it can be erased by an overlapping token. For example, the kobold UI in the top left is almost completely covered by the dragon wing. For this to be possible, Foundry VTT clears the region behind a tokens graphic before its interface is drawn. So the process is:
+It turns out, the main bottleneck is an erase step in which after a token UI is drawn, parts of it can be erased by an overlapping token. For example, the goblin UI in the top left is almost completely covered by the dragon wing. For this to be possible, Foundry VTT clears the region behind a tokens graphic before its interface is drawn. So the process is:
 **For every token:**
 
 1. Draw token selection border if selected
