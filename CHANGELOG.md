@@ -1,3 +1,8 @@
+## 0.5.0
+
+- Add support for barbrawl module
+- This module now requires libwrapper to be installed
+
 ## 0.4.0
 
 - Batch tokens with dynamic token ring together to minimize draw calls in void mesh
