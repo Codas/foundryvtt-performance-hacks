@@ -1,4 +1,8 @@
-## 0.5.0
+## 0.5.2
+
+- Add support for modules overriding the token effects ui
+
+## 0.5.1
 
 - Add support for barbrawl module
 - This module now requires libwrapper to be installed

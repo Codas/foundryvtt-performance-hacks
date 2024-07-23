@@ -5,6 +5,7 @@
 	"private": true,
 	"scripts": {
 		"foundry": "npx node ~/Development/rpgs/FoundryVTT/resources/app/main.js --noupnp --noupdate --noipdiscovery",
+		"foundry11": "npx node ~/Development/rpgs/FoundryVTT-11/resources/app/main.js --noupnp --noupdate --noipdiscovery ---port=30001 --dataPath=\"$HOME/Library/Application Support/FoundryVTT-11\"",
 		"dev": "vite",
 		"build": "vite build",
 		"lint": "eslint .",
@@ -15,8 +16,8 @@
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"eslint": "^8.57.0",
 		"eslint-plugin-format": "^0.1.2",
+		"foundry-pf2e": "github:reonZ/foundry-pf2e",
 		"vite-plugin-checker": "^0.7.0",
-		"vite-tsconfig-paths": "^4.3.2",
-		"foundry-pf2e": "github:reonZ/foundry-pf2e"
+		"vite-tsconfig-paths": "^4.3.2"
 	}
 }

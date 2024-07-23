@@ -1,6 +1,12 @@
 import { SETTINGS, getSetting } from 'src/settings.ts'
-import { wrapFunction } from 'src/utils.ts'
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts'
+
+function cacheEffects(this: Token, wrapper: Function, ...args: any[]) {
+	wrapper(...args)
+	this.effects.cacheAsBitmap = false
+	this.effects.cacheAsBitmapResolution = getBitmapCacheResolution()
+	this.effects.cacheAsBitmap = true
+}
 
 let enableTokenBarsCaching = () => {
 	const enabled = getSetting(SETTINGS.TokenBarsCaching)
@@ -15,11 +21,7 @@ let enableTokenBarsCaching = () => {
 		return
 	}
 
-	wrapFunction(CONFIG.Token.objectClass.prototype, '_drawEffects', function (this: Token, ...args: any[]) {
-		this.effects.cacheAsBitmap = false
-		this.effects.cacheAsBitmapResolution = getBitmapCacheResolution()
-		this.effects.cacheAsBitmap = true
-	})
+	libWrapper.register('fvtt-perf-optim', 'CONFIG.Token.objectClass.prototype._drawEffects', cacheEffects, 'WRAPPER')
 }
 export default enableTokenBarsCaching
 
