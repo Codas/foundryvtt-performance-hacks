@@ -1,3 +1,7 @@
+## 0.5.3
+
+- Fix token effect duplication in case of async \_drawEffect base implementation
+
 ## 0.5.2
 
 - Add support for modules overriding the token effects ui

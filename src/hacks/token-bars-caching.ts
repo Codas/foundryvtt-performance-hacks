@@ -1,8 +1,11 @@
 import { SETTINGS, getSetting } from 'src/settings.ts'
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts'
 
-function cacheResourceBars(this: Token, wrapped: Function, ...args: any[]) {
-	wrapped(...args)
+async function cacheResourceBars(this: Token, wrapped: Function, ...args: any[]) {
+	const wrappedResult = wrapped(...args)
+	if (wrappedResult instanceof Promise) {
+		await wrappedResult
+	}
 	const cacheAsBitmapResolution = getBitmapCacheResolution()
 	const cacheGraphics = (bars: PIXI.Graphics | PIXI.Container | unknown) => {
 		if (bars instanceof PIXI.Graphics) {

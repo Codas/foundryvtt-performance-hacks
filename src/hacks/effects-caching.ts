@@ -1,8 +1,11 @@
 import { SETTINGS, getSetting } from 'src/settings.ts'
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts'
 
-function cacheEffects(this: Token, wrapper: Function, ...args: any[]) {
-	wrapper(...args)
+async function cacheEffects(this: Token, wrapper: Function, ...args: any[]) {
+	const wrappedResult = wrapper(...args)
+	if (wrappedResult instanceof Promise) {
+		await wrappedResult
+	}
 	this.effects.cacheAsBitmap = false
 	this.effects.cacheAsBitmapResolution = getBitmapCacheResolution()
 	this.effects.cacheAsBitmap = true
