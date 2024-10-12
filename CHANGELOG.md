@@ -1,3 +1,7 @@
+## 0.5.4
+
+- Fix token effects caching issues with Token Variant Art and potentially other modules
+
 ## 0.5.3
 
 - Fix token effect duplication in case of async \_drawEffect base implementation

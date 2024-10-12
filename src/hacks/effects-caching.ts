@@ -24,7 +24,7 @@ let enableTokenBarsCaching = () => {
 		return
 	}
 
-	libWrapper.register('fvtt-perf-optim', 'CONFIG.Token.objectClass.prototype._drawEffects', cacheEffects, 'WRAPPER')
+	libWrapper.register('fvtt-perf-optim', 'CONFIG.Token.objectClass.prototype._refreshEffects', cacheEffects, 'WRAPPER')
 }
 export default enableTokenBarsCaching
 
