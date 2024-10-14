@@ -1,5 +1,9 @@
 ## 0.5.4
 
+- Fix token effects caching issues with modules that prevent refreshEffects render flag from being set
+
+## 0.5.4
+
 - Fix token effects caching issues with Token Variant Art and potentially other modules
 
 ## 0.5.3

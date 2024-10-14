@@ -6,9 +6,13 @@ async function cacheEffects(this: Token, wrapper: Function, ...args: any[]) {
 	if (wrappedResult instanceof Promise) {
 		await wrappedResult
 	}
-	this.effects.cacheAsBitmap = false
-	this.effects.cacheAsBitmapResolution = getBitmapCacheResolution()
-	this.effects.cacheAsBitmap = true
+
+	const [flags] = args
+	if (flags?.redrawEffects || flags?.refreshEffects) {
+		this.effects.cacheAsBitmap = false
+		this.effects.cacheAsBitmapResolution = getBitmapCacheResolution()
+		this.effects.cacheAsBitmap = true
+	}
 }
 
 let enableTokenBarsCaching = () => {
@@ -24,7 +28,12 @@ let enableTokenBarsCaching = () => {
 		return
 	}
 
-	libWrapper.register('fvtt-perf-optim', 'CONFIG.Token.objectClass.prototype._refreshEffects', cacheEffects, 'WRAPPER')
+	libWrapper.register(
+		'fvtt-perf-optim',
+		'CONFIG.Token.objectClass.prototype._applyRenderFlags',
+		cacheEffects,
+		'WRAPPER',
+	)
 }
 export default enableTokenBarsCaching
 
