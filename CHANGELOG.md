@@ -1,4 +1,9 @@
-## 0.5.4
+## 0.5.6
+
+- Fix bounds calculation for tokens.
+  This should fix cases where interface elements were not covered correctly by token images
+
+## 0.5.5
 
 - Fix token effects caching issues with modules that prevent refreshEffects render flag from being set
 

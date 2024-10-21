@@ -222,7 +222,24 @@ const tempMatrix = new PIXI.Matrix()
 function getInterfaceBounds(object: PlaceableObject) {
 	const b = object.bounds
 	const lb = object.getLocalBounds()
-	return new PIXI.Rectangle(b.x + lb.x, b.y + lb.y, lb.width, lb.height)
+	const localRect = new PIXI.Rectangle(b.x + lb.x, b.y + lb.y, lb.width, lb.height)
+
+	if (!(object instanceof Token) || !(object.mesh instanceof PrimarySpriteMesh)) {
+		return localRect
+	}
+
+	const meshBounds = (object.mesh as any)._canvasBounds as any
+	const meshRect = new PIXI.Rectangle(
+		meshBounds.minX,
+		meshBounds.minY,
+		meshBounds.maxX - meshBounds.minX,
+		meshBounds.maxY - meshBounds.minY,
+	)
+	const left = Math.min(localRect.left, meshRect.left)
+	const right = Math.max(localRect.right, meshRect.right)
+	const top = Math.min(localRect.top, meshRect.top)
+	const bottom = Math.max(localRect.bottom, meshRect.bottom)
+	return new PIXI.Rectangle(left, top, right - left, bottom - top)
 }
 
 function buildAndRenderTokenBatches(renderer: PIXI.Renderer, container: PIXI.Container) {
