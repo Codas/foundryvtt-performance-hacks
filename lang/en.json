@@ -12,6 +12,10 @@
 			"token-effects-caching": {
 				"name": "Cache token effects",
 				"hint": "Caches the token effects bar. Very minor visual degradataion on high zoom levels expected."
+			},
+			"faster-edge-testing": {
+				"name": "Faster collision testing",
+				"hint": "Improves performance of the builtin sight, auditory etc collision detection. Improves performance especially when using the levels module or rendering of PF2e aura templates."
 			}
 		}
 	}

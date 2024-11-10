@@ -1,3 +1,8 @@
+## 0.6.0
+
+- Improve performance of collision checks in foundry. This greatly improves occlusion checks for the levels
+  module and calculation of aura templates for the pf2e system.
+
 ## 0.5.6
 
 - Fix bounds calculation for tokens.
