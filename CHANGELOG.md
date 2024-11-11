@@ -1,3 +1,7 @@
+## 0.6.4
+
+- Update polish translations (thanks @Lioheart)
+
 ## 0.6.3
 
 - Really Fix vision/light/etc calculation not working for certain walls (created bottom-to-top or right-to-left)
