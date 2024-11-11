@@ -12,6 +12,10 @@
 			"token-effects-caching": {
 				"name": "Efekty tokenów w pamięci podręcznej",
 				"hint": "Przechowuje w pamięci podręcznej pasek efektów tokenów. Oczekiwana bardzo niewielka degradacja wizualna na wysokich poziomach powiększenia."
+			},
+			"faster-edge-testing": {
+				"name": "Szybsze testowanie kolizji",
+				"hint": "Poprawiono działanie wbudowanego wykrywania kolizji wzrokowych, słuchowych itp. Poprawia wydajność, zwłaszcza podczas korzystania z modułu poziomów lub renderowania szablonów aury PF2e."
 			}
 		}
 	}
