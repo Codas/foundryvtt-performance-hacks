@@ -1,6 +1,6 @@
 import type { Edge } from 'foundry-pf2e/src/types/foundry/client-esm/canvas/edges/edge.js'
 import type { CanvasEdges } from 'foundry-pf2e/src/types/foundry/client-esm/canvas/edges/edges.js'
-import { getSetting, SETTINGS } from 'src/settings.ts'
+import { SETTINGS, getSetting } from 'src/settings.ts'
 
 type CanvasEdgesWithQuadtree = CanvasEdges & {
 	// @ts-expect-error types are wrong for CanvasQuadtree. Edge is perfectly valid
@@ -31,7 +31,20 @@ const edgesInBounds = function edgesInBounds(this: CanvasEdgesWithQuadtree, rect
 	if (!this.edgesQuadtree) {
 		this.refresh()
 	}
-	return this.edgesQuadtree.getObjects(rect)
+	const edgesInBounds = this.edgesQuadtree.getObjects(rect)
+	// always add canvas outer bounds edges. Clockwise sweep needs the
+	// bounding vertices to work
+	;[
+		this.get('outerBoundsTop'),
+		this.get('outerBoundsRight'),
+		this.get('outerBoundsBottom'),
+		this.get('outerBoundsLeft'),
+	].forEach((canvasEdge) => {
+		if (canvasEdge) {
+			edgesInBounds.add(canvasEdge)
+		}
+	})
+	return edgesInBounds
 }
 
 const identifyEdges = function identifyEdges(this: ClockwiseSweepPolygon) {

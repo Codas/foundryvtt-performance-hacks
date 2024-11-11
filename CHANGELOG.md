@@ -1,3 +1,7 @@
+## 0.6.1
+
+- Fix vision/light/etc calculation not working in when no bounding enclosing walls are in range
+
 ## 0.6.0
 
 - Improve performance of collision checks in foundry. This greatly improves occlusion checks for the levels
