@@ -1,3 +1,7 @@
+## 0.6.3
+
+- Really Fix vision/light/etc calculation not working for certain walls (created bottom-to-top or right-to-left)
+
 ## 0.6.2
 
 - Fix vision/light/etc calculation not working for certain walls (created bottom-to-top or right-to-left)
