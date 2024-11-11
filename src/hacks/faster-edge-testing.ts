@@ -24,12 +24,17 @@ const refreshEdges = function refreshEdges(this: CanvasEdgesWithQuadtree, wrappe
 	this.edgesQuadtree.clear();
 	for (const edge of canvas.edges.values()) {
 		let rect = (edge as Edge).bounds;
+		// Make sure rects have a positive width and height, as the Rectangle.covers check only works for positive values
 		if (rect.width < 0 || rect.height < 0) {
 			rect = rect.clone();
-			rect.x = rect.x + rect.width;
-			rect.width = -rect.width;
-			rect.y = rect.y + rect.height;
-			rect.height = -rect.height;
+			if (rect.width < 0) {
+				rect.x = rect.x + rect.width;
+				rect.width = -rect.width;
+			}
+			if (rect.height < 0) {
+				rect.y = rect.y + rect.height;
+				rect.height = -rect.height;
+			}
 		}
 		this.edgesQuadtree.insert({ r: rect, t: edge, n: new Set() });
 	}
