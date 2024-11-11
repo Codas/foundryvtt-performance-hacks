@@ -1,1 +1,1 @@
-export const NAMESPACE = "fvtt-perf-optim";
+export const NAMESPACE = 'fvtt-perf-optim';

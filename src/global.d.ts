@@ -1,4 +1,4 @@
-import type { DynamicSpriteSheet } from "./DynamicSpriteSheet.ts";
+import type { DynamicSpriteSheet } from './DynamicSpriteSheet.ts';
 
 interface FvttPerfHacks {
 	autoSpritesheetCache: DynamicSpriteSheet;

@@ -1,5 +1,5 @@
-import { SETTINGS, getSetting } from 'src/settings.ts'
-import { wrapFunction } from 'src/utils.ts'
+import { SETTINGS, getSetting } from 'src/settings.ts';
+import { wrapFunction } from 'src/utils.ts';
 
 /**
  * Principles behind out of order token rendering
@@ -53,35 +53,35 @@ import { wrapFunction } from 'src/utils.ts'
  */
 
 interface InterfaceQuadtreeBounds {
-	r: PIXI.Rectangle
-	t: Token
-	n: Set<any>
+	r: PIXI.Rectangle;
+	t: Token;
+	n: Set<any>;
 }
 
 class TokenRenderBatch {
-	#tokens: Token[]
+	#tokens: Token[];
 
-	#maxChildCount = 0
-	#sliceable: Token[] = []
-	#unslicable: Token[] = []
+	#maxChildCount = 0;
+	#sliceable: Token[] = [];
+	#unslicable: Token[] = [];
 	constructor(tokens: Token[]) {
-		this.#tokens = tokens
+		this.#tokens = tokens;
 		tokens.forEach((token) => {
 			if (token.mask || (token.filters && token.filters.length)) {
-				this.#unslicable.push(token)
+				this.#unslicable.push(token);
 			} else {
-				this.#sliceable.push(token)
-				this.#maxChildCount = Math.max(this.#maxChildCount, token.children.length)
+				this.#sliceable.push(token);
+				this.#maxChildCount = Math.max(this.#maxChildCount, token.children.length);
 			}
-		})
+		});
 		// sort sliceables so that those with dynamic token ring are rendered together.
 		// This minimizes breaking the void mesh drawing batch because dynamic token rings
 		// currently break batching because of their custom shader
-		this.#sliceable.sort((a, b) => +a.hasDynamicRing - +b.hasDynamicRing)
+		this.#sliceable.sort((a, b) => +a.hasDynamicRing - +b.hasDynamicRing);
 	}
 
 	get tokens(): Token[] {
-		return this.#tokens
+		return this.#tokens;
 	}
 
 	render(renderer: PIXI.Renderer) {
@@ -92,80 +92,80 @@ class TokenRenderBatch {
 				// lets render the container without any children first so that custom
 				// render implementations get called... This is not the way
 				if (i === 0) {
-					const renderFns: ((renderer: PIXI.Renderer) => void)[] = []
+					const renderFns: ((renderer: PIXI.Renderer) => void)[] = [];
 					token.children.forEach((child, i) => {
-						renderFns[i] = child.render
-						child.render = () => {}
-					})
-					token.render(renderer)
+						renderFns[i] = child.render;
+						child.render = () => {};
+					});
+					token.render(renderer);
 					token.children.forEach((child, i) => {
-						child.render = renderFns[i]
-					})
+						child.render = renderFns[i];
+					});
 				}
 
-				const child = token.children[i]
+				const child = token.children[i];
 				if (child) {
-					const cullable = child.cullable
-					child.cullable = cullable ?? token.cullable
-					child.render(renderer)
-					child.cullable = cullable
+					const cullable = child.cullable;
+					child.cullable = cullable ?? token.cullable;
+					child.render(renderer);
+					child.cullable = cullable;
 				}
-			})
+			});
 		}
 		// render everything else just as normal
 		this.#unslicable.forEach((token) => {
-			token.render(renderer)
-		})
+			token.render(renderer);
+		});
 	}
 }
 
 abstract class RenderSegment {
-	abstract render(renderer: PIXI.Renderer): void
+	abstract render(renderer: PIXI.Renderer): void;
 }
 
 function isTokenBelow(a: Token, b: Token) {
-	return (a.document.elevation - b.document.elevation || a.document.sort - b.document.sort || a.zIndex - b.zIndex) < 0
+	return (a.document.elevation - b.document.elevation || a.document.sort - b.document.sort || a.zIndex - b.zIndex) < 0;
 }
 
 class TokenRenderSegment extends RenderSegment {
-	#primaryQuadTree = canvas.primary.quadtree
-	#interfaceQuadTree: CanvasQuadtree<PlaceableObject>
-	#tokens: InterfaceQuadtreeBounds[] = []
-	#renderBatches: TokenRenderBatch[] = []
+	#primaryQuadTree = canvas.primary.quadtree;
+	#interfaceQuadTree: CanvasQuadtree<PlaceableObject>;
+	#tokens: InterfaceQuadtreeBounds[] = [];
+	#renderBatches: TokenRenderBatch[] = [];
 
 	constructor(interfaceQuadTree: CanvasQuadtree<PlaceableObject>) {
-		super()
-		this.#interfaceQuadTree = interfaceQuadTree
+		super();
+		this.#interfaceQuadTree = interfaceQuadTree;
 	}
 
 	add(token: InterfaceQuadtreeBounds) {
-		this.#tokens.push(token)
+		this.#tokens.push(token);
 	}
 
 	render(renderer: PIXI.Renderer) {
 		// build batches of non-overlapping token UIs
-		let openSet = this.#tokens.slice()
-		const processed = new Set<PlaceableObject>()
-		const segmentTokens = new Set(this.#tokens.map((t) => t.t))
+		let openSet = this.#tokens.slice();
+		const processed = new Set<PlaceableObject>();
+		const segmentTokens = new Set(this.#tokens.map((t) => t.t));
 		while (openSet.length) {
-			const batchTokens: Token[] = []
-			const overlapTokens: InterfaceQuadtreeBounds[] = []
+			const batchTokens: Token[] = [];
+			const overlapTokens: InterfaceQuadtreeBounds[] = [];
 			for (const token of openSet) {
 				if (this.#checkTokenOverlap(token, processed, segmentTokens)) {
-					overlapTokens.push(token)
+					overlapTokens.push(token);
 				} else {
-					batchTokens.push(token.t)
+					batchTokens.push(token.t);
 				}
 			}
-			batchTokens.forEach((t) => processed.add(t))
+			batchTokens.forEach((t) => processed.add(t));
 			if (overlapTokens.length === openSet.length) {
-				console.error('Overlap testing endless loop! Aborting!')
-				break
+				console.error('Overlap testing endless loop! Aborting!');
+				break;
 			}
-			openSet = overlapTokens
-			this.#renderBatches.push(new TokenRenderBatch(batchTokens))
+			openSet = overlapTokens;
+			this.#renderBatches.push(new TokenRenderBatch(batchTokens));
 		}
-		this.#renderBatches.forEach((batch) => batch.render(renderer))
+		this.#renderBatches.forEach((batch) => batch.render(renderer));
 	}
 
 	#checkTokenOverlap(
@@ -173,8 +173,8 @@ class TokenRenderSegment extends RenderSegment {
 		previousBatch: Set<PlaceableObject>,
 		segmentTokens: Set<PlaceableObject>,
 	): boolean {
-		const interfaceQuadTree = this.#interfaceQuadTree
-		const primaryToken = bounds.t
+		const interfaceQuadTree = this.#interfaceQuadTree;
+		const primaryToken = bounds.t;
 
 		const filterOverlap = (collidingToken: PlaceableObject) =>
 			// tokens always collide with each other, remove those
@@ -184,132 +184,132 @@ class TokenRenderSegment extends RenderSegment {
 			// only include those in our current segment
 			segmentTokens.has(collidingToken) &&
 			// only include colliding tokens that are below the primary token
-			isTokenBelow(collidingToken as any, primaryToken)
+			isTokenBelow(collidingToken as any, primaryToken);
 
 		const interfaceOverlap = interfaceQuadTree.getObjects(bounds.r, {
 			collisionTest: ({ t: collidingToken }) => filterOverlap(collidingToken),
-		})
+		});
 		if (interfaceOverlap.size > 0) {
-			return true
+			return true;
 		}
 
-		const primaryQuadTree = this.#primaryQuadTree
+		const primaryQuadTree = this.#primaryQuadTree;
 		const primaryMeshOverlap = primaryQuadTree.getObjects(bounds.r, {
 			collisionTest: ({ t }) => {
-				const collidingToken = (t as any).object
+				const collidingToken = (t as any).object;
 				if (!(collidingToken instanceof CONFIG.Token.objectClass)) {
-					return false
+					return false;
 				}
-				return filterOverlap(collidingToken)
+				return filterOverlap(collidingToken);
 			},
-		})
-		return primaryMeshOverlap.size > 0
+		});
+		return primaryMeshOverlap.size > 0;
 	}
 }
 class OtherRenderSegment extends RenderSegment {
-	#other: PIXI.DisplayObject
+	#other: PIXI.DisplayObject;
 	constructor(other: PIXI.DisplayObject) {
-		super()
-		this.#other = other
+		super();
+		this.#other = other;
 	}
 
 	render(renderer: PIXI.Renderer) {
-		this.#other.render(renderer)
+		this.#other.render(renderer);
 	}
 }
-const tempMatrix = new PIXI.Matrix()
+const tempMatrix = new PIXI.Matrix();
 
 function getInterfaceBounds(object: PlaceableObject) {
-	const b = object.bounds
-	const lb = object.getLocalBounds()
-	const localRect = new PIXI.Rectangle(b.x + lb.x, b.y + lb.y, lb.width, lb.height)
+	const b = object.bounds;
+	const lb = object.getLocalBounds();
+	const localRect = new PIXI.Rectangle(b.x + lb.x, b.y + lb.y, lb.width, lb.height);
 
 	if (!(object instanceof Token) || !(object.mesh instanceof PrimarySpriteMesh)) {
-		return localRect
+		return localRect;
 	}
 
-	const meshBounds = (object.mesh as any)._canvasBounds as any
+	const meshBounds = (object.mesh as any)._canvasBounds as any;
 	const meshRect = new PIXI.Rectangle(
 		meshBounds.minX,
 		meshBounds.minY,
 		meshBounds.maxX - meshBounds.minX,
 		meshBounds.maxY - meshBounds.minY,
-	)
-	const left = Math.min(localRect.left, meshRect.left)
-	const right = Math.max(localRect.right, meshRect.right)
-	const top = Math.min(localRect.top, meshRect.top)
-	const bottom = Math.max(localRect.bottom, meshRect.bottom)
-	return new PIXI.Rectangle(left, top, right - left, bottom - top)
+	);
+	const left = Math.min(localRect.left, meshRect.left);
+	const right = Math.max(localRect.right, meshRect.right);
+	const top = Math.min(localRect.top, meshRect.top);
+	const bottom = Math.max(localRect.bottom, meshRect.bottom);
+	return new PIXI.Rectangle(left, top, right - left, bottom - top);
 }
 
 function buildAndRenderTokenBatches(renderer: PIXI.Renderer, container: PIXI.Container) {
 	// build initial batches
 	// @ts-expect-error types are wrong for CanvasQuadtree. Does not need params
-	const interfaceQuadtree = new CanvasQuadtree<PlaceableObject>()
-	const segments: RenderSegment[] = []
+	const interfaceQuadtree = new CanvasQuadtree<PlaceableObject>();
+	const segments: RenderSegment[] = [];
 	// populate quadtree
 	container.children.forEach((child, i) => {
 		if (!child.visible || child.worldAlpha <= 0 || !child.renderable) {
-			return
+			return;
 		}
 		if (!(child instanceof Token)) {
-			segments.push(new OtherRenderSegment(child))
-			return
+			segments.push(new OtherRenderSegment(child));
+			return;
 		}
 
-		const bounds = { r: getInterfaceBounds(child), t: child, n: new Set<CanvasQuadtree<PlaceableObject>>() }
-		interfaceQuadtree.insert(bounds)
+		const bounds = { r: getInterfaceBounds(child), t: child, n: new Set<CanvasQuadtree<PlaceableObject>>() };
+		interfaceQuadtree.insert(bounds);
 
-		const lastBatch = segments.at(-1)
+		const lastBatch = segments.at(-1);
 		if (lastBatch && lastBatch instanceof TokenRenderSegment) {
-			lastBatch.add(bounds)
+			lastBatch.add(bounds);
 		} else {
-			const newBatch = new TokenRenderSegment(interfaceQuadtree)
-			newBatch.add(bounds)
-			segments.push(newBatch)
+			const newBatch = new TokenRenderSegment(interfaceQuadtree);
+			newBatch.add(bounds);
+			segments.push(newBatch);
 		}
-	})
-	segments.forEach((segment) => segment.render(renderer))
+	});
+	segments.forEach((segment) => segment.render(renderer));
 }
 
 function renderTokensOoo(this: PIXI.Container, renderer: PIXI.Renderer) {
 	// everything to the very end is just copied from the PIXI.Container implementation
-	const sourceFrame = renderer.renderTexture.sourceFrame
+	const sourceFrame = renderer.renderTexture.sourceFrame;
 
 	if (!(sourceFrame.width > 0 && sourceFrame.height > 0)) {
-		return
+		return;
 	}
-	let bounds: PIXI.Rectangle | undefined
-	let transform: PIXI.Matrix | undefined
+	let bounds: PIXI.Rectangle | undefined;
+	let transform: PIXI.Matrix | undefined;
 	if (this.cullArea) {
-		bounds = this.cullArea
-		transform = this.worldTransform
+		bounds = this.cullArea;
+		transform = this.worldTransform;
 	} else if (this._render !== PIXI.Container.prototype._render) {
-		bounds = this.getBounds(true)
+		bounds = this.getBounds(true);
 	}
-	const projectionTransform = renderer.projection.transform
+	const projectionTransform = renderer.projection.transform;
 	if (projectionTransform) {
 		if (transform) {
-			transform = tempMatrix.copyFrom(transform)
-			transform.prepend(projectionTransform)
+			transform = tempMatrix.copyFrom(transform);
+			transform.prepend(projectionTransform);
 		} else {
-			transform = projectionTransform
+			transform = projectionTransform;
 		}
 	}
 	if (bounds && sourceFrame.intersects(bounds, transform)) {
-		this._render(renderer)
+		this._render(renderer);
 	} else if (this.cullArea) {
-		return
+		return;
 	}
 
 	// custom code
-	buildAndRenderTokenBatches(renderer, this)
+	buildAndRenderTokenBatches(renderer, this);
 }
 
 function useOooTokenRendering() {
-	const enabled = getSetting(SETTINGS.OptimizeTokenUiBatching)
+	const enabled = getSetting(SETTINGS.OptimizeTokenUiBatching);
 	if (!enabled) {
-		return
+		return;
 	}
 
 	/**
@@ -319,8 +319,8 @@ function useOooTokenRendering() {
 	 */
 	wrapFunction(TokenLayer.prototype, '_draw', function (this: TokenLayer) {
 		if (this.objects) {
-			this.objects.render = renderTokensOoo
+			this.objects.render = renderTokensOoo;
 		}
-	})
+	});
 }
-export default useOooTokenRendering
+export default useOooTokenRendering;

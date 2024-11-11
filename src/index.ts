@@ -1,2 +1,2 @@
-import './settings.ts'
-import './hacks/index.ts'
+import './hacks/index.ts';
+import './settings.ts';

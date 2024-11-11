@@ -1,4 +1,4 @@
-import { NAMESPACE } from './constants.ts'
+import { NAMESPACE } from './constants.ts';
 
 export enum SETTINGS {
 	OptimizeTokenUiBatching = 'optimize-interface-layer-clipping',
@@ -8,7 +8,7 @@ export enum SETTINGS {
 }
 
 export function getSetting(settings: SETTINGS): unknown {
-	return game.settings.get(NAMESPACE, settings)
+	return game.settings.get(NAMESPACE, settings);
 }
 
 Hooks.on('init', () => {
@@ -20,7 +20,7 @@ Hooks.on('init', () => {
 		requiresReload: true,
 		type: Boolean,
 		default: true,
-	})
+	});
 	game.settings.register(NAMESPACE, SETTINGS.EffectsCaching, {
 		name: `${NAMESPACE}.settings.${SETTINGS.EffectsCaching}.name`,
 		hint: `${NAMESPACE}.settings.${SETTINGS.EffectsCaching}.hint`,
@@ -29,7 +29,7 @@ Hooks.on('init', () => {
 		requiresReload: true,
 		type: Boolean,
 		default: true,
-	})
+	});
 	game.settings.register(NAMESPACE, SETTINGS.TokenBarsCaching, {
 		name: `${NAMESPACE}.settings.${SETTINGS.TokenBarsCaching}.name`,
 		hint: `${NAMESPACE}.settings.${SETTINGS.TokenBarsCaching}.hint`,
@@ -38,14 +38,14 @@ Hooks.on('init', () => {
 		requiresReload: true,
 		type: Boolean,
 		default: true,
-	})
-	game.settings.register(NAMESPACE, SETTINGS.FasterEdgeTesting, {
-		name: `${NAMESPACE}.settings.${SETTINGS.FasterEdgeTesting}.name`,
-		hint: `${NAMESPACE}.settings.${SETTINGS.FasterEdgeTesting}.hint`,
-		scope: 'client',
-		config: true,
-		requiresReload: true,
-		type: Boolean,
-		default: true,
-	})
-})
+	});
+	// game.settings.register(NAMESPACE, SETTINGS.FasterEdgeTesting, {
+	// 	name: `${NAMESPACE}.settings.${SETTINGS.FasterEdgeTesting}.name`,
+	// 	hint: `${NAMESPACE}.settings.${SETTINGS.FasterEdgeTesting}.hint`,
+	// 	scope: 'client',
+	// 	config: true,
+	// 	requiresReload: true,
+	// 	type: Boolean,
+	// 	default: true,
+	// })
+});
