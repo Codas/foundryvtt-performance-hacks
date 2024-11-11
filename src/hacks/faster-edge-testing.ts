@@ -23,7 +23,15 @@ const refreshEdges = function refreshEdges(this: CanvasEdgesWithQuadtree, wrappe
 	}
 	this.edgesQuadtree.clear();
 	for (const edge of canvas.edges.values()) {
-		this.edgesQuadtree.insert({ r: (edge as Edge).bounds, t: edge, n: new Set() });
+		let rect = (edge as Edge).bounds;
+		if (rect.width < 0 || rect.height < 0) {
+			rect = rect.clone();
+			rect.x = rect.x + rect.width;
+			rect.width = -rect.width;
+			rect.y = rect.y + rect.height;
+			rect.height = -rect.height;
+		}
+		this.edgesQuadtree.insert({ r: rect, t: edge, n: new Set() });
 	}
 };
 
