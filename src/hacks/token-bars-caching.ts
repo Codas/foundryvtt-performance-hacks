@@ -25,7 +25,22 @@ async function cacheResourceBars(this: Token, wrapped: Function, ...args: any[])
 	}
 }
 
+function isTokenBarCachingAvailable() {
+	// disable for newer bar brawl versions as that modules comes with its own caching
+	// and is broken by our caching attempts
+	const barBrawl = game.modules.get('barbrawl');
+	if (barBrawl && barBrawl.active && foundry.utils.isNewerVersion(barBrawl.version, '1.8.8')) {
+		return false;
+	}
+
+	return true;
+}
+
 let enableTokenBarsCaching = () => {
+	if (!isTokenBarCachingAvailable()) {
+		return;
+	}
+
 	const enabled = getSetting(SETTINGS.TokenBarsCaching);
 	if (!enabled) {
 		return;

@@ -15,16 +15,27 @@ async function cacheEffects(this: Token, wrapper: Function, ...args: any[]) {
 	}
 }
 
-let enableTokenBarsCaching = () => {
-	const enabled = getSetting(SETTINGS.TokenBarsCaching);
-
+function isTokenEffectsCachingAvailable() {
 	// Caching is not needed for dorako UX since radial hud already uses prerendered textures
 	// for the status effect icons for performance
 	const hasDorakoRadialHud =
 		game.settings.settings.has('pf2e-dorako-ux.moving.adjust-token-effects-hud') &&
 		game.settings.get('pf2e-dorako-ux', 'moving.adjust-token-effects-hud');
+	if (hasDorakoRadialHud) {
+		return false;
+	}
 
-	if (!enabled || hasDorakoRadialHud) {
+	return true;
+}
+
+let enableTokenBarsCaching = () => {
+	if (!isTokenEffectsCachingAvailable()) {
+		return;
+	}
+
+	const enabled = getSetting(SETTINGS.TokenBarsCaching);
+
+	if (!enabled) {
 		return;
 	}
 

@@ -39,13 +39,4 @@ Hooks.on('init', () => {
 		type: Boolean,
 		default: true,
 	});
-	// game.settings.register(NAMESPACE, SETTINGS.FasterEdgeTesting, {
-	// 	name: `${NAMESPACE}.settings.${SETTINGS.FasterEdgeTesting}.name`,
-	// 	hint: `${NAMESPACE}.settings.${SETTINGS.FasterEdgeTesting}.hint`,
-	// 	scope: 'client',
-	// 	config: true,
-	// 	requiresReload: true,
-	// 	type: Boolean,
-	// 	default: true,
-	// })
 });
