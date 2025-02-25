@@ -1,3 +1,8 @@
+## 0.6.5
+
+- Fix issues with bar brawl module
+- Fix issues with effect hider module
+
 ## 0.6.4
 
 - Update polish translations (thanks @Lioheart)

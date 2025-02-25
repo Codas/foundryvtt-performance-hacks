@@ -1,7 +1,7 @@
 {
 	"id": "fvtt-perf-optim",
 	"title": "Prime Performance",
-	"version": "0.6.4",
+	"version": "0.6.5",
 	"description": "Provides a collection of unofficial performance optimizations and hacks for foundry vtt.",
 	"esmodules": ["dist/fvtt-perf-optim.js"],
 	"languages": [
