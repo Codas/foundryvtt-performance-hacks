@@ -1,3 +1,7 @@
+## 0.6.6
+
+- Increase resolution of cached textures for lowest performance setting
+
 ## 0.6.5
 
 - Fix issues with bar brawl module
