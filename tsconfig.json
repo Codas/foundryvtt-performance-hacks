@@ -7,7 +7,7 @@
 		"module": "NodeNext",
 		"moduleResolution": "nodenext",
 		"resolveJsonModule": true,
-		"types": ["vite/client", "foundry-pf2e"],
+		"types": ["vite/client", "foundry-pf2e-types"],
 		"allowImportingTsExtensions": true,
 		"allowJs": true,
 		"checkJs": true,

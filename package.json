@@ -16,7 +16,7 @@
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"eslint": "^8.57.0",
 		"eslint-plugin-format": "^0.1.2",
-		"foundry-pf2e": "github:reonZ/foundry-pf2e",
+		"foundry-pf2e-types": "github:reonZ/foundry-pf2e-types",
 		"vite-plugin-checker": "^0.7.0",
 		"vite-tsconfig-paths": "^4.3.2"
 	}
