@@ -1,3 +1,7 @@
+## 0.6.7
+
+- Increase texture caching size further for very small grid sizes
+
 ## 0.6.6
 
 - Increase resolution of cached textures for lowest performance setting
