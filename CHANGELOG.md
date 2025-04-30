@@ -1,3 +1,7 @@
+## 0.7.0
+
+- Confirmed working in Foundry VTT v13
+
 ## 0.6.7
 
 - Increase texture caching size further for very small grid sizes
