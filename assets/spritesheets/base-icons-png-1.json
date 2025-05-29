@@ -1,0 +1,168 @@
+{
+	"frames": {
+		"icons/svg/card-joker.svg": {
+			"frame": { "x": 1690, "y": 462, "w": 340, "h": 448 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 88, "y": 32, "w": 340, "h": 448 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/coins.svg": {
+			"frame": { "x": 346, "y": 1450, "w": 472, "h": 328 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 92, "w": 472, "h": 328 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/door-closed-outline.svg": {
+			"frame": { "x": 1038, "y": 2, "w": 328, "h": 464 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 92, "y": 24, "w": 328, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/door-secret-outline.svg": {
+			"frame": { "x": 1382, "y": 462, "w": 280, "h": 448 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 116, "y": 32, "w": 280, "h": 448 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/door-steel.svg": {
+			"frame": { "x": 1366, "y": 946, "w": 320, "h": 456 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 96, "y": 28, "w": 320, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/eye.svg": {
+			"frame": { "x": 2, "y": 1454, "w": 476, "h": 340 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 88, "w": 476, "h": 340 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/fire-shield.svg": {
+			"frame": { "x": 942, "y": 950, "w": 420, "h": 464 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 48, "y": 24, "w": 420, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/holy-shield.svg": {
+			"frame": { "x": 342, "y": 2, "w": 408, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 52, "y": 20, "w": 408, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/ice-shield.svg": {
+			"frame": { "x": 326, "y": 486, "w": 424, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 48, "y": 20, "w": 424, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/light-off.svg": {
+			"frame": { "x": 494, "y": 962, "w": 296, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 100, "y": 16, "w": 296, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/light.svg": {
+			"frame": { "x": 678, "y": 1438, "w": 296, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 100, "y": 16, "w": 296, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/obelisk.svg": {
+			"frame": { "x": 794, "y": 950, "w": 144, "h": 468 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 184, "y": 20, "w": 144, "h": 468 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/pawprint.svg": {
+			"frame": { "x": 1430, "y": 1406, "w": 360, "h": 452 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 84, "y": 16, "w": 360, "h": 452 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/pill.svg": {
+			"frame": { "x": 1022, "y": 478, "w": 464, "h": 356 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 68, "w": 464, "h": 356 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/statue.svg": {
+			"frame": { "x": 754, "y": 478, "w": 264, "h": 468 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 124, "y": 24, "w": 264, "h": 468 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/stone-path.svg": {
+			"frame": { "x": 2, "y": 2, "w": 336, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 88, "y": 16, "w": 336, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/sword.svg": {
+			"frame": { "x": 1370, "y": 2, "w": 456, "h": 456 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 28, "y": 28, "w": 456, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/terror.svg": {
+			"frame": { "x": 190, "y": 970, "w": 300, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 104, "y": 20, "w": 300, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/unconscious.svg": {
+			"frame": { "x": 2, "y": 486, "w": 320, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 88, "y": 16, "w": 320, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/up.svg": {
+			"frame": { "x": 2, "y": 970, "w": 184, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 164, "y": 16, "w": 184, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/video.svg": {
+			"frame": { "x": 754, "y": 2, "w": 472, "h": 280 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 116, "w": 472, "h": 280 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/village.svg": {
+			"frame": { "x": 978, "y": 1418, "w": 456, "h": 448 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 28, "y": 32, "w": 456, "h": 448 },
+			"sourceSize": { "w": 512, "h": 512 }
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "base-icons-png-1.png",
+		"format": "RGBA8888",
+		"size": { "w": 2048, "h": 2048 },
+		"scale": "1",
+		"related_multi_packs": ["base-icons-png-0.json"],
+		"smartupdate": "$TexturePacker:SmartUpdate:df8c088bb10db08b7b97a5f43e7562cd:de60e47eb4799a3caa3a5885689c70a9:c758e3a44cea65e12ab0c0c458a7add7$"
+	}
+}

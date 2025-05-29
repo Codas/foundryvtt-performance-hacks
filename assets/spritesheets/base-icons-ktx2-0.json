@@ -1,0 +1,651 @@
+{
+	"frames": {
+		"control-icon-bg": {
+			"frame": { "x": 962, "y": 1350, "w": 4, "h": 4 },
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": { "x": 0, "y": 0, "w": 4, "h": 4 },
+			"sourceSize": { "w": 4, "h": 4 }
+		},
+		"control-icon-border": {
+			"frame": { "x": 3386, "y": 486, "w": 4, "h": 24 },
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": { "x": 0, "y": 0, "w": 4, "h": 24 },
+			"sourceSize": { "w": 4, "h": 24 }
+		},
+		"control-icon-corner": {
+			"frame": { "x": 1414, "y": 4070, "w": 24, "h": 24 },
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 24 },
+			"sourceSize": { "w": 24, "h": 24 }
+		},
+		"icons/svg/acid.svg": {
+			"frame": { "x": 2, "y": 2, "w": 480, "h": 484 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 12, "w": 480, "h": 484 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/anchor.svg": {
+			"frame": { "x": 2906, "y": 486, "w": 476, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 20, "w": 476, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/angel.svg": {
+			"frame": { "x": 2906, "y": 966, "w": 476, "h": 464 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 28, "w": 476, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/aura.svg": {
+			"frame": { "x": 2, "y": 978, "w": 476, "h": 484 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 12, "w": 476, "h": 484 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/barrel.svg": {
+			"frame": { "x": 1874, "y": 3726, "w": 368, "h": 436 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 72, "y": 40, "w": 368, "h": 436 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/biohazard.svg": {
+			"frame": { "x": 482, "y": 2790, "w": 476, "h": 416 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 40, "w": 476, "h": 416 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/blind.svg": {
+			"frame": { "x": 2398, "y": 3222, "w": 464, "h": 360 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 76, "w": 464, "h": 360 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/blood.svg": {
+			"frame": { "x": 2, "y": 2438, "w": 476, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 476, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/bones.svg": {
+			"frame": { "x": 1454, "y": 970, "w": 476, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 20, "w": 476, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/book.svg": {
+			"frame": { "x": 1446, "y": 2398, "w": 452, "h": 468 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 32, "y": 24, "w": 452, "h": 468 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/bridge.svg": {
+			"frame": { "x": 2, "y": 3886, "w": 464, "h": 208 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 264, "w": 464, "h": 208 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/cancel.svg": {
+			"frame": { "x": 486, "y": 486, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/card-hand.svg": {
+			"frame": { "x": 2866, "y": 1930, "w": 460, "h": 348 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 80, "w": 460, "h": 348 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/castle.svg": {
+			"frame": { "x": 1918, "y": 2394, "w": 464, "h": 464 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 24, "w": 464, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/cave.svg": {
+			"frame": { "x": 2, "y": 2918, "w": 480, "h": 472 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 24, "w": 480, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/chest.svg": {
+			"frame": { "x": 3662, "y": 2014, "w": 432, "h": 336 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 40, "y": 88, "w": 432, "h": 336 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/circle.svg": {
+			"frame": { "x": 2414, "y": 970, "w": 472, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 20, "w": 472, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/city.svg": {
+			"frame": { "x": 1442, "y": 1446, "w": 464, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 20, "w": 464, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/clockwork.svg": {
+			"frame": { "x": 2, "y": 490, "w": 480, "h": 484 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 484 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/combat.svg": {
+			"frame": { "x": 3386, "y": 1118, "w": 424, "h": 480 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 48, "y": 16, "w": 424, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/cowled.svg": {
+			"frame": { "x": 486, "y": 970, "w": 376, "h": 480 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 64, "y": 16, "w": 376, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/d4-grey.svg": {
+			"frame": { "x": 3698, "y": 3218, "w": 64, "h": 56 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 56 },
+			"sourceSize": { "w": 64, "h": 64 }
+		},
+		"icons/svg/d6-grey.svg": {
+			"frame": { "x": 3538, "y": 3542, "w": 56, "h": 56 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 4, "y": 4, "w": 56, "h": 56 },
+			"sourceSize": { "w": 64, "h": 64 }
+		},
+		"icons/svg/d8-grey.svg": {
+			"frame": { "x": 3598, "y": 2006, "w": 56, "h": 64 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 4, "y": 0, "w": 56, "h": 64 },
+			"sourceSize": { "w": 64, "h": 64 }
+		},
+		"icons/svg/d10-grey.svg": {
+			"frame": { "x": 3342, "y": 3542, "w": 64, "h": 64 },
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
+			"sourceSize": { "w": 64, "h": 64 }
+		},
+		"icons/svg/d12-grey.svg": {
+			"frame": { "x": 3410, "y": 3542, "w": 64, "h": 64 },
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
+			"sourceSize": { "w": 64, "h": 64 }
+		},
+		"icons/svg/d20-black.svg": {
+			"frame": { "x": 3478, "y": 3542, "w": 56, "h": 64 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 4, "y": 0, "w": 56, "h": 64 },
+			"sourceSize": { "w": 64, "h": 64 }
+		},
+		"icons/svg/d20-grey.svg": {
+			"frame": { "x": 3598, "y": 2074, "w": 56, "h": 64 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 4, "y": 0, "w": 56, "h": 64 },
+			"sourceSize": { "w": 64, "h": 64 }
+		},
+		"icons/svg/d20-highlight.svg": {
+			"frame": { "x": 2854, "y": 2394, "w": 408, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 52, "y": 20, "w": 408, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/d20.svg": {
+			"frame": { "x": 2866, "y": 3218, "w": 408, "h": 472 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 52, "y": 20, "w": 408, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/daze.svg": {
+			"frame": { "x": 970, "y": 970, "w": 480, "h": 464 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 28, "w": 480, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/deaf.svg": {
+			"frame": { "x": 1446, "y": 2854, "w": 448, "h": 464 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 32, "y": 24, "w": 448, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/degen.svg": {
+			"frame": { "x": 974, "y": 2, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/dice-target.svg": {
+			"frame": { "x": 970, "y": 486, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/direction.svg": {
+			"frame": { "x": 3890, "y": 2, "w": 184, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 164, "y": 16, "w": 184, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/door-closed.svg": {
+			"frame": { "x": 2314, "y": 3726, "w": 368, "h": 432 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 72, "y": 56, "w": 368, "h": 432 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/door-exit.svg": {
+			"frame": { "x": 3210, "y": 3630, "w": 448, "h": 464 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 32, "y": 28, "w": 448, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/door-locked-outline.svg": {
+			"frame": { "x": 3386, "y": 722, "w": 392, "h": 484 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 60, "y": 12, "w": 392, "h": 484 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/door-open-outline.svg": {
+			"frame": { "x": 478, "y": 3210, "w": 456, "h": 468 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 28, "y": 24, "w": 456, "h": 468 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/down.svg": {
+			"frame": { "x": 3890, "y": 2, "w": 184, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 164, "y": 16, "w": 184, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/downgrade.svg": {
+			"frame": { "x": 2386, "y": 2286, "w": 464, "h": 456 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 28, "w": 464, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/explosion.svg": {
+			"frame": { "x": 486, "y": 2, "w": 484, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 484, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/falling.svg": {
+			"frame": { "x": 1458, "y": 2, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/fire.svg": {
+			"frame": { "x": 482, "y": 1350, "w": 476, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 20, "w": 476, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/frozen.svg": {
+			"frame": { "x": 1454, "y": 486, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 12, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/hanging-sign.svg": {
+			"frame": { "x": 962, "y": 2398, "w": 480, "h": 452 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 36, "w": 480, "h": 452 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/hazard.svg": {
+			"frame": { "x": 3606, "y": 2354, "w": 476, "h": 436 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 32, "w": 476, "h": 436 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/heal.svg": {
+			"frame": { "x": 1910, "y": 1918, "w": 472, "h": 464 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 32, "w": 472, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/house.svg": {
+			"frame": { "x": 2, "y": 3402, "w": 480, "h": 472 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/ice-aura.svg": {
+			"frame": { "x": 1942, "y": 2, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/invisible.svg": {
+			"frame": { "x": 3394, "y": 470, "w": 248, "h": 488 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 132, "y": 12, "w": 248, "h": 488 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/item-bag.svg": {
+			"frame": { "x": 3698, "y": 3278, "w": 364, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 68, "y": 20, "w": 364, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/lever.svg": {
+			"frame": { "x": 1910, "y": 1446, "w": 468, "h": 468 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 28, "w": 468, "h": 468 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/lightning.svg": {
+			"frame": { "x": 2, "y": 1954, "w": 476, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 16, "w": 476, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/mage-shield.svg": {
+			"frame": { "x": 478, "y": 3682, "w": 412, "h": 456 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 52, "y": 20, "w": 412, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/mole.svg": {
+			"frame": { "x": 962, "y": 2854, "w": 480, "h": 364 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 104, "w": 480, "h": 364 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/mountain.svg": {
+			"frame": { "x": 1914, "y": 2862, "w": 480, "h": 440 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 440 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/mystery-man-black.svg": {
+			"frame": { "x": 2382, "y": 1906, "w": 376, "h": 480 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 64, "y": 16, "w": 376, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/mystery-man.svg": {
+			"frame": { "x": 486, "y": 970, "w": 376, "h": 480 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 64, "y": 16, "w": 376, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/net.svg": {
+			"frame": { "x": 2, "y": 1466, "w": 484, "h": 476 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 12, "y": 16, "w": 484, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/oak.svg": {
+			"frame": { "x": 3394, "y": 2, "w": 464, "h": 492 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 12, "w": 464, "h": 492 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/padlock.svg": {
+			"frame": { "x": 1390, "y": 3306, "w": 388, "h": 480 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 60, "y": 16, "w": 388, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/paralysis.svg": {
+			"frame": { "x": 482, "y": 1830, "w": 476, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 20, "w": 476, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/poison.svg": {
+			"frame": { "x": 1938, "y": 486, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/radiation.svg": {
+			"frame": { "x": 482, "y": 2310, "w": 476, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 476, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/regen.svg": {
+			"frame": { "x": 2426, "y": 2, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/ruins.svg": {
+			"frame": { "x": 962, "y": 1438, "w": 476, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 16, "w": 476, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/shield.svg": {
+			"frame": { "x": 2866, "y": 1446, "w": 304, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 104, "y": 16, "w": 304, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/silenced.svg": {
+			"frame": { "x": 3266, "y": 2330, "w": 336, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 88, "y": 16, "w": 336, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/skull.svg": {
+			"frame": { "x": 2422, "y": 486, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/sleep.svg": {
+			"frame": { "x": 3218, "y": 1546, "w": 440, "h": 456 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 32, "y": 24, "w": 440, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/sound-off.svg": {
+			"frame": { "x": 3218, "y": 2006, "w": 376, "h": 320 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 80, "y": 96, "w": 376, "h": 320 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/sound.svg": {
+			"frame": { "x": 3342, "y": 3218, "w": 352, "h": 320 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 80, "y": 96, "w": 352, "h": 320 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/stoned.svg": {
+			"frame": { "x": 1874, "y": 3306, "w": 416, "h": 480 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 36, "y": 16, "w": 416, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/sun.svg": {
+			"frame": { "x": 962, "y": 1918, "w": 476, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 16, "w": 476, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/tankard.svg": {
+			"frame": { "x": 938, "y": 3222, "w": 448, "h": 476 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 28, "y": 16, "w": 448, "h": 476 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/target.svg": {
+			"frame": { "x": 2910, "y": 2, "w": 480, "h": 480 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 16, "w": 480, "h": 480 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/temple.svg": {
+			"frame": { "x": 3662, "y": 1546, "w": 432, "h": 464 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 40, "y": 24, "w": 432, "h": 464 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/thrust.svg": {
+			"frame": { "x": 3322, "y": 2814, "w": 400, "h": 456 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 56, "y": 28, "w": 400, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/tower-flag.svg": {
+			"frame": { "x": 1414, "y": 3698, "w": 368, "h": 456 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 72, "y": 32, "w": 368, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/tower.svg": {
+			"frame": { "x": 938, "y": 3702, "w": 392, "h": 472 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 64, "y": 20, "w": 392, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/trap.svg": {
+			"frame": { "x": 3782, "y": 2794, "w": 480, "h": 312 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 112, "w": 480, "h": 312 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/upgrade.svg": {
+			"frame": { "x": 2750, "y": 3630, "w": 464, "h": 456 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 28, "w": 464, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/wall-direction.svg": {
+			"frame": { "x": 1442, "y": 1922, "w": 464, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 24, "y": 20, "w": 464, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/waterfall.svg": {
+			"frame": { "x": 2382, "y": 1446, "w": 480, "h": 456 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 16, "y": 28, "w": 480, "h": 456 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/windmill.svg": {
+			"frame": { "x": 2850, "y": 2870, "w": 344, "h": 468 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 84, "y": 20, "w": 344, "h": 468 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/wing.svg": {
+			"frame": { "x": 2398, "y": 2746, "w": 472, "h": 448 },
+			"rotated": true,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 28, "w": 472, "h": 448 },
+			"sourceSize": { "w": 512, "h": 512 }
+		},
+		"icons/svg/wingfoot.svg": {
+			"frame": { "x": 1934, "y": 970, "w": 476, "h": 472 },
+			"rotated": false,
+			"trimmed": true,
+			"spriteSourceSize": { "x": 20, "y": 20, "w": 476, "h": 472 },
+			"sourceSize": { "w": 512, "h": 512 }
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.1",
+		"image": "base-icons-ktx2-0.ktx2",
+		"format": "BASISU_UASTC",
+		"size": { "w": 4096, "h": 4096 },
+		"scale": "1",
+		"related_multi_packs": ["base-icons-ktx2-1.json"],
+		"smartupdate": "$TexturePacker:SmartUpdate:df8c088bb10db08b7b97a5f43e7562cd:de60e47eb4799a3caa3a5885689c70a9:c758e3a44cea65e12ab0c0c458a7add7$"
+	}
+}

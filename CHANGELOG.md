@@ -1,3 +1,7 @@
+## 0.8.0
+
+- Add spritesheet based icon replacement
+
 ## 0.7.0
 
 - Confirmed working in Foundry VTT v13

@@ -223,8 +223,10 @@ function getInterfaceBounds(object: PlaceableObject) {
 	const b = object.bounds;
 	const lb = object.getLocalBounds();
 	const localRect = new PIXI.Rectangle(b.x + lb.x, b.y + lb.y, lb.width, lb.height);
+	const PrimarySpriteMeshClass = foundry?.canvas?.primary?.PrimarySpriteMesh ?? PrimarySpriteMesh;
+	const TokenClass = foundry?.canvas?.placeables?.Token ?? Token;
 
-	if (!(object instanceof Token) || !(object.mesh instanceof PrimarySpriteMesh)) {
+	if (!(object instanceof TokenClass) || !(object.mesh instanceof PrimarySpriteMeshClass)) {
 		return localRect;
 	}
 
@@ -244,15 +246,18 @@ function getInterfaceBounds(object: PlaceableObject) {
 
 function buildAndRenderTokenBatches(renderer: PIXI.Renderer, container: PIXI.Container) {
 	// build initial batches
+	const Quadtree = foundry?.canvas?.geometry?.CanvasQuadtree ?? CanvasQuadtree;
 	// @ts-expect-error types are wrong for CanvasQuadtree. Does not need params
-	const interfaceQuadtree = new CanvasQuadtree<PlaceableObject>();
+	const interfaceQuadtree = new Quadtree<PlaceableObject>();
 	const segments: RenderSegment[] = [];
+	const TokenClass = foundry?.canvas?.placeables?.Token ?? Token;
+
 	// populate quadtree
 	container.children.forEach((child, i) => {
 		if (!child.visible || child.worldAlpha <= 0 || !child.renderable) {
 			return;
 		}
-		if (!(child instanceof Token)) {
+		if (!(child instanceof TokenClass)) {
 			segments.push(new OtherRenderSegment(child));
 			return;
 		}
@@ -323,4 +328,4 @@ function useOooTokenRendering() {
 		}
 	});
 }
-export default useOooTokenRendering;
+export { useOooTokenRendering };
