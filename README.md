@@ -1,4 +1,5 @@
 # Foundry VTT Prime Performance
+
 <a href='https://ko-fi.com/J3J6YWWB4' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 Increases your Foundry VTT Performance by your favorite prime number![^1][^2] Without impact on the visual fidelity[^3]
@@ -45,6 +46,9 @@ Caches token nameplates to textures, allowing for better batching of the UI elem
 
 **Cache token resource bars**\
 Caches token resource bars to textures, allowing for better batching of the UI elements. This can result in slightly blockier hp bars in very high zoom levels.
+
+**Core Icon Spritesheets**\
+Replaces build in SVG icon rendering with a sprite atlas. Greatly reduces the amount of textures needed to render scenes, especially those with large amount of notes. Also introduces a sprite based replacement for control icon backgrounds to allow for more batching when rendering the interface layer.
 
 ---
 

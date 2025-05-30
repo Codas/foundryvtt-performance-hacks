@@ -13,9 +13,9 @@
 				"name": "Token-Efekte cachen",
 				"hint": "Cacht die Token-Effektleiste. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität haben."
 			},
-			"faster-edge-testing": {
-				"name": "Schnellere Kollisionsprüfung",
-				"hint": "Verbessert die Kollisionsprüfung zum Test auf Sichtbarkeit etc. Verbessert drastisch die Performance wenn das Levels Modul aktiv ist oder das Anzeigen von PF2e Aura Templates"
+			"spritesheet-substitution": {
+				"name": "Austausch von Texturen mit Spritesheets",
+				"hint": "Tauscht gewisse Icons und andere Grafikelemente von Foundry gegen Spritesheets aus. Dies kann die Leistung und den Resourcenverbrauch bei der Anzeige von vielen UI Icons für Journals, Lichter, Türen etc verbessern."
 			}
 		}
 	}
