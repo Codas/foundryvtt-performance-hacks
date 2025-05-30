@@ -1,4 +1,3 @@
-import { NAMESPACE } from 'src/constants.ts';
 import { SETTINGS, getSetting } from 'src/settings.ts';
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts';
 
@@ -47,9 +46,9 @@ let enableTokenBarsCaching = () => {
 		return;
 	}
 
-	libWrapper.register(NAMESPACE, 'CONFIG.Token.objectClass.prototype.drawBars', cacheResourceBars, 'WRAPPER');
+	libWrapper.register('fvtt-perf-optim', 'CONFIG.Token.objectClass.prototype.drawBars', cacheResourceBars, 'WRAPPER');
 };
-export { enableTokenBarsCaching };
+export default enableTokenBarsCaching;
 
 if (import.meta.hot) {
 	import.meta.hot.accept((newModule) => {

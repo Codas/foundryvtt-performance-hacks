@@ -4,7 +4,7 @@ export enum SETTINGS {
 	OptimizeTokenUiBatching = 'optimize-interface-layer-clipping',
 	EffectsCaching = 'token-effects-caching',
 	TokenBarsCaching = 'token-bars-caching',
-	SpritesheetSubstitution = 'spritesheet-substitution',
+	FasterEdgeTesting = 'faster-edge-testing',
 }
 
 export function getSetting(settings: SETTINGS): unknown {
@@ -33,15 +33,6 @@ Hooks.on('init', () => {
 	game.settings.register(NAMESPACE, SETTINGS.TokenBarsCaching, {
 		name: `${NAMESPACE}.settings.${SETTINGS.TokenBarsCaching}.name`,
 		hint: `${NAMESPACE}.settings.${SETTINGS.TokenBarsCaching}.hint`,
-		scope: 'client',
-		config: true,
-		requiresReload: true,
-		type: Boolean,
-		default: true,
-	});
-	game.settings.register(NAMESPACE, SETTINGS.SpritesheetSubstitution, {
-		name: `${NAMESPACE}.settings.${SETTINGS.SpritesheetSubstitution}.name`,
-		hint: `${NAMESPACE}.settings.${SETTINGS.SpritesheetSubstitution}.hint`,
 		scope: 'client',
 		config: true,
 		requiresReload: true,

@@ -1,4 +1,3 @@
-import { NAMESPACE } from 'src/constants.ts';
 import { SETTINGS, getSetting } from 'src/settings.ts';
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts';
 
@@ -47,7 +46,7 @@ function isTokenEffectsCachingAvailable() {
 	return true;
 }
 
-let enableEffectsCaching = () => {
+let enableTokenBarsCaching = () => {
 	if (!isTokenEffectsCachingAvailable()) {
 		return;
 	}
@@ -58,12 +57,17 @@ let enableEffectsCaching = () => {
 		return;
 	}
 
-	libWrapper.register(NAMESPACE, 'CONFIG.Token.objectClass.prototype._applyRenderFlags', cacheEffects, 'WRAPPER');
+	libWrapper.register(
+		'fvtt-perf-optim',
+		'CONFIG.Token.objectClass.prototype._applyRenderFlags',
+		cacheEffects,
+		'WRAPPER',
+	);
 };
-export { enableEffectsCaching };
+export default enableTokenBarsCaching;
 
 if (import.meta.hot) {
 	import.meta.hot.accept((newModule) => {
-		enableEffectsCaching = newModule?.foo;
+		enableTokenBarsCaching = newModule?.foo;
 	});
 }

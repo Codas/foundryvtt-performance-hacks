@@ -6,16 +6,16 @@
 				"hint": "Optimizes render batching of Token UI elements. No visual degredation expected. Needed in order for the other settings to have a noticable impact."
 			},
 			"token-bars-caching": {
-				"name": "Cache Token Resource Bars",
+				"name": "Cache token resource bars",
 				"hint": "Caches token resource bars to textures. Very minor visual degradataion on high zoom levels expected."
 			},
 			"token-effects-caching": {
-				"name": "Cache Token Effects",
+				"name": "Cache token effects",
 				"hint": "Caches the token effects bar. Very minor visual degradataion on high zoom levels expected."
 			},
-			"spritesheet-substitution": {
-				"name": "Core Icon Spritesheets",
-				"hint": "Substitutes core SVG icons and other graphic elements with optimized spriteshseets. This can improve performance and resource usage when displaying many UI icons for journals, lights, doors, etc."
+			"faster-edge-testing": {
+				"name": "Faster collision testing",
+				"hint": "Improves performance of the builtin sight, auditory etc collision detection. Improves performance especially when using the levels module or rendering of PF2e aura templates."
 			}
 		}
 	}
