@@ -1,3 +1,10 @@
+## 0.8.2
+
+- Re-Enable spritesheet based texture replacement
+- Improve render batching of ambient sounds and light overlays
+- Add settings menu to register custom spritesheets
+- Patch dynamic ring rendering code to support spritesheet token subject images
+
 ## 0.8.1
 
 - Revert 0.8.0 for now

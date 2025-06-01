@@ -47,8 +47,21 @@ Caches token nameplates to textures, allowing for better batching of the UI elem
 **Cache token resource bars**\
 Caches token resource bars to textures, allowing for better batching of the UI elements. This can result in slightly blockier hp bars in very high zoom levels.
 
-**Core Icon Spritesheets**\
-Replaces build in SVG icon rendering with a sprite atlas. Greatly reduces the amount of textures needed to render scenes, especially those with large amount of notes. Also introduces a sprite based replacement for control icon backgrounds to allow for more batching when rendering the interface layer.
+**Texture Replacement with Spritesheets**\
+Replaces build in SVG icon rendering with a sprite atlas. Greatly reduces the amount of textures needed to render scenes, especially those with large amount of notes, different door states etc. Also introduces a sprite based replacement for control icon backgrounds to allow for more batching when rendering the interface layer.
+
+**Custom Spritesheets**\
+Allows for the replacement of arbitrary textures referenced in foundry with optimized spritesheets. To create your own spritesheets to replace build-in textures, simply name the spritesheet frames like the asset path referenced in foundry, prefixed by a `#` sign. For example, if a tile in your scene references a texture in `assets/tiles/my-fancy-tile.webp`, the spritesheet frame should be named `#assets/tiles/my-fancy-tile.webp`.
+
+If you create custom spritesheets, it is strongly recommended to use GPU compressible textures. Supported formats are basis_universal files (`.basis`) with ETC1 texture compression and zstandard supercompression for Foundry VTT v12 and `.ktx2` files with either ETC1 or UASTC texture format and zstandard supercompression for Foundry VTT v13.
+[TexturePacker](https://www.codeandweb.com/texturepacker) can be used to quickly create spritesheets and has built-in support for `.basis` files with ETC1 compression.
+
+The best use case for this currently is to create spritesheet textures for party actors. If you are also using dynamic tokens, don't forget to also enable **Dynamic Token Spritesheet Support**. Regular token graphics _should_ use premultiplied alpha (and setting the `'alpha_mode'` property in the spritesheet meta data object to `'pma'`). For token subject images premultiplied alpha is **required**.
+
+Future version of Prime Performance will likely contain a feature to create these spritesheets automatically and on a per-scene basis to optimize rendering in complex scenes with many tiles.
+
+**Dynamic Token Spritesheet Support**\
+Patches the dynamic token ring rendering engine to support spritesheets for the token subjects. This should only be used if you also use **Custom Spritesheets** to replace token images.
 
 ---
 

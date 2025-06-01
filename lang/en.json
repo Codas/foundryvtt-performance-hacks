@@ -14,8 +14,28 @@
 				"hint": "Caches the token effects bar. Very minor visual degradataion on high zoom levels expected."
 			},
 			"spritesheet-substitution": {
-				"name": "Core Icon Spritesheets",
+				"name": "Texture Replacement with Spritesheets",
 				"hint": "Substitutes core SVG icons and other graphic elements with optimized spriteshseets. This can improve performance and resource usage when displaying many UI icons for journals, lights, doors, etc."
+			},
+			"spritesheet-substitution-custom": {
+				"name": "Custom Spritesheets",
+				"label": "Manage Custom Spritesheets",
+				"hint": "Custom spritesheets can be used to replace more core or custom Icons and textures, for example custom condition marker, token art or tiles for improved performance",
+				"menu": {
+					"add": "Add Custom Spritesheet",
+					"spritesheet": "Select Custom Spritesheet",
+					"delete": "Delete Custom Spritesheet",
+					"title": "Manage Custom Spritesheets",
+					"warn-no-src": "You must select a spritesheet source to add it",
+					"warn-no-json": "The file you select must be a valid pixi.js spritesheet JSON file",
+					"warn-inalid-asset": "The file you select does not contain valid pixi.js spritesheet data",
+					"warn-init-failed": "Prime Performance: Failed to load default icon substitution spritesheets. Spritesheet optimizations will be disabled. Please check the console for more details.",
+					"warn-custom-spritesheets-failed": "Prime Performance: Failed to load one or more custom spritesheet. Please check the console for more details."
+				}
+			},
+			"token-ring-spritesheet-support": {
+				"name": "Dynamic Token Spritesheet Support",
+				"hint": "Allows tokens with dynamic rings to be replaced with spritesheet textures. This is only needed if you use dynamic token rings and the spritesheet substitution feature to replace token textures."
 			}
 		}
 	}

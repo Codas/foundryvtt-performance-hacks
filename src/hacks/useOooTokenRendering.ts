@@ -1,4 +1,5 @@
-import { SETTINGS, getSetting } from 'src/settings.ts';
+import { SETTINGS } from 'src/settings/constants.ts';
+import { getSetting } from 'src/settings/settings.ts';
 import { wrapFunction } from 'src/utils/wrapFunction.ts';
 
 /**

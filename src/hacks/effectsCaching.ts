@@ -1,5 +1,6 @@
 import { NAMESPACE } from 'src/constants.ts';
-import { SETTINGS, getSetting } from 'src/settings.ts';
+import { SETTINGS } from 'src/settings/constants.ts';
+import { getSetting } from 'src/settings/settings.ts';
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts';
 
 function refreshEffectCache(object: PIXI.DisplayObject) {
@@ -41,6 +42,10 @@ function isTokenEffectsCachingAvailable() {
 		game.settings.settings.has('pf2e-dorako-ux.moving.adjust-token-effects-hud') &&
 		game.settings.get('pf2e-dorako-ux', 'moving.adjust-token-effects-hud');
 	if (hasDorakoRadialHud) {
+		return false;
+	}
+
+	if (game.modules.has('pf2e-effects-halo') && game.modules.get('pf2e-effects-halo')?.active) {
 		return false;
 	}
 

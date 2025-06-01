@@ -1,5 +1,6 @@
 import { NAMESPACE } from 'src/constants.ts';
-import { SETTINGS, getSetting } from 'src/settings.ts';
+import { SETTINGS } from 'src/settings/constants.ts';
+import { getSetting } from 'src/settings/settings.ts';
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts';
 
 async function cacheResourceBars(this: Token, wrapped: Function, ...args: any[]) {

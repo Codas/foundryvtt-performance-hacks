@@ -16,6 +16,26 @@
 			"spritesheet-substitution": {
 				"name": "Austausch von Texturen mit Spritesheets",
 				"hint": "Tauscht gewisse Icons und andere Grafikelemente von Foundry gegen Spritesheets aus. Dies kann die Leistung und den Resourcenverbrauch bei der Anzeige von vielen UI Icons für Journals, Lichter, Türen etc verbessern."
+			},
+			"spritesheet-substitution-custom": {
+				"name": "Eigene Spritesheets",
+				"label": "Verwalte eigene Spritesheets",
+				"hint": "Eigene Spritesheets können verwendet werden, um Grafiken von Effekten, Tiles, Tokens, Szenen und anderen Objekten auszutauschen.",
+				"menu": {
+					"add": "Eigenes Spritesheet hinzufügen",
+					"spritesheet": "Wähle Spritesheet aus",
+					"delete": "Lösche Spritesheet",
+					"title": "Verwalte eigene Spritesheets",
+					"warn-no-src": "Du musst einen Spritesheet-Pfad auswählen, um ihn hinzuzufügen",
+					"warn-no-json": "Die ausgewählte Datei muss eine gültige pixi.js Spritesheet JSON-Datei sein",
+					"warn-inalid-asset": "Die ausgewählte Datei enthält keine gültigen pixi.js Spritesheet-Daten",
+					"warn-init-failed": "Prime Performance: Fehler beim laden der Standard-Spritesheets. Optimierung durch Spritesheets wird deaktiviert. Bitte prüfe die Konsole auf weitere Details.",
+					"warn-custom-spritesheets-failed": "Prime Performance: Fehler beim laden von einen oder mehreren eigenen Spritesheets. Bitte prüfe die Konsole auf weitere Details."
+				}
+			},
+			"token-ring-spritesheet-support": {
+				"name": "Unterstützung für Spritesheets im dynamischen Token-Ring",
+				"hint": "Erlaubt es, Token-Grafiken mit dynamischen Ringen durch Spritesheet-Texturen zu ersetzen. Dies ist nur nötig, wenn du dynamische Token-Ringe und den Austausch von Spritesheets verwendest, um Token-Grafiken (subject textures) auszutauschen."
 			}
 		}
 	}

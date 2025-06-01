@@ -6,4 +6,7 @@ export const FOUNDRY_API = {
 	get game() {
 		return foundry.game ?? game;
 	},
+	get generation(): number {
+		return game.release.generation;
+	},
 };

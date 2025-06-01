@@ -641,11 +641,11 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "1.1",
-		"image": "base-icons-png-0.png",
-		"format": "RGBA8888",
+		"image": "base-icons-0.basis",
+		"format": "BASISU_ETC1S",
 		"size": { "w": 4096, "h": 4096 },
 		"scale": "1",
-		"related_multi_packs": ["base-icons-png-1.json"],
+		"related_multi_packs": ["base-icons-1.json"],
 		"smartupdate": "$TexturePacker:SmartUpdate:df8c088bb10db08b7b97a5f43e7562cd:de60e47eb4799a3caa3a5885689c70a9:c758e3a44cea65e12ab0c0c458a7add7$"
 	}
 }

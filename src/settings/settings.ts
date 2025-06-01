@@ -1,11 +1,6 @@
-import { NAMESPACE } from './constants.ts';
-
-export enum SETTINGS {
-	OptimizeTokenUiBatching = 'optimize-interface-layer-clipping',
-	EffectsCaching = 'token-effects-caching',
-	TokenBarsCaching = 'token-bars-caching',
-	SpritesheetSubstitution = 'spritesheet-substitution',
-}
+import { NAMESPACE } from 'src/constants.ts';
+import { CustomSpritesheetConfig } from '../apps/CustomSpritesheetConfig.ts';
+import { SETTINGS } from './constants.ts';
 
 export function getSetting(settings: SETTINGS): unknown {
 	return game.settings.get(NAMESPACE, settings);
@@ -47,5 +42,32 @@ Hooks.on('init', () => {
 		requiresReload: true,
 		type: Boolean,
 		default: true,
+	});
+
+	game.settings.register(NAMESPACE, SETTINGS.CustomSpritesheets, {
+		name: `${NAMESPACE}.settings.${SETTINGS.CustomSpritesheets}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.CustomSpritesheets}.hint`,
+		config: false,
+		type: Array,
+		default: [],
+	});
+
+	game.settings.registerMenu(NAMESPACE, SETTINGS.CustomSpritesheets, {
+		name: `${NAMESPACE}.settings.${SETTINGS.CustomSpritesheets}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.CustomSpritesheets}.hint`,
+		label: `${NAMESPACE}.settings.${SETTINGS.CustomSpritesheets}.label`,
+		icon: 'fa-solid fa-images',
+		type: CustomSpritesheetConfig,
+		restricted: true,
+	});
+
+	game.settings.register(NAMESPACE, SETTINGS.TokenRingSpritesheetSupport, {
+		name: `${NAMESPACE}.settings.${SETTINGS.TokenRingSpritesheetSupport}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.TokenRingSpritesheetSupport}.hint`,
+		scope: 'world',
+		config: true,
+		requiresReload: true,
+		type: Boolean,
+		default: false,
 	});
 });

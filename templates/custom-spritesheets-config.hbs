@@ -1,0 +1,21 @@
+<form class='standard-form scrollable'>
+	{{#each spritesheets}}
+		<div class='control custom-font' data-index='{{index}}'>
+			<span>{{{this}}}</span>
+			<a
+				class='control'
+				data-action='delete'
+				title='{{localize "fvtt-perf-optim.settings.spritesheet-substitution-custom.menu.delete"}}'
+			>
+				<i class='fa-solid fa-xmark'></i>
+			</a>
+		</div>
+	{{/each}}
+
+	<div class='form-group picker' data-name='src'>
+		<label>{{localize 'fvtt-perf-optim.settings.spritesheet-substitution-custom.menu.spritesheet'}}</label>
+		<div class='form-fields'>
+			<file-picker name='src' type='json'></file-picker>
+		</div>
+	</div>
+</form>

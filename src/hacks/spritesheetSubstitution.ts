@@ -1,8 +1,29 @@
 import type { PrimarySpriteMesh } from 'foundry-pf2e-types/foundry/client/pixi/placeables/primary-canvas-objects';
 import { NAMESPACE } from 'src/constants.ts';
-import { SETTINGS, getSetting } from 'src/settings.ts';
+import { SETTINGS } from 'src/settings/constants.ts';
+import { getSetting } from 'src/settings/settings.ts';
 import { FOUNDRY_API } from 'src/utils/foundryShim.ts';
 import { registerWrapperForVersion } from 'src/utils/registerWrapper.ts';
+
+/**
+ * For spritesheets to work with dynamic token rings, the texture coords need to be changed slightly.
+ * Essentially: They have to be mulitplied by the relative base texture size.
+ * For a texture that is 3x2 image tiles, using the texture at the bottom left corner, this would be:
+ * vertex shader main code:
+ * vOrigTextureCoord = aTextureCoord * vec2(3, 2) - vec2(0, 1)
+ *
+ * This fixes the color band being displayed relative to the base texture size.
+ *
+ * Gradient color rings still need to be fixed, as that uses the textureCoord + smoothstep to
+ * create a gradient, which again shifts the gradient to be over the whole base texture are
+ * as apposed to just the token cutout. Best way to fix this would probably be to pass another
+ * vTextureCoordClipped or somthing to the shader, that does the same calculation as for the
+ * textureCoord ((aTextureCoord - 0.5) * aTextureScaleCorrection + 0.5), but also applies the
+ * correction for the vOrigTextureCoord as above:
+ * vTextureCoordClipped = (vOrigTextureCoord - 0.5) * aTextureScaleCorrection + 0.5;
+ *
+ * then use vTextureCoordClipped in the gradient calculation instead of vTextureCoord
+ */
 
 const CONTROL_ICON_SRC = {
 	background: 'control-icon-bg',
@@ -282,6 +303,7 @@ function restoreRenderableOriginal(children: PIXI.DisplayObject[]) {
 		}
 	}
 }
+
 function disableRenderingFor<T extends PIXI.DisplayObject>(children: T[], test: (child: T) => boolean) {
 	for (const child of children) {
 		if (test(child)) {
@@ -313,12 +335,30 @@ function DoorControl__getTexture(this: DoorControl) {
 	return FOUNDRY_API.getTexture(path);
 }
 
+async function loadAndRegisterSpritesheets(spritesheetUrls: string[]) {
+	const spritesheets: PIXI.Spritesheet[] = await Promise.all(spritesheetUrls.map((url) => PIXI.Assets.load(url)));
+	for (const spritesheet of spritesheets) {
+		if (!(spritesheet instanceof PIXI.Spritesheet)) {
+			continue;
+		}
+
+		if (spritesheet.data.meta.alphaMode === 'pma') {
+			spritesheet.baseTexture.alphaMode = PIXI.ALPHA_MODES.PMA;
+		}
+
+		const allSheets = [spritesheet, ...(spritesheet.linkedSheets ?? [])];
+		for (const sheet of allSheets) {
+			for (const [name, texture] of Object.entries(sheet.textures)) {
+				if (texture instanceof PIXI.Texture) {
+					spritesheetSubstitutions[name] = texture;
+				}
+			}
+		}
+	}
+}
+
 async function loadBaseSpritesheets(): Promise<boolean> {
-	// TODO make adding additional spritesheets possible in settings
-	const basePath = `modules/${NAMESPACE}/dist/spritesheets`;
-	const baseSpritesheet =
-		game.release.generation < 13 ? `${basePath}/base-icons-png-0.json` : `${basePath}/base-icons-ktx2-0.json`;
-	const spritesheetUrls = [baseSpritesheet];
+	const baseSpritesheet = `modules/${NAMESPACE}/dist/spritesheets/base-icons-0.json`;
 
 	// track loading state. Should something go wrong during spritesheet loading, we
 	// simply cancel the initialization and log an error
@@ -326,25 +366,26 @@ async function loadBaseSpritesheets(): Promise<boolean> {
 
 	// load the base spritesheets and extract the textures for substitution
 	try {
-		const spritesheets: PIXI.Spritesheet[] = await Promise.all(spritesheetUrls.map((url) => PIXI.Assets.load(url)));
-		for (const spritesheet of spritesheets) {
-			if (!(spritesheet instanceof PIXI.Spritesheet)) {
-				continue;
-			}
-
-			const allSheets = [spritesheet, ...(spritesheet.linkedSheets ?? [])];
-			for (const sheet of allSheets) {
-				for (const [name, texture] of Object.entries(sheet.textures)) {
-					if (texture instanceof PIXI.Texture) {
-						spritesheetSubstitutions[name] = texture;
-					}
-				}
-			}
-		}
+		await loadAndRegisterSpritesheets([baseSpritesheet]);
 	} catch (error) {
+		ui.notifications.error(
+			game.i18n.localize(`${NAMESPACE}.settings.${SETTINGS.CustomSpritesheets}.menu.warn-init-failed`),
+		);
 		console.error('Error loading base spritesheets for substitution');
 		console.error(error);
 		loadingSuccessful = false;
+	}
+
+	try {
+		const customSpritesheets: string[] = game.settings.get(NAMESPACE, SETTINGS.CustomSpritesheets) ?? [];
+		await loadAndRegisterSpritesheets(customSpritesheets);
+	} catch (error) {
+		ui.notifications.warn(
+			game.i18n.localize(`${NAMESPACE}.settings.${SETTINGS.CustomSpritesheets}.menu.warn-custom-spritesheets-failed`),
+		);
+		console.error('Error loading custom spritesheets for substitution', error);
+		// this will not mark initialization as failed, because the base spritesheets
+		// are still loaded and the substitution will work for those
 	}
 
 	// Resolve the initialization promise to indicate that spritesheet substitution is ready
@@ -363,6 +404,11 @@ async function enableSpritesheetSubstitution() {
 
 	if (!enabled) {
 		return;
+	}
+
+	// make sure basis transcoder is enabled (it is by default in v13+)
+	if (FOUNDRY_API.game.release.generation < 13) {
+		CONFIG.Canvas.transcoders.basis = true;
 	}
 
 	// register wrapper for texture loader to wait for spritesheet initialization when loading textures
@@ -444,7 +490,7 @@ async function enableSpritesheetSubstitution() {
 
 	// Override TokenRing configure method to fix texture loading
 	registerWrapperForVersion(TokenRing_configure, 'WRAPPER', {
-		v12: 'TokenRing.prototype.configure',
+		v12: 'foundry.canvas.tokens.TokenRing.prototype.configure',
 		v13: 'foundry.canvas.placeables.tokens.TokenRing.prototype.configure',
 	});
 }
