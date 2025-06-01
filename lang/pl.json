@@ -13,9 +13,29 @@
 				"name": "Efekty tokenów w pamięci podręcznej",
 				"hint": "Przechowuje w pamięci podręcznej pasek efektów tokenów. Oczekiwana bardzo niewielka degradacja wizualna na wysokich poziomach powiększenia."
 			},
-			"faster-edge-testing": {
-				"name": "Szybsze testowanie kolizji",
-				"hint": "Poprawiono działanie wbudowanego wykrywania kolizji wzrokowych, słuchowych itp. Poprawia wydajność, zwłaszcza podczas korzystania z modułu poziomów lub renderowania szablonów aury PF2e."
+			"spritesheet-substitution": {
+				"name": "Zastąpienie tekstur szablonami sprite'ów",
+				"hint": "Zastępuje podstawowe ikony SVG i inne elementy graficzne zoptymalizowanymi zestawami sprite'ów. Może to poprawić wydajność i wykorzystanie zasobów podczas wyświetlania wielu ikon interfejsu użytkownika dla dzienników, świateł, drzwi itp."
+			},
+			"spritesheet-substitution-custom": {
+				"name": "Niestandardowe zestawy sprite'ów",
+				"label": "Zarządzaj niestandardowymi zestawami sprite'ów",
+				"hint": "Niestandardowe zestawy sprite'ów mogą być używane do zastąpienia bardziej podstawowych lub niestandardowych ikon i tekstur, na przykład niestandardowych znaczników stanu, grafiki tokenów lub kafelków, aby poprawić wydajność.",
+				"menu": {
+					"add": "Dodaj niestandardowy zestaw sprite'ów",
+					"spritesheet": "Wybierz niestandardowy zestaw sprite'ów",
+					"delete": "Usuń niestandardowy zestaw sprite'ów",
+					"title": "Zarządzaj niestandardowymi zestawami sprite'ów",
+					"warn-no-src": "Musisz wybrać źródło zestawu sprite'ów, aby go dodać.",
+					"warn-no-json": "Wybrany plik musi być prawidłowym plikiem JSON zawierającym zestaw sprite'ów pixi.js.",
+					"warn-inalid-asset": "Wybrany plik nie zawiera prawidłowych danych zestawu sprite'ów pixi.js.",
+					"warn-init-failed": "Prime Performance: Nie udało się załadować domyślnych zestawów sprite'ów zastępujących ikony. Optymalizacja zestawów sprite'ów zostanie wyłączona. Więcej szczegółów znajdziesz w konsoli.",
+					"warn-custom-spritesheets-failed": "Prime Performance: Nie udało się załadować jednego lub więcej niestandardowych zestawów sprite'ów. Sprawdź konsolę, aby uzyskać więcej informacji."
+				}
+			},
+			"token-ring-spritesheet-support": {
+				"name": "Obsługa zestawów sprite'ów tokenów dynamicznych",
+				"hint": "Umożliwia zastąpienie tokenów z dynamicznymi pierścieniami teksturami zestawu sprite'ów. Jest to konieczne tylko w przypadku używania dynamicznych pierścieni tokenów i funkcji zastępowania tokenów teksturami zestawu sprite'ów."
 			}
 		}
 	}
