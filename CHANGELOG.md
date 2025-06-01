@@ -1,3 +1,7 @@
+## 0.8.3
+
+- Update polish translations (thanks @Lioheart)
+
 ## 0.8.2
 
 - Re-Enable spritesheet based texture replacement
