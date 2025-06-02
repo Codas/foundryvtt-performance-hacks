@@ -36,6 +36,10 @@
 			"token-ring-spritesheet-support": {
 				"name": "Dynamic Token Spritesheet Support",
 				"hint": "Allows tokens with dynamic rings to be replaced with spritesheet textures. This is only needed if you use dynamic token rings and the spritesheet substitution feature to replace token textures."
+			},
+			"precomputed-noise-textures": {
+				"name": "Optimize animated lights",
+				"hint": "Optimizes the shader of certain animated lights (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, Swirling Fog, Vortex) by utilizing precomputed FBM noise textures."
 			}
 		}
 	}

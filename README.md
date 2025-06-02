@@ -53,6 +53,10 @@ Replaces build in SVG icon rendering with a sprite atlas. Greatly reduces the am
 **Custom Spritesheets**\
 Allows for the replacement of arbitrary textures referenced in foundry with optimized spritesheets. To create your own spritesheets to replace build-in textures, simply name the spritesheet frames like the asset path referenced in foundry, prefixed by a `#` sign. For example, if a tile in your scene references a texture in `assets/tiles/my-fancy-tile.webp`, the spritesheet frame should be named `#assets/tiles/my-fancy-tile.webp`.
 
+**Optimize animated lights**\
+Patches the shader of certain animated lights that use fbm (fractal brownian motion) noise to use precomputed noise textures where possible. This requires each client to load a few additional textures with associated memory overhead, but in my testing this is absolytely worth it.\
+Only of of the textures is actually saved in a GPU compressible format as it caused extremely blocky animations otherweise. If anyone as some ideas as to why this is, please create an issue or contact me on discord. :)
+
 If you create custom spritesheets, it is strongly recommended to use GPU compressible textures. Supported formats are basis_universal files (`.basis`) with ETC1 texture compression and zstandard supercompression for Foundry VTT v12 and `.ktx2` files with either ETC1 or UASTC texture format and zstandard supercompression for Foundry VTT v13.
 [TexturePacker](https://www.codeandweb.com/texturepacker) can be used to quickly create spritesheets and has built-in support for `.basis` files with ETC1 compression.
 

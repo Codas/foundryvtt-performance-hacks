@@ -36,6 +36,10 @@
 			"token-ring-spritesheet-support": {
 				"name": "Unterstützung für Spritesheets im dynamischen Token-Ring",
 				"hint": "Erlaubt es, Token-Grafiken mit dynamischen Ringen durch Spritesheet-Texturen zu ersetzen. Dies ist nur nötig, wenn du dynamische Token-Ringe und den Austausch von Spritesheets verwendest, um Token-Grafiken (subject textures) auszutauschen."
+			},
+			"precomputed-noise-textures": {
+				"name": "Optimierte animierte Lichter",
+				"hint": "Optimiert den Shader von animierten Lichtern (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, Swirling Fog, Vortex) indem vorberechnete Texturen für das FBM Rauschen verwendet werden."
 			}
 		}
 	}

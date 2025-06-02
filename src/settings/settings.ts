@@ -70,4 +70,14 @@ Hooks.on('init', () => {
 		type: Boolean,
 		default: false,
 	});
+
+	game.settings.register(NAMESPACE, SETTINGS.PrecomputedNoiseTextures, {
+		name: `${NAMESPACE}.settings.${SETTINGS.PrecomputedNoiseTextures}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.PrecomputedNoiseTextures}.hint`,
+		scope: 'client',
+		config: true,
+		requiresReload: true,
+		type: Boolean,
+		default: true,
+	});
 });

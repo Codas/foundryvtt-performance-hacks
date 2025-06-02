@@ -1,4 +1,5 @@
 import { enableEffectsCaching } from './effectsCaching.ts';
+import { enablePrecomputedNoiseTextures } from './precomputedNoiseTextures.ts';
 import { enableSpritesheetSubstitution } from './spritesheetSubstitution.ts';
 import { enableTokenBarsCaching } from './tokenBarsCaching.ts';
 import { enableTokenRingSpritesheetSupport } from './tokenRingSpritesheetSupport.ts';
@@ -10,4 +11,5 @@ Hooks.once('setup', () => {
 	enableTokenBarsCaching();
 	enableTokenRingSpritesheetSupport();
 	enableSpritesheetSubstitution();
+	enablePrecomputedNoiseTextures();
 });
