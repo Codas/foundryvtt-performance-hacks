@@ -1,3 +1,7 @@
+## 0.9.1
+
+- Fix Foundry v12 compatibility
+
 ## 0.9.0
 
 - Add animated lights shader optimizations. The following animations have been optimized: Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, Swirling Fog, Vortex

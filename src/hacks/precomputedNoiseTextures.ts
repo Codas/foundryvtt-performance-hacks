@@ -80,10 +80,12 @@ float fbmLQ(in float factor, in float channel, in vec2 uv, in float ignored_smoo
 }
 
 function patchShaderFBM() {
-	const shaderLocationPrefix = FOUNDRY_API.generation < 13 ? globalThis : foundry.canvas.rendering.shaders;
-	const fbm31 = shaderLocationPrefix.GhostLightColorationShader.FBM(3, 1);
-	const fbm41 = shaderLocationPrefix.GhostLightColorationShader.FBM(4, 1);
-	const fbmHQ3 = shaderLocationPrefix.GhostLightColorationShader.FBMHQ(3);
+	const getShaderByName = (name: string) => {
+		return FOUNDRY_API.generation < 13 ? eval(name) : foundry.canvas.rendering.shaders[name];
+	};
+	const fbm31 = getShaderByName('GhostLightColorationShader').FBM(3, 1);
+	const fbm41 = getShaderByName('GhostLightColorationShader').FBM(4, 1);
+	const fbmHQ3 = getShaderByName('GhostLightColorationShader').FBMHQ(3);
 
 	const shaders = [
 		{
@@ -378,7 +380,7 @@ function patchShaderFBM() {
 		},
 	];
 	for (const { shader, replacements } of shaders) {
-		const ShaderClass = shaderLocationPrefix[shader];
+		const ShaderClass = getShaderByName(shader);
 		for (const [search, replace] of replacements) {
 			ShaderClass.fragmentShader = ShaderClass.fragmentShader.replace(search, replace);
 		}
@@ -394,7 +396,7 @@ async function enablePrecomputedNoiseTextures() {
 
 	registerWrapperForVersion(AdaptiveLightingShader__updateCommonUniforms, 'WRAPPER', {
 		// TODO: v12
-		v12: 'BaseLightSource.prototype._updateCommonUniforms',
+		v12: 'foundry.canvas.sources.BaseLightSource.prototype._updateCommonUniforms',
 		v13: 'foundry.canvas.sources.BaseLightSource.prototype._updateCommonUniforms',
 	});
 
