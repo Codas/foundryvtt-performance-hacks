@@ -1,3 +1,9 @@
+## 0.9.2
+
+- Update polish translations (thanks @Lioheart)
+- Improve precomputed textures fidelity and size
+- Add optimized light shaders for black hole, roiling darkness, and light dome animations
+
 ## 0.9.1
 
 - Fix Foundry v12 compatibility

@@ -11,6 +11,10 @@ interface NoiseTextureData {
 }
 
 const FBM_TEXTURE_DATA: Record<string, NoiseTextureData> = {
+	'fbm(2)_5_10': {
+		path: `modules/${NAMESPACE}/dist/noise/fbm2-1_2.basis`,
+		format: PIXI.FORMATS.RG,
+	},
 	'fbm(3)_1_3_5': {
 		path: `modules/${NAMESPACE}/dist/noise/fbm3-1_3_5.avif`,
 		format: PIXI.FORMATS.RGB,
@@ -26,9 +30,9 @@ const FBM_TEXTURE_DATA: Record<string, NoiseTextureData> = {
 };
 
 // TODO remove me, this is just for debugging!
-for (const [key, value] of Object.entries(FBM_TEXTURE_DATA)) {
-	FBM_TEXTURE_DATA[key].path = `${value.path}?v=${Math.random()}`;
-}
+// for (const [key, value] of Object.entries(FBM_TEXTURE_DATA)) {
+// 	FBM_TEXTURE_DATA[key].path = `${value.path}?v=${Math.random()}`;
+// }
 
 const NOISE_TEXTURE_MAP: Record<string, NoiseTextureData> = {
 	ghost: FBM_TEXTURE_DATA['fbm(3)_1_3_5'],
@@ -37,6 +41,9 @@ const NOISE_TEXTURE_MAP: Record<string, NoiseTextureData> = {
 	fog: FBM_TEXTURE_DATA['fbm(4)_1_6_8'],
 	vortex: FBM_TEXTURE_DATA['fbm(4)_1_6_8'],
 	smokepatch: FBM_TEXTURE_DATA['fbmHQ(3)_1_10'],
+	hole: FBM_TEXTURE_DATA['fbmHQ(3)_1_10'],
+	dome: FBM_TEXTURE_DATA['fbm(2)_5_10'],
+	roiling: FBM_TEXTURE_DATA['fbm(3)_1_3_5'],
 };
 
 const NOISE_TEXTURE_URLS = Array.from(new Set(Object.values(NOISE_TEXTURE_MAP)));
@@ -48,6 +55,20 @@ function AdaptiveLightingShader__updateCommonUniforms(
 ) {
 	wrapped(shader);
 	const u = shader.uniforms;
+	const animationType: string | undefined = this.animation?.type;
+	if (!animationType) {
+		return;
+	}
+	const noiseTextureData = NOISE_TEXTURE_MAP[animationType];
+	if (!noiseTextureData) {
+		return;
+	}
+	u.fbmTexture = FOUNDRY_API.getTexture(noiseTextureData.path);
+}
+
+function AdaptiveLightingShader__updateDarknessUniforms(this: BaseLightSource<any>, wrapped: (...args: any) => void) {
+	wrapped();
+	const u = this.layers.darkness?.shader?.uniforms;
 	const animationType: string | undefined = this.animation?.type;
 	if (!animationType) {
 		return;
@@ -83,6 +104,7 @@ function patchShaderFBM() {
 	const getShaderByName = (name: string) => {
 		return FOUNDRY_API.generation < 13 ? eval(name) : foundry.canvas.rendering.shaders[name];
 	};
+	const fbm21 = getShaderByName('GhostLightColorationShader').FBM(2, 1);
 	const fbm31 = getShaderByName('GhostLightColorationShader').FBM(3, 1);
 	const fbm41 = getShaderByName('GhostLightColorationShader').FBM(4, 1);
 	const fbmHQ3 = getShaderByName('GhostLightColorationShader').FBMHQ(3);
@@ -111,7 +133,7 @@ function patchShaderFBM() {
 				[
 					// wrap-line
 					'float distortion2 = fbm(vec2(',
-					'float distortion2 = fbmLQ(6.0, 2.0, vec2(',
+					'float distortion2 = fbmLQ(1.0, 1.0, vec2(',
 				],
 				[
 					// wrap-line
@@ -378,6 +400,78 @@ function patchShaderFBM() {
 				],
 			],
 		},
+
+		{
+			shader: 'BlackHoleDarknessShader',
+			replacements: [
+				[fbmHQ3, fbmHQ3 + optimizedFBM()],
+				[
+					// wrap-line
+					'float beams = fract(angle + sin(dist * 30.0 * (intensity * 0.2) - time + fbm(uv * 10.0 + time * 0.25, 1.0) * dad));',
+					'float beams = fract(angle + sin(dist * 30.0 * (intensity * 0.2) - time + fbmLQ(10.0, 1.0, uv * 10.0 + time * 0.25, 1.0) * dad));',
+				],
+			],
+		},
+
+		{
+			shader: 'LightDomeColorationShader',
+			replacements: [
+				[fbm21, fbm21 + optimizedFBM()],
+				[
+					// wrap-line
+					'float q = 2.0 * fbm(p + time * 0.2);',
+					'float q = 2.0 * fbmLQ(1.0, 1.0, p + time * 0.2);',
+				],
+				[
+					// wrap-line
+					'vec2 r = vec2(fbm(p + q + ( time  ) - p.x - p.y), fbm(p * 2.0 + ( time )));',
+					'vec2 r = vec2(fbmLQ(1.0, 1.0, p + q + ( time  ) - p.x - p.y), fbmLQ(2.0, 2.0, p * 2.0 + ( time )));',
+				],
+				[
+					// wrap-line
+					'return clamp( mix( c1, c2, abs(fbm(p + r)) ) + mix( c3, c4, abs(r.x * r.x * r.x) ) - mix(',
+					'return clamp( mix( c1, c2, fbmLQ(1.0, 1.0, p + r) ) + mix( c3, c4, abs(r.x * r.x * r.x) ) - mix(',
+				],
+			],
+		},
+
+		{
+			shader: 'RoilingDarknessShader',
+			replacements: [
+				[fbm31, fbm31 + optimizedFBM()],
+				[
+					// wrap-line
+					`float distortion1 = fbm( vec2(`,
+					`float distortion1 = fbmLQ(1.0, 1.0, vec2(`,
+				],
+				[
+					// wrap-line
+					`fbm( vUvs * 2.5 + time * 0.5),`,
+					`fbmLQ(3.0, 2.0, vUvs * 2.5 + time * 0.5),`,
+				],
+				[
+					// wrap-line
+					`fbm( (-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));`,
+					`fbmLQ(5.0, 3.0, (-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));`,
+				],
+
+				[
+					// wrap-line
+					`float distortion2 = fbm( vec2(`,
+					`float distortion2 = fbmLQ(1.0, 1.0, vec2(`,
+				],
+				[
+					// wrap-line
+					`fbm( -vUvs * 5.0 + time * 0.5),`,
+					`fbmLQ(5.0, 3.0, -vUvs * 5.0 + time * 0.5),`,
+				],
+				[
+					// wrap-line
+					`fbm( (vUvs + vec2(0.01)) * 2.5 + time * INVTHREE)));`,
+					`fbmLQ(3.0, 2.0, (vUvs + vec2(0.01)) * 2.5 + time * INVTHREE)));`,
+				],
+			],
+		},
 	];
 	for (const { shader, replacements } of shaders) {
 		const ShaderClass = getShaderByName(shader);
@@ -395,9 +489,12 @@ async function enablePrecomputedNoiseTextures() {
 	}
 
 	registerWrapperForVersion(AdaptiveLightingShader__updateCommonUniforms, 'WRAPPER', {
-		// TODO: v12
 		v12: 'foundry.canvas.sources.BaseLightSource.prototype._updateCommonUniforms',
 		v13: 'foundry.canvas.sources.BaseLightSource.prototype._updateCommonUniforms',
+	});
+	registerWrapperForVersion(AdaptiveLightingShader__updateDarknessUniforms, 'WRAPPER', {
+		v12: 'foundry.canvas.sources.PointDarknessSource.prototype._updateDarknessUniforms',
+		v13: 'foundry.canvas.sources.PointDarknessSource.prototype._updateDarknessUniforms',
 	});
 
 	patchShaderFBM();
@@ -416,6 +513,7 @@ async function enablePrecomputedNoiseTextures() {
 			}
 			texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
 			texture.baseTexture.format = format;
+			texture.baseTexture.scaleMode = PIXI.SCALE_MODES.LINEAR;
 		}),
 	);
 }
