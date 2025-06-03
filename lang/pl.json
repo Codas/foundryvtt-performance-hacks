@@ -36,6 +36,10 @@
 			"token-ring-spritesheet-support": {
 				"name": "Obsługa zestawów sprite'ów tokenów dynamicznych",
 				"hint": "Umożliwia zastąpienie tokenów z dynamicznymi pierścieniami teksturami zestawu sprite'ów. Jest to konieczne tylko w przypadku używania dynamicznych pierścieni tokenów i funkcji zastępowania tokenów teksturami zestawu sprite'ów."
+			},
+			"precomputed-noise-textures": {
+				"name": "Optymalizacja animowanych świateł",
+				"hint": "Optymalizuje shader niektórych animowanych świateł (Czarująca fala, Wróżkowe światło, Widmowe światło, Zadymiona ścieżka, Wirująca mgła, Wir) poprzez wykorzystanie wstępnie obliczonych tekstur szumu FBM."
 			}
 		}
 	}
