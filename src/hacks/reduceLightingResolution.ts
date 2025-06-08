@@ -1,5 +1,5 @@
-import type { RENDER_SCALE_DEFAULTS } from 'src/settings/constants.ts';
-import { SETTINGS } from 'src/settings/constants.ts';
+import { NAMESPACE } from 'src/constants.ts';
+import { RENDER_SCALE_DEFAULTS, SETTINGS } from 'src/settings/constants.ts';
 import { getSetting } from 'src/settings/settings.ts';
 import { FOUNDRY_API } from 'src/utils/foundryShim.ts';
 
@@ -24,7 +24,15 @@ async function enableReducedLightingResolution() {
 		if (!getSetting<boolean>(SETTINGS.ReduceLightingResolution)) {
 			return;
 		}
-		const customRenderScale = getSetting<typeof RENDER_SCALE_DEFAULTS>(SETTINGS.CustomRenderScale);
+		let customRenderScale = getSetting<typeof RENDER_SCALE_DEFAULTS>(SETTINGS.CustomRenderScale);
+
+		// TODO: remove in some future version, this is a workaround for settings being initialized as an array
+		// because I set the wrong default value in the settings file
+		if (Array.isArray(customRenderScale)) {
+			game.settings.set(NAMESPACE, SETTINGS.CustomRenderScale, RENDER_SCALE_DEFAULTS);
+			customRenderScale = RENDER_SCALE_DEFAULTS;
+		}
+
 		configureEffectsResolution(customRenderScale);
 	});
 }

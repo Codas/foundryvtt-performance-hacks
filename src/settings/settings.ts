@@ -3,7 +3,7 @@ import { NAMESPACE } from 'src/constants.ts';
 import { toggleDisableAppBackgroundBlur } from 'src/hacks/disableAppBackgroundBlur.ts';
 import { configureEffectsResolution } from 'src/hacks/reduceLightingResolution.ts';
 import { CustomSpritesheetConfig } from '../apps/CustomSpritesheetConfig.ts';
-import { type RENDER_SCALE_DEFAULTS, SETTINGS } from './constants.ts';
+import { RENDER_SCALE_DEFAULTS, SETTINGS } from './constants.ts';
 
 export function getSetting<T = unknown>(settings: SETTINGS): T {
 	return game.settings.get<T>(NAMESPACE, settings);
@@ -104,7 +104,7 @@ Hooks.on('init', () => {
 		config: false,
 		scope: 'client',
 		type: Object,
-		default: [],
+		default: RENDER_SCALE_DEFAULTS,
 	});
 	game.settings.registerMenu(NAMESPACE, SETTINGS.CustomRenderScale, {
 		name: `${NAMESPACE}.settings.${SETTINGS.CustomRenderScale}.name`,

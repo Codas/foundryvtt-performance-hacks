@@ -1,5 +1,9 @@
 ## 0.10.2
 
+- Fix setting defaults and v12 issues
+
+## 0.10.2
+
 - Fix application templates not being included in module package
 
 ## 0.10.1

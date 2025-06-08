@@ -147,7 +147,8 @@ export class CustomRenderScaleConfig extends foundry.applications.api.Handlebars
 		const FormDataExtendedConstructor =
 			FOUNDRY_API.generation >= 13 ? foundry.applications.ux.FormDataExtended : FormDataExtended;
 
-		const formData = new FormDataExtendedConstructor(this.form);
+		const dataElement = FOUNDRY_API.generation >= 13 ? this.form : this.element;
+		const formData = new FormDataExtendedConstructor(dataElement);
 
 		this.#setting = foundry.utils.expandObject(formData.object) as typeof RENDER_SCALE_DEFAULTS;
 		configureEffectsResolution(this.#setting);
