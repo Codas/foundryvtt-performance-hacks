@@ -1,3 +1,7 @@
+## 0.10.1
+
+- Fix styles not being included in module package
+
 ## 0.10.0
 
 - Add reduced render scaling option for lighting passes.
