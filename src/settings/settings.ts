@@ -1,9 +1,12 @@
+import { CustomRenderScaleConfig } from 'src/apps/CustomRenderScaleMenu.ts';
 import { NAMESPACE } from 'src/constants.ts';
+import { toggleDisableAppBackgroundBlur } from 'src/hacks/disableAppBackgroundBlur.ts';
+import { configureEffectsResolution } from 'src/hacks/reduceLightingResolution.ts';
 import { CustomSpritesheetConfig } from '../apps/CustomSpritesheetConfig.ts';
-import { SETTINGS } from './constants.ts';
+import { type RENDER_SCALE_DEFAULTS, SETTINGS } from './constants.ts';
 
-export function getSetting(settings: SETTINGS): unknown {
-	return game.settings.get(NAMESPACE, settings);
+export function getSetting<T = unknown>(settings: SETTINGS): T {
+	return game.settings.get<T>(NAMESPACE, settings);
 }
 
 Hooks.on('init', () => {
@@ -79,5 +82,49 @@ Hooks.on('init', () => {
 		requiresReload: true,
 		type: Boolean,
 		default: true,
+	});
+
+	game.settings.register(NAMESPACE, SETTINGS.ReduceLightingResolution, {
+		name: `${NAMESPACE}.settings.${SETTINGS.ReduceLightingResolution}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.ReduceLightingResolution}.hint`,
+		scope: 'client',
+		requiresReload: false,
+		config: true,
+		onChange: (enabled) => {
+			const customRenderScale = getSetting<typeof RENDER_SCALE_DEFAULTS>(SETTINGS.CustomRenderScale);
+			configureEffectsResolution(enabled ? customRenderScale : null);
+		},
+		type: Boolean,
+		default: true,
+	});
+
+	game.settings.register(NAMESPACE, SETTINGS.CustomRenderScale, {
+		name: `${NAMESPACE}.settings.${SETTINGS.CustomRenderScale}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.CustomRenderScale}.hint`,
+		config: false,
+		scope: 'client',
+		type: Object,
+		default: [],
+	});
+	game.settings.registerMenu(NAMESPACE, SETTINGS.CustomRenderScale, {
+		name: `${NAMESPACE}.settings.${SETTINGS.CustomRenderScale}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.CustomRenderScale}.hint`,
+		label: `${NAMESPACE}.settings.${SETTINGS.CustomRenderScale}.label`,
+		icon: 'fa-solid fa-percent',
+		type: CustomRenderScaleConfig,
+		restricted: true,
+	});
+
+	game.settings.register(NAMESPACE, SETTINGS.DisableAppV2BackgroundBlur, {
+		name: `${NAMESPACE}.settings.${SETTINGS.DisableAppV2BackgroundBlur}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.DisableAppV2BackgroundBlur}.hint`,
+		scope: 'client',
+		requiresReload: false,
+		config: true,
+		onChange: (value) => {
+			toggleDisableAppBackgroundBlur(!!value);
+		},
+		type: Boolean,
+		default: false,
 	});
 });

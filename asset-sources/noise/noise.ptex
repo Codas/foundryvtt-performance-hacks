@@ -31,12 +31,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "tones_map_3",
-			"from_port": 0,
-			"to": "combine",
-			"to_port": 1
-		},
-		{
 			"from": "tones_map",
 			"from_port": 0,
 			"to": "combine",
@@ -46,12 +40,6 @@
 			"from": "fbm3_6",
 			"from_port": 0,
 			"to": "tones_map_4",
-			"to_port": 0
-		},
-		{
-			"from": "tones_map_4",
-			"from_port": 0,
-			"to": "combine",
 			"to_port": 0
 		},
 		{
@@ -71,6 +59,18 @@
 			"from_port": 0,
 			"to": "tones_map_5",
 			"to_port": 0
+		},
+		{
+			"from": "tones_map_4",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 0
+		},
+		{
+			"from": "tones_map_3",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 1
 		}
 	],
 	"label": "Graph",
@@ -105,7 +105,7 @@
 				"metallic": 0.0,
 				"normal": 1.0,
 				"roughness": 1.0,
-				"size": 12,
+				"size": 12.0,
 				"sss": 1.0
 			},
 			"seed_int": 0,
@@ -132,7 +132,7 @@
 			"parameters": {
 				"folds": 0.0,
 				"iterations": 3.0,
-				"noise": 1,
+				"noise": 1.0,
 				"offset": 0.0,
 				"persistence": 0.5,
 				"scale_x": 3.0,
@@ -303,7 +303,7 @@
 			"parameters": {
 				"folds": 0.0,
 				"iterations": 4.0,
-				"noise": 1,
+				"noise": 1.0,
 				"offset": 0.0,
 				"persistence": 0.5,
 				"scale_x": 3.0,
@@ -333,7 +333,7 @@
 			"parameters": {
 				"folds": 0.0,
 				"iterations": 4.0,
-				"noise": 1,
+				"noise": 1.0,
 				"offset": 0.0,
 				"persistence": 0.5,
 				"scale_x": 20.0,

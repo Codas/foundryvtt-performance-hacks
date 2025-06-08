@@ -3,7 +3,7 @@
 		"settings": {
 			"optimize-interface-layer-clipping": {
 				"name": "Optimize Token UI Render Batching",
-				"hint": "Optimizes render batching of Token UI elements. No visual degredation expected. Needed in order for the other settings to have a noticable impact."
+				"hint": "Optimizes render batching of Token UI elements. No visual degredation expected. Required in order for the token bars and effects caching settings to have a noticable impact."
 			},
 			"token-bars-caching": {
 				"name": "Cache Token Resource Bars",
@@ -12,6 +12,14 @@
 			"token-effects-caching": {
 				"name": "Cache Token Effects",
 				"hint": "Caches the token effects bar. Very minor visual degradataion on high zoom levels expected."
+			},
+			"precomputed-noise-textures": {
+				"name": "Optimize animated lights",
+				"hint": "Optimizes the shader of certain animated lights (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, Swirling Fog, Vortex) by utilizing precomputed FBM noise textures. The visual impact is minimal, but the performance impact is significant, especially on lower-end GPUs."
+			},
+			"reduce-lighting-resolution": {
+				"name": "Scale Lighting Effects Resolution",
+				"hint": "Reduces the internal resolution of lighting effects to improve performance. This can dramatically improve performance, especially when using many lights or large light sources. The visual impact should be minimal, except for some very high zoom levels and some lighting effects like hexa dome that have very clear outlines. You can configure the render scale for the individual lighting layers in the settings menu."
 			},
 			"spritesheet-substitution": {
 				"name": "Texture Replacement with Spritesheets",
@@ -37,9 +45,40 @@
 				"name": "Dynamic Token Spritesheet Support",
 				"hint": "Allows tokens with dynamic rings to be replaced with spritesheet textures. This is only needed if you use dynamic token rings and the spritesheet substitution feature to replace token textures."
 			},
-			"precomputed-noise-textures": {
-				"name": "Optimize animated lights",
-				"hint": "Optimizes the shader of certain animated lights (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, Swirling Fog, Vortex) by utilizing precomputed FBM noise textures."
+			"disable-app-v2-background-blur": {
+				"name": "Disable background blur effects",
+				"hint": "Disables the background blur effects in the app v2 and all other UI elements. This can dramatically improve performance, especially on lower-end GPUs and certain operating systems like MacOS."
+			},
+
+			"custom-render-scale": {
+				"name": "Lighting Effects Render Scale",
+				"label": "Configure Render Scale",
+				"hint": "Configure the rennder scale for lighting effects on the canvas. This can improve performance significantly, especially on lower-end GPUs. Visual impact ranges from unnoticable to very noticable, depending on the effects layer. Activate \"Reduce resolution of lighting effects\" for this configuration to work.",
+				"menu": {
+					"title": "Custom Render Scale",
+					"label": "Custom Render Scale",
+					"description": "Configure individual render scales for different lighting effects. The render scale is a multiplier for the internal resolution of the lighting effects. A value of 100 means 100% render scale, so no change. A value of 50 means the resolution is halved and so on.",
+					"confirm": "Confirm",
+					"cancel": "Reset",
+					"FIELDS": {
+						"background": {
+							"label": "Background",
+							"hint": "Background effects render scale. High visual impact, minimal performance impact. Optimized default is 100%"
+						},
+						"illumination": {
+							"label": "Illumination",
+							"hint": "Illumination effects render scale. Very low visual impact, medium performance impact. Optimized default is 40%"
+						},
+						"coloration": {
+							"label": "Coloration",
+							"hint": "Coloration effects render scale. Medium to very high visual impact, depending on coloration technique. High performance impact. Optimized default is 100%."
+						},
+						"darkness": {
+							"label": "Darkness",
+							"hint": "Darkness effects render scale. Minimal visual impact, minmal performance impact. Optimized default is 50%"
+						}
+					}
+				}
 			}
 		}
 	}

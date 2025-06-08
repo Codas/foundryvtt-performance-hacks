@@ -1,5 +1,6 @@
 import { SETTINGS } from 'src/settings/constants.ts';
 import { getSetting } from 'src/settings/settings.ts';
+import { FOUNDRY_API } from 'src/utils/foundryShim.ts';
 import { wrapFunction } from 'src/utils/wrapFunction.ts';
 
 /**
@@ -323,7 +324,8 @@ function enableOooTokenRendering() {
 	 * to use a specialized rendering function that renders the children (potentially)
 	 * out of order to increase batching
 	 */
-	wrapFunction(TokenLayer.prototype, '_draw', function (this: TokenLayer) {
+	const TokenLayerPrototype = FOUNDRY_API.generation >= 13 ? foundry.canvas.layers.TokenLayer : TokenLayer;
+	wrapFunction(TokenLayerPrototype, '_draw', function (this: TokenLayer) {
 		if (this.objects) {
 			this.objects.render = renderTokensOoo;
 		}

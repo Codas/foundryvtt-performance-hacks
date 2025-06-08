@@ -26,11 +26,11 @@ const FBM_TEXTURE_DATA = {
 };
 
 // TODO remove me, this is just for debugging!
-for (const [key, value] of Object.entries(FBM_TEXTURE_DATA)) {
-	FBM_TEXTURE_DATA[key].path = `${value.path}?v=${Math.random()}`;
-}
+// for (const [key, value] of Object.entries(FBM_TEXTURE_DATA)) {
+// 	FBM_TEXTURE_DATA[key].path = `${value.path}?v=${Math.random()}`;
+// }
 
-const NOISE_TEXTURE_MAP: Record<string, NoiseTextureData> = {
+export const NOISE_TEXTURE_MAP = {
 	ghost: FBM_TEXTURE_DATA['fbm2+3'],
 	fairy: FBM_TEXTURE_DATA['fbm2+3'],
 	witchwave: FBM_TEXTURE_DATA.fbm4,
@@ -40,7 +40,7 @@ const NOISE_TEXTURE_MAP: Record<string, NoiseTextureData> = {
 	hole: FBM_TEXTURE_DATA.fbmHQ3,
 	dome: FBM_TEXTURE_DATA['fbm2+3'],
 	roiling: FBM_TEXTURE_DATA['fbm2+3'],
-};
+} satisfies Record<string, NoiseTextureData>;
 
 const NOISE_TEXTURE_URLS = Array.from(new Set(Object.values(NOISE_TEXTURE_MAP)));
 
@@ -74,26 +74,6 @@ function AdaptiveLightingShader__updateDarknessUniforms(this: BaseLightSource<an
 		return;
 	}
 	u.fbmTexture = FOUNDRY_API.getTexture(noiseTextureData.path);
-}
-
-function optimizedFBMOld() {
-	return `
-
-uniform sampler2D fbmTexture;
-float fbmLQ(in float factor, in float channel, in vec2 uv) {
-  vec4 fbmColor = texture2D(fbmTexture, uv * 0.1 / factor );
-  if (channel < 1.5)  {
-    return fbmColor.r;
-  } else if (channel < 2.5) {
-   return fbmColor.g;
-  } else {
-   return fbmColor.b;
-  }
-}
-float fbmLQ(in float factor, in float channel, in vec2 uv, in float ignored_smoothness) {
-  return fbmLQ(factor, channel, uv) * 1.5;
-}
-`;
 }
 
 interface FBMData {
@@ -146,7 +126,7 @@ function patchShaderFBM() {
 				[
 					// wrap-line
 					'float distortion1 = fbm(vec2(',
-					'float distortion1 = fbm3_1(vec2(',
+					'float distortion1 = 1.2 * fbm3_1(vec2(',
 				],
 				[
 					// wrap-line
@@ -161,7 +141,7 @@ function patchShaderFBM() {
 				[
 					// wrap-line
 					'float distortion2 = fbm(vec2(',
-					'float distortion2 = fbm3_1(vec2(',
+					'float distortion2 = 1.2 * fbm3_1(vec2(',
 				],
 				[
 					// wrap-line
@@ -182,7 +162,7 @@ function patchShaderFBM() {
 				[
 					// wrap-line
 					'float distortion1 = fbm(vec2(',
-					'float distortion1 = fbm3_1(vec2(',
+					'float distortion1 = 1.2 * fbm3_1(vec2(',
 				],
 				[
 					// wrap-line
@@ -197,7 +177,7 @@ function patchShaderFBM() {
 				[
 					// wrap-line
 					'float distortion2 = fbm(vec2(',
-					'float distortion2 = fbm3_1(vec2(',
+					'float distortion2 = 1.2 * fbm3_1(vec2(',
 				],
 				[
 					// wrap-line

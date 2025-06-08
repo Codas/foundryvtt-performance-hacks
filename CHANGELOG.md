@@ -1,3 +1,10 @@
+## 0.10.0
+
+- Add reduced render scaling option for lighting passes.
+  - By default, only illumination and darkness effects are rendered with reduced resolution. This should have no visible impact at all as illumination passes don't have detailed features anyway.
+- Tweak noise textures for improved fidelity
+- Add option to disable blurred window backgrounds in Application V2
+
 ## 0.9.2
 
 - Update polish translations (thanks @Lioheart)

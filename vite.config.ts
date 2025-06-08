@@ -25,7 +25,7 @@ export default defineConfig(({ command: _buildOrServe }) => ({
 		port: 30001,
 		proxy: {
 			// Serves static files from main Foundry server.
-			[`^(/${packagePath}/(assets|lang|packs}))`]: `http://localhost:${FOUNDRY_PORT}`,
+			[`^(/${packagePath}/(assets|lang|packs|styles|templates))`]: `http://localhost:${FOUNDRY_PORT}`,
 
 			// All other paths besides package ID path are served from main Foundry server.
 			[`^(?!/${packagePath}/)`]: `http://localhost:${FOUNDRY_PORT}`,
