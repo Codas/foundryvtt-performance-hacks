@@ -1,4 +1,9 @@
-## 0.10.2
+## 0.10.4
+
+- Fix radial gradients in dynamic tokens when using spritesheets for subject textures in v12
+- Update german translations
+
+## 0.10.3
 
 - Fix setting defaults and v12 issues
 

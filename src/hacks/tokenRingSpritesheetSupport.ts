@@ -39,10 +39,17 @@ function patchTokenRingShader() {
 	);
 
 	// add fragment shader input
-	ShaderClass._batchFragmentShader = ShaderClass._batchFragmentShader.replace(
-		'float gradientMix = smoothstep(0.0, 1.0, dot(rotation(vTextureCoord, time), vec2(0.5)));',
-		'float gradientMix = smoothstep(0.0, 1.0, dot(rotation(vTextureCoordClipped, time), vec2(0.5)));',
-	);
+	if (FOUNDRY_API.generation < 13) {
+		ShaderClass._batchFragmentShader = ShaderClass._batchFragmentShader.replace(
+			'mix(ccol, vBackgroundColor * tokenRing.r, smoothstep(0.0, 1.0, dot(rotation(vTextureCoord, time), vec2(0.5))))',
+			'mix(ccol, vBackgroundColor * tokenRing.r, smoothstep(0.0, 1.0, dot(rotation(vTextureCoordClipped, time), vec2(0.5))))',
+		);
+	} else {
+		ShaderClass._batchFragmentShader = ShaderClass._batchFragmentShader.replace(
+			'float gradientMix = smoothstep(0.0, 1.0, dot(rotation(vTextureCoord, time), vec2(0.5)));',
+			'float gradientMix = smoothstep(0.0, 1.0, dot(rotation(vTextureCoordClipped, time), vec2(0.5)));',
+		);
+	}
 
 	// // fix the gradient mix calculation to use the clipped texture coordinates
 	ShaderClass._batchFragmentShader = ShaderClass._batchFragmentShader.replace(

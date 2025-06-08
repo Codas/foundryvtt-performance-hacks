@@ -13,6 +13,7 @@
 				"name": "Token-Efekte cachen",
 				"hint": "Cacht die Token-Effektleiste. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität haben."
 			},
+
 			"spritesheet-substitution": {
 				"name": "Austausch von Texturen mit Spritesheets",
 				"hint": "Tauscht gewisse Icons und andere Grafikelemente von Foundry gegen Spritesheets aus. Dies kann die Leistung und den Resourcenverbrauch bei der Anzeige von vielen UI Icons für Journals, Lichter, Türen etc verbessern."
@@ -40,6 +41,45 @@
 			"precomputed-noise-textures": {
 				"name": "Optimierte animierte Lichter",
 				"hint": "Optimiert den Shader von animierten Lichtern (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, Swirling Fog, Vortex) indem vorberechnete Texturen für das FBM Rauschen verwendet werden."
+			},
+			"reduce-lighting-resolution": {
+				"name": "Auflösung der Lichteffekte reduzieren",
+				"hint": "Reduziert die interne Auflösung von Lichteffekten. Verbessert die performance deutlich, insbesondere wenn viele Lichteffekte oder große Lichtquellen verwendet werden. Die visuelle Beeinträchtigung sollte minimal sein. Die Skalierung für die einzelnen Beleuchtungsebenen können im separaten Menu konfiguriert werden."
+			},
+			"disable-app-v2-background-blur": {
+				"name": "Hintergrund-Blur deaktivieren",
+				"hint": "Deaktiviert die Hintergrund-Blur in App V2 und allen anderen UI-Elementen. Dies kann die Leistung dramatisch verbessern, insbesondere auf schwächeren GPUs und bestimmten Betriebssystemen wie MacOS."
+			},
+
+			"custom-render-scale": {
+				"name": "Skalierung der Lichteffekte",
+				"label": "Skalierung konfigurieren",
+				"hint": "Konfiguriere die interne Auflösung für Lichteffekte auf dem Spielfeld. Dies kann die Leistung deutlich verbessern, besonders auf schwächeren GPUs. Die visuelle Auswirkung reicht von unbemerkbar bis sehr auffällig, abhängig von der Effektebene. Aktiviere \"Auflösung der Lichteffekte reduzieren\", damit diese Konfiguration wirksam wird.",
+				"menu": {
+					"title": "Benutzerdefinierte Skalierung",
+					"label": "Benutzerdefinierte Skalierung",
+					"description": "Konfiguriere die Skalierugn für die individuelle Ebnenen der Lichteffekte. Die Darstellungsskalierung ist der Prozentwert für die interne Auflösung der Lichteffekte. Ein Wert von 100 bedeutet 100% Darstellungsskalierung, also keine Änderung. Ein Wert von 50 bedeutet, dass die Auflösung halbiert (und die Menge der zu berechnende Pixel geviertelt) wird, usw.",
+					"confirm": "Bestätigen",
+					"cancel": "Zurücksetzen",
+					"FIELDS": {
+						"background": {
+							"label": "Hintergrund",
+							"hint": "Darstellungsskalierung für Hintergrundeffekte. Hohe visuelle Auswirkung, minimale Leistungsverbesserung. Optimierter Standardwert ist 100%."
+						},
+						"illumination": {
+							"label": "Beleuchtung",
+							"hint": "Darstellungsskalierung für die Beleuchtungsebene. Sehr geringe visuelle Auswirkung, mittlere Leistungsverbesserung. Optimierter Standardwert ist 40%."
+						},
+						"coloration": {
+							"label": "Färbung",
+							"hint": "Darstellungsskalierung für Färbungsebene. Mittlere bis sehr hohe visuelle Auswirkung, abhängig von der gewählten Färbungsmethode. Hohe Leistungsverbesserung. Optimierter Standardwert ist 100%."
+						},
+						"darkness": {
+							"label": "Dunkelheit",
+							"hint": "Darstellungsskalierung für Dunkelheitseffekte. Minimale visuelle Auswirkung, minimale Leistungsverbesserung. Optimierter Standardwert ist 50%."
+						}
+					}
+				}
 			}
 		}
 	}
