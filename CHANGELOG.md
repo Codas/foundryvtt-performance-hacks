@@ -1,3 +1,7 @@
+## 0.10.2
+
+- Fix application templates not being included in module package
+
 ## 0.10.1
 
 - Fix styles not being included in module package
