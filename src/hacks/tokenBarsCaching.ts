@@ -1,6 +1,7 @@
 import { NAMESPACE } from 'src/constants.ts';
 import { SETTINGS } from 'src/settings/constants.ts';
 import { getSetting } from 'src/settings/settings.ts';
+import { FOUNDRY_API } from 'src/utils/foundryShim.ts';
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts';
 
 async function cacheResourceBars(this: Token, wrapped: Function, ...args: any[]) {
@@ -44,7 +45,7 @@ let enableTokenBarsCaching = () => {
 	}
 
 	const enabled = getSetting(SETTINGS.TokenBarsCaching);
-	if (!enabled) {
+	if (!enabled || !FOUNDRY_API.hasCanvas) {
 		return;
 	}
 

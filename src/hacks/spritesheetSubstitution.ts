@@ -402,12 +402,12 @@ async function loadBaseSpritesheets(): Promise<boolean> {
 async function enableSpritesheetSubstitution() {
 	const enabled = getSetting(SETTINGS.SpritesheetSubstitution);
 
-	if (!enabled) {
+	if (!enabled || !FOUNDRY_API.hasCanvas) {
 		return;
 	}
 
 	// make sure basis transcoder is enabled (it is by default in v13+)
-	if (FOUNDRY_API.game.release.generation < 13) {
+	if (FOUNDRY_API.generation < 13) {
 		CONFIG.Canvas.transcoders.basis = true;
 	}
 

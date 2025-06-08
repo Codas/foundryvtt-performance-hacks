@@ -99,7 +99,7 @@ function TokenRingSamplerShader__packInterleavedGeometry(
 async function enableTokenRingSpritesheetSupport() {
 	const enabled = getSetting(SETTINGS.TokenRingSpritesheetSupport);
 
-	if (!enabled) {
+	if (!enabled || !FOUNDRY_API.hasCanvas) {
 		return;
 	}
 

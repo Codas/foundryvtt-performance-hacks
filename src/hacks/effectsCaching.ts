@@ -1,6 +1,7 @@
 import { NAMESPACE } from 'src/constants.ts';
 import { SETTINGS } from 'src/settings/constants.ts';
 import { getSetting } from 'src/settings/settings.ts';
+import { FOUNDRY_API } from 'src/utils/foundryShim.ts';
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts';
 
 function refreshEffectCache(object: PIXI.DisplayObject) {
@@ -59,7 +60,7 @@ let enableEffectsCaching = () => {
 
 	const enabled = getSetting(SETTINGS.TokenBarsCaching);
 
-	if (!enabled) {
+	if (!enabled || !FOUNDRY_API.hasCanvas) {
 		return;
 	}
 

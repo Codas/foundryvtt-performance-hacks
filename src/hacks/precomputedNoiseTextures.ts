@@ -486,8 +486,13 @@ function patchShaderFBM() {
 async function enablePrecomputedNoiseTextures() {
 	const enabled = getSetting(SETTINGS.PrecomputedNoiseTextures);
 
-	if (!enabled) {
+	if (!enabled || !FOUNDRY_API.hasCanvas) {
 		return;
+	}
+
+	// make sure basis transcoder is enabled (it is by default in v13+)
+	if (FOUNDRY_API.generation < 13) {
+		CONFIG.Canvas.transcoders.basis = true;
 	}
 
 	registerWrapperForVersion(AdaptiveLightingShader__updateCommonUniforms, 'WRAPPER', {

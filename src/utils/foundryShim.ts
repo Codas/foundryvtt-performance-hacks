@@ -9,4 +9,7 @@ export const FOUNDRY_API = {
 	get generation(): number {
 		return game.release.generation;
 	},
+	get hasCanvas(): boolean {
+		return !game.settings.get('core', 'noCanvas');
+	},
 };

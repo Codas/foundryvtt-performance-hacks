@@ -315,7 +315,7 @@ function renderTokensOoo(this: PIXI.Container, renderer: PIXI.Renderer) {
 
 function enableOooTokenRendering() {
 	const enabled = getSetting(SETTINGS.OptimizeTokenUiBatching);
-	if (!enabled) {
+	if (!enabled || !FOUNDRY_API.hasCanvas) {
 		return;
 	}
 
@@ -325,10 +325,10 @@ function enableOooTokenRendering() {
 	 * out of order to increase batching
 	 */
 	const TokenLayerPrototype = FOUNDRY_API.generation >= 13 ? foundry.canvas.layers.TokenLayer : TokenLayer;
-	wrapFunction(TokenLayerPrototype, '_draw', function (this: TokenLayer) {
+	wrapFunction(TokenLayerPrototype.prototype, '_draw', function (this: TokenLayer) {
 		if (this.objects) {
 			this.objects.render = renderTokensOoo;
 		}
 	});
 }
-export { enableOooTokenRendering as useOooTokenRendering };
+export { enableOooTokenRendering };
