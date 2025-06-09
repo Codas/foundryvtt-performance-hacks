@@ -2,6 +2,7 @@
 
 - Fix radial gradients in dynamic tokens when using spritesheets for subject textures in v12
 - Update german translations
+- Update polish translations (thanks @Lioheart)
 
 ## 0.10.3
 
