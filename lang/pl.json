@@ -3,7 +3,7 @@
 		"settings": {
 			"optimize-interface-layer-clipping": {
 				"name": "Optymalizacja wsadowego renderowania Token UI",
-				"hint": "Optymalizuje renderowanie elementów interfejsu użytkownika Tokena. Nie przewiduje się pogorszenia wyglądu. Wymagane, aby inne ustawienia miały zauważalny wpływ."
+				"hint": "Optymalizuje renderowanie elementów interfejsu użytkownika tokenów. Nie przewiduje się pogorszenia jakości obrazu. Wymagane, aby ustawienia buforowania pasków tokenów i efektów miały zauważalny wpływ."
 			},
 			"token-bars-caching": {
 				"name": "Paski zasobów tokenów w pamięci podręcznej",
@@ -12,6 +12,14 @@
 			"token-effects-caching": {
 				"name": "Efekty tokenów w pamięci podręcznej",
 				"hint": "Przechowuje w pamięci podręcznej pasek efektów tokenów. Oczekiwana bardzo niewielka degradacja wizualna na wysokich poziomach powiększenia."
+			},
+			"precomputed-noise-textures": {
+				"name": "Optymalizacja animowanych świateł",
+				"hint": "Optymalizuje shader niektórych animowanych świateł (Czarująca fala, Wróżkowe światło, Widmowe światło, Zadymiona ścieżka, Wirująca mgła, Wir) poprzez wykorzystanie wstępnie obliczonych tekstur szumu FBM. Wpływ na wygląd jest minimalny, ale znaczący dla wydajności, zwłaszcza na słabszych kartach graficznych."
+			},
+			"reduce-lighting-resolution": {
+				"name": "Skala rozdzielczości efektów świetlnych",
+				"hint": "Zmniejsza wewnętrzną rozdzielczość efektów świetlnych, aby poprawić wydajność. Może to znacznie poprawić wydajność, zwłaszcza w przypadku użycia wielu świateł lub dużych źródeł światła. Wpływ na wygląd powinien być minimalny, z wyjątkiem niektórych bardzo wysokich poziomów powiększenia i niektórych efektów świetlnych, takich jak heksagonalna kopuła, które mają bardzo wyraźne kontury. Skalę renderowania dla poszczególnych warstw oświetlenia można skonfigurować w menu ustawień."
 			},
 			"spritesheet-substitution": {
 				"name": "Zastąpienie tekstur szablonami sprite'ów",
@@ -37,9 +45,40 @@
 				"name": "Obsługa zestawów sprite'ów tokenów dynamicznych",
 				"hint": "Umożliwia zastąpienie tokenów z dynamicznymi pierścieniami teksturami zestawu sprite'ów. Jest to konieczne tylko w przypadku używania dynamicznych pierścieni tokenów i funkcji zastępowania tokenów teksturami zestawu sprite'ów."
 			},
-			"precomputed-noise-textures": {
-				"name": "Optymalizacja animowanych świateł",
-				"hint": "Optymalizuje shader niektórych animowanych świateł (Czarująca fala, Wróżkowe światło, Widmowe światło, Zadymiona ścieżka, Wirująca mgła, Wir) poprzez wykorzystanie wstępnie obliczonych tekstur szumu FBM."
+			"disable-app-v2-background-blur": {
+				"name": "Wyłącz efekty rozmycia tła",
+				"hint": "Wyłącza efekty rozmycia tła w aplikacji v2 i wszystkich innych elementach interfejsu użytkownika. Może to znacznie poprawić wydajność, zwłaszcza na słabszych kartach graficznych i niektórych systemach operacyjnych, takich jak MacOS."
+			},
+
+			"custom-render-scale": {
+				"name": "Skala renderowania efektów świetlnych",
+				"label": "Konfiguracja skali renderowania",
+				"hint": "Skonfiguruj skalę renderowania efektów świetlnych na płótnie. Może to znacznie poprawić wydajność, zwłaszcza w przypadku słabszych kart graficznych. Efekt wizualny może być niezauważalny lub bardzo widoczny, w zależności od warstwy efektów. Aby ta konfiguracja zadziałała, należy włączyć opcję „Zmniejsz rozdzielczość efektów świetlnych”.",
+				"menu": {
+					"title": "Niestandardowa skala renderowania",
+					"label": "Niestandardowa skala renderowania",
+					"description": "Skonfiguruj indywidualne skale renderowania dla różnych efektów świetlnych. Skala renderowania jest mnożnikiem wewnętrznej rozdzielczości efektów świetlnych. Wartość 100 oznacza skalę renderowania 100%, czyli brak zmian. Wartość 50 oznacza zmniejszenie rozdzielczości o połowę i tak dalej.",
+					"confirm": "Potwierdź",
+					"cancel": "Reset",
+					"FIELDS": {
+						"background": {
+							"label": "Tło",
+							"hint": "Skala renderowania efektów tła. Duży efekt wizualny, minimalny wpływ na wydajność. Optymalna wartość domyślna to 100%."
+						},
+						"illumination": {
+							"label": "Oświetlenie",
+							"hint": "Skala renderowania efektów świetlnych. Bardzo niewielki wpływ na wygląd, średni wpływ na wydajność. Optymalna wartość domyślna to 40%."
+						},
+						"coloration": {
+							"label": "Zabarwienie",
+							"hint": "Skala efektów zabarwienia. Średni do bardzo wysokiego wpływu wizualnego, w zależności od techniki zabarwienia. Wysoki wpływ na wydajność. Optymalna wartość domyślna to 100%."
+						},
+						"darkness": {
+							"label": "Ciemność",
+							"hint": "Skala renderowania efektów ciemności. Minimalny wpływ na wygląd, minimalny wpływ na wydajność. Optymalna wartość domyślna to 50%."
+						}
+					}
+				}
 			}
 		}
 	}
