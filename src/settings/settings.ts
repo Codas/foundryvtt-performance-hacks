@@ -112,7 +112,7 @@ Hooks.on('init', () => {
 		label: `${NAMESPACE}.settings.${SETTINGS.CustomRenderScale}.label`,
 		icon: 'fa-solid fa-percent',
 		type: CustomRenderScaleConfig,
-		restricted: true,
+		restricted: false,
 	});
 
 	game.settings.register(NAMESPACE, SETTINGS.DisableAppV2BackgroundBlur, {

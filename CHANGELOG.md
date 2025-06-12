@@ -1,3 +1,7 @@
+## 0.10.5
+
+- Make custom render scale settings menu available to non-gm users
+
 ## 0.10.4
 
 - Fix radial gradients in dynamic tokens when using spritesheets for subject textures in v12
