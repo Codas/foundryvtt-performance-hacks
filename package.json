@@ -13,7 +13,6 @@
 	},
 	"devDependencies": {
 		"@antfu/eslint-config": "^2.21.2",
-		"@rollup/plugin-node-resolve": "^15.2.3",
 		"eslint": "^8.57.0",
 		"eslint-plugin-format": "^0.1.2",
 		"foundry-pf2e-types": "github:reonZ/foundry-pf2e-types",

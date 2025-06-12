@@ -1,5 +1,4 @@
 /* eslint-env node */
-import resolve from '@rollup/plugin-node-resolve'; // This resolves NPM modules from node_modules.
 import { type Connect, defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import moduleJSON from './module.json' with { type: 'json' };
@@ -55,9 +54,6 @@ export default defineConfig(({ command: _buildOrServe }) => ({
 
 	plugins: [
 		tsconfigPaths(),
-		resolve({
-			browser: true,
-		}),
 		{
 			name: 'change-names',
 			configureServer(server) {
