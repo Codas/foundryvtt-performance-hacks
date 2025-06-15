@@ -31,6 +31,169 @@ const CONTROL_ICON_SRC = {
 	corner: 'control-icon-corner',
 };
 
+class OptimizedControlIcon extends ControlIcon {
+	declare bg: PIXI.DisplayObject;
+	declare rect: [number, number, number, number];
+	declare iconSrc: string;
+	declare texture: PIXI.Texture | undefined;
+
+	override async draw() {
+		this.texture ??= FOUNDRY_API.getTexture(this.iconSrc);
+
+		if (!(this.bg instanceof PIXI.Graphics)) {
+			return super.draw();
+		}
+
+		this.removeChild(this.bg);
+
+		const [offset, _, width] = this.rect;
+
+		const cornerTopLeft = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.corner));
+		const borderTop = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.border));
+
+		const cornerTopRight = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.corner));
+		const borderRight = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.border));
+
+		const cornerBottomRight = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.corner));
+		const borderBottom = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.border));
+
+		const cornerBottomLeft = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.corner));
+		const borderLeft = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.border));
+
+		const background = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.background));
+		const cornerSize = 4 * (canvas.dimensions.uiScale ?? 1);
+		background.width = width - cornerSize * 2;
+		background.height = width - cornerSize * 2;
+		background.anchor.set(0.5, 0.5);
+		background.position.set(width / 2, width / 2);
+
+		const backgroundContainer = new PIXI.Container();
+		const borderLength = width - cornerSize * 2;
+		const borders = [
+			{
+				element: borderTop,
+				left: cornerSize,
+				top: 0,
+				rotation: 0,
+			},
+			{
+				element: borderRight,
+				left: width,
+				top: cornerSize,
+				rotation: Math.PI * 0.5,
+			},
+			{
+				element: borderBottom,
+				left: width - cornerSize,
+				top: width,
+				rotation: Math.PI * 1,
+			},
+			{
+				element: borderLeft,
+				left: 0,
+				top: width - cornerSize,
+				rotation: Math.PI * 1.5,
+			},
+		];
+		borders.forEach(({ element, top, left, rotation }) => {
+			element.rotation = rotation;
+			element.position.set(left, top);
+			element.width = borderLength;
+			element.height = cornerSize;
+			backgroundContainer.addChild(element);
+		});
+
+		const corners = [
+			{ element: cornerTopLeft, left: 0, top: 0, rotation: 0 },
+			{ element: cornerTopRight, left: 1, top: 0, rotation: Math.PI * 0.5 },
+			{ element: cornerBottomRight, left: 1, top: 1, rotation: Math.PI },
+			{ element: cornerBottomLeft, left: 0, top: 1, rotation: Math.PI * 1.5 },
+		];
+
+		corners.forEach(({ element, top, left, rotation }) => {
+			element.rotation = rotation;
+			element.position.set(left * width, top * width);
+			element.width = cornerSize;
+			element.height = cornerSize;
+			backgroundContainer.addChild(element);
+		});
+
+		backgroundContainer.addChild(background);
+		backgroundContainer.position.set(offset, offset);
+
+		this.addChildAt(backgroundContainer, 0);
+		this.bg = backgroundContainer;
+
+		return super.draw();
+	}
+}
+
+function removeOldControlIcon(container: PIXI.Container & { controlIcon: ControlIcon | OptimizedControlIcon }) {
+	if (container.controlIcon instanceof OptimizedControlIcon) {
+		return;
+	}
+	const oldControlIcon = container.controlIcon;
+	container.removeChild(oldControlIcon);
+}
+
+function drawOptimizedControlIcon({
+	size,
+	texture,
+	tint,
+}: {
+	size: number;
+	texture?: string | null;
+	tint?: number;
+}): OptimizedControlIcon {
+	const icon = new OptimizedControlIcon({ texture: texture as any, size, tint });
+	icon.x -= size * 0.5;
+	icon.y -= size * 0.5;
+	return icon;
+}
+
+function AmbientLight__draw(this: AmbientLight, wrapped: (...args: any[]) => void, ...args: any[]) {
+	const result = wrapped(...args);
+	removeOldControlIcon(this);
+
+	const size = 60 * canvas.dimensions.uiScale;
+	this.controlIcon = this.addChild(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.light }));
+
+	return result;
+}
+
+function AmbientSound__draw(this: AmbientSound, wrapped: (...args: any[]) => void, ...args: any[]) {
+	const result = wrapped(...args);
+	removeOldControlIcon(this);
+
+	const size = 60 * canvas.dimensions.uiScale;
+	this.controlIcon = this.addChild(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.sound }));
+
+	return result;
+}
+
+function MeasuredTemplate__draw(this: MeasuredTemplate, wrapped: (...args: any[]) => void, ...args: any[]) {
+	const result = wrapped(...args);
+	removeOldControlIcon(this);
+
+	const size = 60 * canvas.dimensions.uiScale;
+	this.controlIcon = this.addChild(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.template }));
+
+	return result;
+}
+
+function Note__draw(this: Note, wrapped: (...args: any[]) => void, ...args: any[]) {
+	const result = wrapped(...args);
+	const oldControlIcon = this.controlIcon;
+	this.removeChild(oldControlIcon);
+
+	const { texture, iconSize } = this.document;
+	this.controlIcon = this.addChild(
+		drawOptimizedControlIcon({ size: iconSize, texture: texture.src, tint: texture.tint }),
+	);
+
+	return result;
+}
+
 const { resolve: resolveInitializationPromise, promise: initializationPromise } = Promise.withResolvers<boolean>();
 const spritesheetSubstitutions: Record<string, PIXI.Texture> = {};
 
@@ -124,96 +287,6 @@ async function transcodeAsyncWithMipmaps(
 		}),
 	);
 	return resources;
-}
-
-function ControlIcon_draw(this: ControlIcon, wrapped: (...args: any[]) => void, ...args: any[]) {
-	this.texture ??= FOUNDRY_API.getTexture(this.iconSrc);
-
-	if (!(this.bg instanceof PIXI.Graphics)) {
-		return wrapped(...args);
-	}
-
-	this.removeChild(this.bg);
-
-	const [offset, _, width] = this.rect;
-
-	const cornerTopLeft = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.corner));
-	const borderTop = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.border));
-
-	const cornerTopRight = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.corner));
-	const borderRight = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.border));
-
-	const cornerBottomRight = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.corner));
-	const borderBottom = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.border));
-
-	const cornerBottomLeft = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.corner));
-	const borderLeft = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.border));
-
-	const background = FOUNDRY_API.createSpriteMesh(FOUNDRY_API.getTexture(CONTROL_ICON_SRC.background));
-	const cornerSize = 4 * (canvas.dimensions.uiScale ?? 1);
-	background.width = width - cornerSize * 2;
-	background.height = width - cornerSize * 2;
-	background.anchor.set(0.5, 0.5);
-	background.position.set(width / 2, width / 2);
-
-	const backgroundContainer = new PIXI.Container();
-	const borderLength = width - cornerSize * 2;
-	const borders = [
-		{
-			element: borderTop,
-			left: cornerSize,
-			top: 0,
-			rotation: 0,
-		},
-		{
-			element: borderRight,
-			left: width,
-			top: cornerSize,
-			rotation: Math.PI * 0.5,
-		},
-		{
-			element: borderBottom,
-			left: width - cornerSize,
-			top: width,
-			rotation: Math.PI * 1,
-		},
-		{
-			element: borderLeft,
-			left: 0,
-			top: width - cornerSize,
-			rotation: Math.PI * 1.5,
-		},
-	];
-	borders.forEach(({ element, top, left, rotation }) => {
-		element.rotation = rotation;
-		element.position.set(left, top);
-		element.width = borderLength;
-		element.height = cornerSize;
-		backgroundContainer.addChild(element);
-	});
-
-	const corners = [
-		{ element: cornerTopLeft, left: 0, top: 0, rotation: 0 },
-		{ element: cornerTopRight, left: 1, top: 0, rotation: Math.PI * 0.5 },
-		{ element: cornerBottomRight, left: 1, top: 1, rotation: Math.PI },
-		{ element: cornerBottomLeft, left: 0, top: 1, rotation: Math.PI * 1.5 },
-	];
-
-	corners.forEach(({ element, top, left, rotation }) => {
-		element.rotation = rotation;
-		element.position.set(left * width, top * width);
-		element.width = cornerSize;
-		element.height = cornerSize;
-		backgroundContainer.addChild(element);
-	});
-
-	backgroundContainer.addChild(background);
-	backgroundContainer.position.set(offset, offset);
-
-	this.addChildAt(backgroundContainer, 0);
-	this.bg = backgroundContainer;
-
-	return wrapped(...args);
 }
 
 function TokenRing_configure(this: any, wrapped: (...args: any[]) => void, mesh: PrimarySpriteMesh | undefined) {
@@ -451,11 +524,22 @@ async function enableSpritesheetSubstitution() {
 		});
 	}
 
-	// Override the ControlIcon draw method to use the new spritesheet textures and
-	// create an optimized texture based background and border for the control icon
-	registerWrapperForVersion(ControlIcon_draw, 'WRAPPER', {
-		v12: 'ControlIcon.prototype.draw',
-		v13: 'foundry.canvas.containers.ControlIcon.prototype.draw',
+	// Override placeables draw methods to create optimized control icons
+	registerWrapperForVersion(AmbientLight__draw, 'WRAPPER', {
+		v12: 'AmbientLight.prototype.draw',
+		v13: 'foundry.canvas.placeables.AmbientLight.prototype.draw',
+	});
+	registerWrapperForVersion(AmbientSound__draw, 'WRAPPER', {
+		v12: 'AmbientSound.prototype.draw',
+		v13: 'foundry.canvas.placeables.AmbientSound.prototype.draw',
+	});
+	registerWrapperForVersion(MeasuredTemplate__draw, 'WRAPPER', {
+		v12: 'MeasuredTemplate.prototype.draw',
+		v13: 'foundry.canvas.placeables.MeasuredTemplate.prototype.draw',
+	});
+	registerWrapperForVersion(Note__draw, 'WRAPPER', {
+		v12: 'Note.prototype.draw',
+		v13: 'foundry.canvas.placeables.Note.prototype.draw',
 	});
 
 	// Override the AmbientLight refreshControl because it sets the control icon texture manually

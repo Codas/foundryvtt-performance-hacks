@@ -1,3 +1,7 @@
+## 0.10.6
+
+- Make spritesheet based control icon drawing less intrusive to other modules
+
 ## 0.10.5
 
 - Make custom render scale settings menu available to non-gm users

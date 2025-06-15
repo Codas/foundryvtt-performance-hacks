@@ -2,7 +2,8 @@ import type BaseLightSource from 'foundry-pf2e-types/foundry/client-esm/canvas/s
 import { NAMESPACE } from 'src/constants.ts';
 import { SETTINGS } from 'src/settings/constants.ts';
 import { getSetting } from 'src/settings/settings.ts';
-import { FOUNDRY_API } from 'src/utils/foundryShim.ts';
+import { FOUNDRY_API, type ShaderName } from 'src/utils/foundryShim.ts';
+import { type ShaderModificationData, patchShader } from 'src/utils/patchShader.ts';
 import { registerWrapperForVersion } from 'src/utils/registerWrapper.ts';
 
 interface NoiseTextureData {
@@ -43,6 +44,11 @@ export const NOISE_TEXTURE_MAP = {
 } satisfies Record<string, NoiseTextureData>;
 
 const NOISE_TEXTURE_URLS = Array.from(new Set(Object.values(NOISE_TEXTURE_MAP)));
+
+interface ShaderPatches {
+	shader: ShaderName;
+	replacements: ShaderModificationData;
+}
 
 function AdaptiveLightingShader__updateCommonUniforms(
 	this: BaseLightSource<any>,
@@ -102,13 +108,10 @@ float fbm${name}(in vec2 uv, in float ignoredSmoothness) {
 }
 
 function patchShaderFBM() {
-	const getShaderByName = (name: string) => {
-		return FOUNDRY_API.generation < 13 ? eval(name) : foundry.canvas.rendering.shaders[name];
-	};
-	const fbm2 = getShaderByName('GhostLightColorationShader').FBM(2, 1);
-	const fbm3 = getShaderByName('GhostLightColorationShader').FBM(3, 1);
-	const fbm4 = getShaderByName('GhostLightColorationShader').FBM(4, 1);
-	const fbmHQ3 = getShaderByName('GhostLightColorationShader').FBMHQ(3);
+	const fbm2 = FOUNDRY_API.getShaderByName('GhostLightColorationShader').FBM(2, 1);
+	const fbm3 = FOUNDRY_API.getShaderByName('GhostLightColorationShader').FBM(3, 1);
+	const fbm4 = FOUNDRY_API.getShaderByName('GhostLightColorationShader').FBM(4, 1);
+	const fbmHQ3 = FOUNDRY_API.getShaderByName('GhostLightColorationShader').FBMHQ(3);
 
 	const optimizedFBM2 = optimizedFBM({ name: '2', channel: 'r', scale: 1.6 });
 	const optimizedFBM3 = optimizedFBM({ name: '3_1', channel: 'g', scale: 1 }, { name: '3_5', channel: 'b', scale: 5 });
@@ -121,365 +124,396 @@ function patchShaderFBM() {
 	const shaders = [
 		{
 			shader: 'GhostLightIlluminationShader',
-			replacements: [
-				[fbm3, fbm3 + optimizedFBM3],
-				[
-					// wrap-line
-					'float distortion1 = fbm(vec2(',
-					'float distortion1 = 1.2 * fbm3_1(vec2(',
+			replacements: {
+				fragment: [
+					[fbm3, fbm3 + optimizedFBM3],
+					[
+						// wrap-line
+						'float distortion1 = fbm(vec2(',
+						'float distortion1 = 1.2 * fbm3_1(vec2(',
+					],
+					[
+						// wrap-line
+						'fbm(vUvs * 5.0 - time * 0.50),',
+						'fbm3_5(vUvs * 5.0 - time * 0.50),',
+					],
+					[
+						// wrap-line
+						'fbm((-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));',
+						'fbm3_5((-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));',
+					],
+					[
+						// wrap-line
+						'float distortion2 = fbm(vec2(',
+						'float distortion2 = 1.2 * fbm3_1(vec2(',
+					],
+					[
+						// wrap-line
+						'fbm(-vUvs * 5.0 - time * 0.50),',
+						'fbm3_5(-vUvs * 5.0 - time * 0.50),',
+					],
+					[
+						// wrap-line
+						'fbm((-vUvs + vec2(0.01)) * 5.0 + time * INVTHREE)));',
+						'fbm3_5((-vUvs + vec2(0.01)) * 5.0 + time * INVTHREE)));',
+					],
 				],
-				[
-					// wrap-line
-					'fbm(vUvs * 5.0 - time * 0.50),',
-					'fbm3_5(vUvs * 5.0 - time * 0.50),',
-				],
-				[
-					// wrap-line
-					'fbm((-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));',
-					'fbm3_5((-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));',
-				],
-				[
-					// wrap-line
-					'float distortion2 = fbm(vec2(',
-					'float distortion2 = 1.2 * fbm3_1(vec2(',
-				],
-				[
-					// wrap-line
-					'fbm(-vUvs * 5.0 - time * 0.50),',
-					'fbm3_5(-vUvs * 5.0 - time * 0.50),',
-				],
-				[
-					// wrap-line
-					'fbm((-vUvs + vec2(0.01)) * 5.0 + time * INVTHREE)));',
-					'fbm3_5((-vUvs + vec2(0.01)) * 5.0 + time * INVTHREE)));',
-				],
-			],
+			},
 		},
 		{
 			shader: 'GhostLightColorationShader',
-			replacements: [
-				[fbm3, fbm3 + optimizedFBM3],
-				[
-					// wrap-line
-					'float distortion1 = fbm(vec2(',
-					'float distortion1 = 1.2 * fbm3_1(vec2(',
+			replacements: {
+				fragment: [
+					[fbm3, fbm3 + optimizedFBM3],
+					[
+						// wrap-line
+						'float distortion1 = fbm(vec2(',
+						'float distortion1 = 1.2 * fbm3_1(vec2(',
+					],
+					[
+						// wrap-line
+						'fbm(vUvs * 3.0 + time * 0.50),',
+						'fbm3_5(vUvs * 3.0 + time * 0.50),',
+					],
+					[
+						// wrap-line
+						'fbm((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));',
+						'fbm3_5((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));',
+					],
+					[
+						// wrap-line
+						'float distortion2 = fbm(vec2(',
+						'float distortion2 = 1.2 * fbm3_1(vec2(',
+					],
+					[
+						// wrap-line
+						'fbm(-vUvs * 3.0 + time * 0.50),',
+						'fbm3_5(-vUvs * 3.0 + time * 0.50),',
+					],
+					[
+						// wrap-line
+						'fbm((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
+						'fbm3_5((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
+					],
+					[
+						// wrap-line
+						'uv *= fbm(vec2(time + distortion1, time + distortion2));',
+						'uv *= fbm3_1(vec2(time + distortion1, time + distortion2));',
+					],
 				],
-				[
-					// wrap-line
-					'fbm(vUvs * 3.0 + time * 0.50),',
-					'fbm3_5(vUvs * 3.0 + time * 0.50),',
-				],
-				[
-					// wrap-line
-					'fbm((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));',
-					'fbm3_5((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));',
-				],
-				[
-					// wrap-line
-					'float distortion2 = fbm(vec2(',
-					'float distortion2 = 1.2 * fbm3_1(vec2(',
-				],
-				[
-					// wrap-line
-					'fbm(-vUvs * 3.0 + time * 0.50),',
-					'fbm3_5(-vUvs * 3.0 + time * 0.50),',
-				],
-				[
-					// wrap-line
-					'fbm((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
-					'fbm3_5((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
-				],
-				[
-					// wrap-line
-					'uv *= fbm(vec2(time + distortion1, time + distortion2));',
-					'uv *= fbm3_1(vec2(time + distortion1, time + distortion2));',
-				],
-			],
+			},
 		},
 
 		{
 			shader: 'FairyLightIlluminationShader',
-			replacements: [
-				[fbm3, fbm3 + optimizedFBM3],
-				// distortion 1
-				[
-					// wrap-line
-					'float distortion1 = fbm(vec2(',
-					'float distortion1 = fbm3_1(vec2(',
+			replacements: {
+				fragment: [
+					[fbm3, fbm3 + optimizedFBM3],
+					// distortion 1
+					[
+						// wrap-line
+						'float distortion1 = fbm(vec2(',
+						'float distortion1 = fbm3_1(vec2(',
+					],
+					[
+						// wrap-line
+						'fbm(vUvs * 3.0 - time * 0.50), ',
+						'fbm3_5(vUvs * 3.0 - time * 0.50),',
+					],
+					[
+						'fbm((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));',
+						'fbm3_5((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));',
+					],
+					// distortion 2
+					[
+						// wrap-line
+						'float distortion2 = fbm(vec2(',
+						'float distortion2 = fbm3_1(vec2(',
+					],
+					[
+						// wrap-line
+						'fbm(-vUvs * 3.0 - time * 0.50),',
+						'fbm3_5(-vUvs * 3.0 - time * 0.50),',
+					],
+					[
+						// wrap-line
+						'fbm((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
+						'fbm3_5((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
+					],
 				],
-				[
-					// wrap-line
-					'fbm(vUvs * 3.0 - time * 0.50), ',
-					'fbm3_5(vUvs * 3.0 - time * 0.50),',
-				],
-				['fbm((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));', 'fbm3_5((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));'],
-				// distortion 2
-				[
-					// wrap-line
-					'float distortion2 = fbm(vec2(',
-					'float distortion2 = fbm3_1(vec2(',
-				],
-				[
-					// wrap-line
-					'fbm(-vUvs * 3.0 - time * 0.50),',
-					'fbm3_5(-vUvs * 3.0 - time * 0.50),',
-				],
-				[
-					// wrap-line
-					'fbm((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
-					'fbm3_5((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
-				],
-			],
+			},
 		},
 		{
 			shader: 'FairyLightColorationShader',
-			replacements: [
-				[fbm3, fbm3 + optimizedFBM3],
-				// distortion 1
-				[
-					// wrap-line
-					'float distortion1 = fbm(vec2(',
-					'float distortion1 = fbm3_1(vec2(',
+			replacements: {
+				fragment: [
+					[fbm3, fbm3 + optimizedFBM3],
+					// distortion 1
+					[
+						// wrap-line
+						'float distortion1 = fbm(vec2(',
+						'float distortion1 = fbm3_1(vec2(',
+					],
+					[
+						// wrap-line
+						'fbm(vUvs * 3.0 + time * 0.50),',
+						'fbm3_5(vUvs * 3.0 + time * 0.50),',
+					],
+					[
+						'fbm((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));',
+						'fbm3_5((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));',
+					],
+					// distortion 2
+					[
+						// wrap-line
+						'float distortion2 = fbm(vec2(',
+						'float distortion2 = fbm3_1(vec2(',
+					],
+					[
+						// wrap-line
+						'fbm(-vUvs * 3.0 + time * 0.50),',
+						'fbm3_5(-vUvs * 3.0 + time * 0.50),',
+					],
+					[
+						// wrap-line
+						'fbm((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
+						'fbm3_5((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
+					],
+					// final FBM
+					[
+						// wrap-line
+						'uv *= fbm(vec2(time + distortion1, time + distortion2));',
+						'uv *= fbm3_1(vec2(time + distortion1, time + distortion2));',
+					],
 				],
-				[
-					// wrap-line
-					'fbm(vUvs * 3.0 + time * 0.50),',
-					'fbm3_5(vUvs * 3.0 + time * 0.50),',
-				],
-				['fbm((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));', 'fbm3_5((-vUvs + vec2(1.)) * 5.0 + time * INVTHREE)));'],
-				// distortion 2
-				[
-					// wrap-line
-					'float distortion2 = fbm(vec2(',
-					'float distortion2 = fbm3_1(vec2(',
-				],
-				[
-					// wrap-line
-					'fbm(-vUvs * 3.0 + time * 0.50),',
-					'fbm3_5(-vUvs * 3.0 + time * 0.50),',
-				],
-				[
-					// wrap-line
-					'fbm((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
-					'fbm3_5((-vUvs + vec2(1.)) * 5.0 - time * INVTHREE)));',
-				],
-				// final FBM
-				[
-					// wrap-line
-					'uv *= fbm(vec2(time + distortion1, time + distortion2));',
-					'uv *= fbm3_1(vec2(time + distortion1, time + distortion2));',
-				],
-			],
+			},
 		},
 
 		{
 			shader: 'BewitchingWaveIlluminationShader',
-			replacements: [
-				[fbm4, fbm4 + optimizedFBM4],
-				[
-					// wrap-line
-					'float motion = fbm(uv + time * 0.25);',
-					'float motion = fbm4_1(uv + time * 0.25);',
+			replacements: {
+				fragment: [
+					[fbm4, fbm4 + optimizedFBM4],
+					[
+						// wrap-line
+						'float motion = fbm(uv + time * 0.25);',
+						'float motion = fbm4_1(uv + time * 0.25);',
+					],
 				],
-			],
+			},
 		},
 		{
 			shader: 'BewitchingWaveColorationShader',
-			replacements: [
-				[fbm4, fbm4 + optimizedFBM4],
-				[
-					// wrap-line
-					'float motion = fbm(uv + time * 0.25);',
-					'float motion = fbm4_1(uv + time * 0.25);',
+			replacements: {
+				fragment: [
+					[fbm4, fbm4 + optimizedFBM4],
+					[
+						// wrap-line
+						'float motion = fbm(uv + time * 0.25);',
+						'float motion = fbm4_1(uv + time * 0.25);',
+					],
 				],
-			],
+			},
 		},
 
 		{
 			shader: 'FogColorationShader',
-			replacements: [
-				[fbm4, fbm4 + optimizedFBM4],
-				[
-					// wrap-line
-					'float q = fbm(p - time * 0.1);',
-					'float q = fbm4_8(p - time * 0.1);',
+			replacements: {
+				fragment: [
+					[fbm4, fbm4 + optimizedFBM4],
+					[
+						// wrap-line
+						'float q = fbm(p - time * 0.1);',
+						'float q = fbm4_8(p - time * 0.1);',
+					],
+					[
+						// wrap-line
+						'vec2 r = vec2(fbm(p + q - time * 0.5 - p.x - p.y),',
+						'vec2 r = vec2(fbm4_8(p + q - time * 0.5 - p.x - p.y),',
+					],
+					[
+						// wrap-line
+						'fbm(p + q - time * 0.3));',
+						'fbm4_8(p + q - time * 0.3));',
+					],
+					[
+						// wrap-line
+						'fbm(p + r)) + mix(c3, c4, r.x)',
+						'fbm4_8(p + r)) + mix(c3, c4, r.x)',
+					],
 				],
-				[
-					// wrap-line
-					'vec2 r = vec2(fbm(p + q - time * 0.5 - p.x - p.y),',
-					'vec2 r = vec2(fbm4_8(p + q - time * 0.5 - p.x - p.y),',
-				],
-				[
-					// wrap-line
-					'fbm(p + q - time * 0.3));',
-					'fbm4_8(p + q - time * 0.3));',
-				],
-				[
-					// wrap-line
-					'fbm(p + r)) + mix(c3, c4, r.x)',
-					'fbm4_8(p + r)) + mix(c3, c4, r.x)',
-				],
-			],
+			},
 		},
 
 		{
 			shader: 'VortexIlluminationShader',
-			replacements: [
-				[fbm4, fbm4 + optimizedFBM4],
-				[
-					// wrap-line
-					'float q = fbm(p + time);',
-					'float q = fbm4_8(p + time);',
+			replacements: {
+				fragment: [
+					[fbm4, fbm4 + optimizedFBM4],
+					[
+						// wrap-line
+						'float q = fbm(p + time);',
+						'float q = fbm4_8(p + time);',
+					],
+					[
+						// wrap-line
+						'vec2 r = vec2(fbm(p + q + time * 0.9 - p.x - p.y), fbm(p + q + time * 0.6));',
+						'vec2 r = vec2(fbm4_8(p + q + time * 0.9 - p.x - p.y), fbm4_8(p + q + time * 0.6));',
+					],
+					[
+						// wrap-line
+						'return mix(c1, c2, fbm(p + r)) + mix(c3, c4, r.x) - mix(c5, c6, r.y);',
+						'return mix(c1, c2, fbm4_8(p + r)) + mix(c3, c4, r.x) - mix(c5, c6, r.y);',
+					],
 				],
-				[
-					// wrap-line
-					'vec2 r = vec2(fbm(p + q + time * 0.9 - p.x - p.y), fbm(p + q + time * 0.6));',
-					'vec2 r = vec2(fbm4_8(p + q + time * 0.9 - p.x - p.y), fbm4_8(p + q + time * 0.6));',
-				],
-				[
-					// wrap-line
-					'return mix(c1, c2, fbm(p + r)) + mix(c3, c4, r.x) - mix(c5, c6, r.y);',
-					'return mix(c1, c2, fbm4_8(p + r)) + mix(c3, c4, r.x) - mix(c5, c6, r.y);',
-				],
-			],
+			},
 		},
 		{
 			shader: 'VortexColorationShader',
-			replacements: [
-				[fbm4, fbm4 + optimizedFBM4],
-				[
-					// wrap-line
-					'float q = fbm(p + time);',
-					'float q = fbm4_8(p + time);',
+			replacements: {
+				fragment: [
+					[fbm4, fbm4 + optimizedFBM4],
+					[
+						// wrap-line
+						'float q = fbm(p + time);',
+						'float q = fbm4_8(p + time);',
+					],
+					[
+						// wrap-line
+						'vec2 r = vec2(fbm(p + q + time * 0.9 - p.x - p.y), ',
+						'vec2 r = vec2(fbm4_1(p + q + time * 0.9 - p.x - p.y), ',
+					],
+					[
+						// wrap-line
+						'fbm(p + q + time * 0.6));',
+						'fbm4_8(p + q + time * 0.6));',
+					],
+					[
+						// wrap-line
+						'fbm(p + r)) + mix(c3, c4, r.x) ',
+						'fbm4_8(p + r)) + mix(c3, c4, r.x) ',
+					],
 				],
-				[
-					// wrap-line
-					'vec2 r = vec2(fbm(p + q + time * 0.9 - p.x - p.y), ',
-					'vec2 r = vec2(fbm4_1(p + q + time * 0.9 - p.x - p.y), ',
-				],
-				[
-					// wrap-line
-					'fbm(p + q + time * 0.6));',
-					'fbm4_8(p + q + time * 0.6));',
-				],
-				[
-					// wrap-line
-					'fbm(p + r)) + mix(c3, c4, r.x) ',
-					'fbm4_8(p + r)) + mix(c3, c4, r.x) ',
-				],
-			],
+			},
 		},
 
 		{
 			shader: 'SmokePatchIlluminationShader',
-			replacements: [
-				[fbmHQ3, fbmHQ3 + optimizedFBMHQ3],
-				[
-					// wrap-line
-					'max(fbm(uv + t, 1.0),',
-					'max(fbmHQ3_1(uv + t, 1.0),',
+			replacements: {
+				fragment: [
+					[fbmHQ3, fbmHQ3 + optimizedFBMHQ3],
+					[
+						// wrap-line
+						'max(fbm(uv + t, 1.0),',
+						'max(fbmHQ3_1(uv + t, 1.0),',
+					],
+					[
+						// wrap-line
+						'fbm(uv - t, 1.0)),',
+						'fbmHQ3_1(uv - t, 1.0)),',
+					],
 				],
-				[
-					// wrap-line
-					'fbm(uv - t, 1.0)),',
-					'fbmHQ3_1(uv - t, 1.0)),',
-				],
-			],
+			},
 		},
 		{
 			shader: 'SmokePatchColorationShader',
-			replacements: [
-				[fbmHQ3, fbmHQ3 + optimizedFBMHQ3],
-				[
-					// wrap-line
-					'max(fbm(uv + t, 1.0),',
-					'max(fbmHQ3_1(uv + t, 1.0),',
+			replacements: {
+				fragment: [
+					[fbmHQ3, fbmHQ3 + optimizedFBMHQ3],
+					[
+						// wrap-line
+						'max(fbm(uv + t, 1.0),',
+						'max(fbmHQ3_1(uv + t, 1.0),',
+					],
+					[
+						// wrap-line
+						'fbm(uv - t, 1.0)),',
+						'fbmHQ3_1(uv - t, 1.0)),',
+					],
 				],
-				[
-					// wrap-line
-					'fbm(uv - t, 1.0)),',
-					'fbmHQ3_1(uv - t, 1.0)),',
-				],
-			],
+			},
 		},
 
 		{
 			shader: 'BlackHoleDarknessShader',
-			replacements: [
-				[fbmHQ3, fbmHQ3 + optimizedFBMHQ3],
-				[
-					// wrap-line
-					'float beams = fract(angle + sin(dist * 30.0 * (intensity * 0.2) - time + fbm(uv * 10.0 + time * 0.25, 1.0) * dad));',
-					'float beams = fract(angle + sin(dist * 30.0 * (intensity * 0.2) - time + fbmHQ3_10(uv * 10.0 + time * 0.25, 1.0) * dad));',
+			replacements: {
+				fragment: [
+					[fbmHQ3, fbmHQ3 + optimizedFBMHQ3],
+					[
+						// wrap-line
+						'float beams = fract(angle + sin(dist * 30.0 * (intensity * 0.2) - time + fbm(uv * 10.0 + time * 0.25, 1.0) * dad));',
+						'float beams = fract(angle + sin(dist * 30.0 * (intensity * 0.2) - time + fbmHQ3_10(uv * 10.0 + time * 0.25, 1.0) * dad));',
+					],
 				],
-			],
+			},
 		},
 
 		{
 			shader: 'LightDomeColorationShader',
-			replacements: [
-				[fbm2, fbm2 + optimizedFBM2],
-				[
-					// wrap-line
-					'float q = 2.0 * fbm(p + time * 0.2);',
-					'float q = 2.0 * fbm2(p + time * 0.2);',
+			replacements: {
+				fragment: [
+					[fbm2, fbm2 + optimizedFBM2],
+					[
+						// wrap-line
+						'float q = 2.0 * fbm(p + time * 0.2);',
+						'float q = 2.0 * fbm2(p + time * 0.2);',
+					],
+					[
+						// wrap-line
+						'vec2 r = vec2(fbm(p + q + ( time  ) - p.x - p.y), fbm(p * 2.0 + ( time )));',
+						'vec2 r = vec2(fbm2(p + q + ( time  ) - p.x - p.y), fbm2(p * 2.0 + ( time )));',
+					],
+					[
+						// wrap-line
+						'return clamp( mix( c1, c2, abs(fbm(p + r)) ) + mix( c3, c4, abs(r.x * r.x * r.x) ) - mix(',
+						'return clamp( mix( c1, c2, fbm2(p + r) ) + mix( c3, c4, abs(r.x * r.x * r.x) ) - mix(',
+					],
 				],
-				[
-					// wrap-line
-					'vec2 r = vec2(fbm(p + q + ( time  ) - p.x - p.y), fbm(p * 2.0 + ( time )));',
-					'vec2 r = vec2(fbm2(p + q + ( time  ) - p.x - p.y), fbm2(p * 2.0 + ( time )));',
-				],
-				[
-					// wrap-line
-					'return clamp( mix( c1, c2, abs(fbm(p + r)) ) + mix( c3, c4, abs(r.x * r.x * r.x) ) - mix(',
-					'return clamp( mix( c1, c2, fbm2(p + r) ) + mix( c3, c4, abs(r.x * r.x * r.x) ) - mix(',
-				],
-			],
+			},
 		},
 
 		{
 			shader: 'RoilingDarknessShader',
-			replacements: [
-				[fbm3, fbm3 + optimizedFBM3],
-				[
-					// wrap-line
-					`float distortion1 = fbm( vec2(`,
-					`float distortion1 = fbm3_1(vec2(`,
-				],
-				[
-					// wrap-line
-					`fbm( vUvs * 2.5 + time * 0.5),`,
-					`fbm3_5(vUvs * 2.5 + time * 0.5),`,
-				],
-				[
-					// wrap-line
-					`fbm( (-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));`,
-					`fbm3_5((-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));`,
-				],
+			replacements: {
+				fragment: [
+					[fbm3, fbm3 + optimizedFBM3],
+					[
+						// wrap-line
+						`float distortion1 = fbm( vec2(`,
+						`float distortion1 = fbm3_1(vec2(`,
+					],
+					[
+						// wrap-line
+						`fbm( vUvs * 2.5 + time * 0.5),`,
+						`fbm3_5(vUvs * 2.5 + time * 0.5),`,
+					],
+					[
+						// wrap-line
+						`fbm( (-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));`,
+						`fbm3_5((-vUvs - vec2(0.01)) * 5.0 + time * INVTHREE)));`,
+					],
 
-				[
-					// wrap-line
-					`float distortion2 = fbm( vec2(`,
-					`float distortion2 = fbm3_1(vec2(`,
+					[
+						// wrap-line
+						`float distortion2 = fbm( vec2(`,
+						`float distortion2 = fbm3_1(vec2(`,
+					],
+					[
+						// wrap-line
+						`fbm( -vUvs * 5.0 + time * 0.5),`,
+						`fbm3_5(-vUvs * 5.0 + time * 0.5),`,
+					],
+					[
+						// wrap-line
+						`fbm( (vUvs + vec2(0.01)) * 2.5 + time * INVTHREE)));`,
+						`fbm3_5((vUvs + vec2(0.01)) * 2.5 + time * INVTHREE)));`,
+					],
 				],
-				[
-					// wrap-line
-					`fbm( -vUvs * 5.0 + time * 0.5),`,
-					`fbm3_5(-vUvs * 5.0 + time * 0.5),`,
-				],
-				[
-					// wrap-line
-					`fbm( (vUvs + vec2(0.01)) * 2.5 + time * INVTHREE)));`,
-					`fbm3_5((vUvs + vec2(0.01)) * 2.5 + time * INVTHREE)));`,
-				],
-			],
+			},
 		},
-	];
+	] satisfies ShaderPatches[];
 	for (const { shader, replacements } of shaders) {
-		const ShaderClass = getShaderByName(shader);
-		for (const [search, replace] of replacements) {
-			ShaderClass.fragmentShader = ShaderClass.fragmentShader.replace(search, replace);
-		}
+		patchShader(shader, replacements);
 	}
 }
 
