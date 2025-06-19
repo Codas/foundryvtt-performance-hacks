@@ -1,3 +1,8 @@
+## 0.11.0
+
+- Simplify animated lights optimizations
+- Improve quality of precomputed noise textures
+
 ## 0.10.6
 
 - Make spritesheet based control icon drawing less intrusive to other modules
