@@ -3,20 +3,20 @@
 		"settings": {
 			"optimize-interface-layer-clipping": {
 				"name": "Optimiere Render-Reihenfolge von Token UI-Elementen",
-				"hint": "Optimiert, in welcher Reihenfolge die Token UI Elemente gerendert werden für verbessertes Draw Call Batching. Keine optimische Beeinflussung der Tokens zu erwarten. Wird benötigt, damit die anderen Einstellunge einen merkbaren Einfluss haben."
+				"hint": "Optimiert, in welcher Reihenfolge die Token UI Elemente gerendert werden für verbessertes Draw Call Batching. Keine optische Beeinflussung der Tokens zu erwarten. Wird benötigt, damit die anderen Einstellungen einen merkbaren Einfluss haben."
 			},
 			"token-bars-caching": {
 				"name": "Token-Ressourceleisten cachen",
-				"hint": "Cacht die Token-Ressourcenleisten Draw Batching zu verbessern. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität der haben."
+				"hint": "Cacht die Token-Ressourcenleisten, um Draw Batching zu verbessern. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität haben."
 			},
 			"token-effects-caching": {
-				"name": "Token-Efekte cachen",
+				"name": "Token-Effekte cachen",
 				"hint": "Cacht die Token-Effektleiste. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität haben."
 			},
 
 			"spritesheet-substitution": {
 				"name": "Austausch von Texturen mit Spritesheets",
-				"hint": "Tauscht gewisse Icons und andere Grafikelemente von Foundry gegen Spritesheets aus. Dies kann die Leistung und den Resourcenverbrauch bei der Anzeige von vielen UI Icons für Journals, Lichter, Türen etc verbessern."
+				"hint": "Tauscht gewisse Icons und andere Grafikelemente von Foundry gegen Spritesheets aus. Dies kann die Leistung und den Ressourcenverbrauch bei der Anzeige von vielen UI Icons für Journals, Lichter, Türen etc. verbessern."
 			},
 			"spritesheet-substitution-custom": {
 				"name": "Eigene Spritesheets",
@@ -29,9 +29,9 @@
 					"title": "Verwalte eigene Spritesheets",
 					"warn-no-src": "Du musst einen Spritesheet-Pfad auswählen, um ihn hinzuzufügen",
 					"warn-no-json": "Die ausgewählte Datei muss eine gültige pixi.js Spritesheet JSON-Datei sein",
-					"warn-inalid-asset": "Die ausgewählte Datei enthält keine gültigen pixi.js Spritesheet-Daten",
-					"warn-init-failed": "Prime Performance: Fehler beim laden der Standard-Spritesheets. Optimierung durch Spritesheets wird deaktiviert. Bitte prüfe die Konsole auf weitere Details.",
-					"warn-custom-spritesheets-failed": "Prime Performance: Fehler beim laden von einen oder mehreren eigenen Spritesheets. Bitte prüfe die Konsole auf weitere Details."
+					"warn-invalid-asset": "Die ausgewählte Datei enthält keine gültigen pixi.js Spritesheet-Daten",
+					"warn-init-failed": "Prime Performance: Fehler beim Laden der Standard-Spritesheets. Optimierung durch Spritesheets wird deaktiviert. Bitte prüfe die Konsole auf weitere Details.",
+					"warn-custom-spritesheets-failed": "Prime Performance: Fehler beim Laden von einem oder mehreren eigenen Spritesheets. Bitte prüfe die Konsole auf weitere Details."
 				}
 			},
 			"token-ring-spritesheet-support": {
@@ -44,7 +44,7 @@
 			},
 			"reduce-lighting-resolution": {
 				"name": "Auflösung der Lichteffekte reduzieren",
-				"hint": "Reduziert die interne Auflösung von Lichteffekten. Verbessert die performance deutlich, insbesondere wenn viele Lichteffekte oder große Lichtquellen verwendet werden. Die visuelle Beeinträchtigung sollte minimal sein. Die Skalierung für die einzelnen Beleuchtungsebenen können im separaten Menu konfiguriert werden."
+				"hint": "Reduziert die interne Auflösung von Lichteffekten. Verbessert die Performance deutlich, insbesondere wenn viele Lichteffekte oder große Lichtquellen verwendet werden. Die visuelle Beeinträchtigung sollte minimal sein. Die Skalierung für die einzelnen Beleuchtungsebenen kann im separaten Menü konfiguriert werden."
 			},
 			"disable-app-v2-background-blur": {
 				"name": "Hintergrund-Blur deaktivieren",
@@ -58,7 +58,7 @@
 				"menu": {
 					"title": "Benutzerdefinierte Skalierung",
 					"label": "Benutzerdefinierte Skalierung",
-					"description": "Konfiguriere die Skalierugn für die individuelle Ebnenen der Lichteffekte. Die Darstellungsskalierung ist der Prozentwert für die interne Auflösung der Lichteffekte. Ein Wert von 100 bedeutet 100% Darstellungsskalierung, also keine Änderung. Ein Wert von 50 bedeutet, dass die Auflösung halbiert (und die Menge der zu berechnende Pixel geviertelt) wird, usw.",
+					"description": "Konfiguriere die Skalierung für die individuellen Ebenen der Lichteffekte. Die Darstellungsskalierung ist der Prozentwert für die interne Auflösung der Lichteffekte. Ein Wert von 100 bedeutet 100% Darstellungsskalierung, also keine Änderung. Ein Wert von 50 bedeutet, dass die Auflösung halbiert (und die Menge der zu berechnenden Pixel geviertelt) wird, usw.",
 					"confirm": "Bestätigen",
 					"cancel": "Zurücksetzen",
 					"FIELDS": {

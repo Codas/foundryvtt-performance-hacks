@@ -3,15 +3,15 @@
 		"settings": {
 			"optimize-interface-layer-clipping": {
 				"name": "Optimize Token UI Render Batching",
-				"hint": "Optimizes render batching of Token UI elements. No visual degredation expected. Required in order for the token bars and effects caching settings to have a noticable impact."
+				"hint": "Optimizes render batching of Token UI elements. No visual degradation expected. Required in order for the token bars and effects caching settings to have a noticeable impact."
 			},
 			"token-bars-caching": {
 				"name": "Cache Token Resource Bars",
-				"hint": "Caches token resource bars to textures. Very minor visual degradataion on high zoom levels expected."
+				"hint": "Caches token resource bars to textures. Very minor visual degradation on high zoom levels expected."
 			},
 			"token-effects-caching": {
 				"name": "Cache Token Effects",
-				"hint": "Caches the token effects bar. Very minor visual degradataion on high zoom levels expected."
+				"hint": "Caches the token effects bar. Very minor visual degradation on high zoom levels expected."
 			},
 			"precomputed-noise-textures": {
 				"name": "Optimize animated lights",
@@ -23,7 +23,7 @@
 			},
 			"spritesheet-substitution": {
 				"name": "Texture Replacement with Spritesheets",
-				"hint": "Substitutes core SVG icons and other graphic elements with optimized spriteshseets. This can improve performance and resource usage when displaying many UI icons for journals, lights, doors, etc."
+				"hint": "Substitutes core SVG icons and other graphic elements with optimized spritesheets. This can improve performance and resource usage when displaying many UI icons for journals, lights, doors, etc."
 			},
 			"spritesheet-substitution-custom": {
 				"name": "Custom Spritesheets",
@@ -53,7 +53,7 @@
 			"custom-render-scale": {
 				"name": "Lighting Effects Render Scale",
 				"label": "Configure Render Scale",
-				"hint": "Configure the rennder scale for lighting effects on the canvas. This can improve performance significantly, especially on lower-end GPUs. Visual impact ranges from unnoticable to very noticable, depending on the effects layer. Activate \"Reduce resolution of lighting effects\" for this configuration to work.",
+				"hint": "Configure the render scale for lighting effects on the canvas. This can improve performance significantly, especially on lower-end GPUs. Visual impact ranges from unnoticeable to very noticeable, depending on the effects layer. Activate \"Reduce resolution of lighting effects\" for this configuration to work.",
 				"menu": {
 					"title": "Custom Render Scale",
 					"label": "Custom Render Scale",
@@ -75,7 +75,7 @@
 						},
 						"darkness": {
 							"label": "Darkness",
-							"hint": "Darkness effects render scale. Minimal visual impact, minmal performance impact. Optimized default is 50%"
+							"hint": "Darkness effects render scale. Minimal visual impact, minimal performance impact. Optimized default is 50%"
 						}
 					}
 				}

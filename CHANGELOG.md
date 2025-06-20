@@ -1,3 +1,7 @@
+## 0.11.1
+
+- Fix typo in module settings (thanks @nschoenwald)
+
 ## 0.11.0
 
 - Simplify animated lights optimizations
