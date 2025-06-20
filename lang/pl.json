@@ -3,15 +3,15 @@
 		"settings": {
 			"optimize-interface-layer-clipping": {
 				"name": "Optymalizacja wsadowego renderowania Token UI",
-				"hint": "Optymalizuje renderowanie elementów interfejsu użytkownika tokenów. Nie przewiduje się pogorszenia jakości obrazu. Wymagane, aby ustawienia buforowania pasków tokenów i efektów miały zauważalny wpływ."
+				"hint": "Optymalizuje renderowanie serii elementów interfejsu użytkownika tokenów. Nie przewiduje się pogorszenia jakości obrazu. Wymagane, aby ustawienia buforowania pasków tokenów i efektów miały zauważalny wpływ."
 			},
 			"token-bars-caching": {
 				"name": "Paski zasobów tokenów w pamięci podręcznej",
-				"hint": "Paski zasobów tokenów w pamięci podręcznej do tekstur. Oczekiwana bardzo niewielka degradacja wizualna na wysokich poziomach powiększenia."
+				"hint": "Buforuje paski zasobów tokenów do tekstur. Spodziewane bardzo niewielkie pogorszenie jakości obrazu przy wysokich poziomach powiększenia."
 			},
 			"token-effects-caching": {
 				"name": "Efekty tokenów w pamięci podręcznej",
-				"hint": "Przechowuje w pamięci podręcznej pasek efektów tokenów. Oczekiwana bardzo niewielka degradacja wizualna na wysokich poziomach powiększenia."
+				"hint": "Buforuje pasek efektów tokenów. Przy dużym powiększeniu można spodziewać się niewielkiego pogorszenia jakości obrazu."
 			},
 			"precomputed-noise-textures": {
 				"name": "Optymalizacja animowanych świateł",
@@ -53,7 +53,7 @@
 			"custom-render-scale": {
 				"name": "Skala renderowania efektów świetlnych",
 				"label": "Konfiguracja skali renderowania",
-				"hint": "Skonfiguruj skalę renderowania efektów świetlnych na płótnie. Może to znacznie poprawić wydajność, zwłaszcza w przypadku słabszych kart graficznych. Efekt wizualny może być niezauważalny lub bardzo widoczny, w zależności od warstwy efektów. Aby ta konfiguracja zadziałała, należy włączyć opcję „Zmniejsz rozdzielczość efektów świetlnych”.",
+				"hint": "Skonfiguruj skalę renderowania efektów świetlnych na płótnie. Może to znacznie poprawić wydajność, zwłaszcza w przypadku słabszych kart graficznych. Efekt wizualny może być niezauważalny lub bardzo wyraźny, w zależności od warstwy efektów. Aby ta konfiguracja zadziałała, należy aktywować opcję „Zmniejsz rozdzielczość efektów świetlnych”.",
 				"menu": {
 					"title": "Niestandardowa skala renderowania",
 					"label": "Niestandardowa skala renderowania",
@@ -75,7 +75,7 @@
 						},
 						"darkness": {
 							"label": "Ciemność",
-							"hint": "Skala renderowania efektów ciemności. Minimalny wpływ na wygląd, minimalny wpływ na wydajność. Optymalna wartość domyślna to 50%."
+							"hint": "Skala efektów ciemności. Minimalny wpływ na wygląd i wydajność. Optymalna wartość domyślna to 50%."
 						}
 					}
 				}
