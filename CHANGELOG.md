@@ -1,3 +1,8 @@
+## 0.11.2
+
+- Update Polish translations (thanks @Lioheart)
+- Add Japanese translations (thanks @ryotai-trpg)
+
 ## 0.11.1
 
 - Fix typo in module settings (thanks @nschoenwald)
