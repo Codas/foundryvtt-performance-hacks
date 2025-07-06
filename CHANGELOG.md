@@ -1,3 +1,7 @@
+## 0.11.3
+
+- Fix an issue with control icons not being optimized in certain cases
+
 ## 0.11.2
 
 - Update Polish translations (thanks @Lioheart)

@@ -526,20 +526,20 @@ async function enableSpritesheetSubstitution() {
 
 	// Override placeables draw methods to create optimized control icons
 	registerWrapperForVersion(AmbientLight__draw, 'WRAPPER', {
-		v12: 'AmbientLight.prototype.draw',
-		v13: 'foundry.canvas.placeables.AmbientLight.prototype.draw',
+		v12: 'AmbientLight.prototype._draw',
+		v13: 'foundry.canvas.placeables.AmbientLight.prototype._draw',
 	});
 	registerWrapperForVersion(AmbientSound__draw, 'WRAPPER', {
-		v12: 'AmbientSound.prototype.draw',
-		v13: 'foundry.canvas.placeables.AmbientSound.prototype.draw',
+		v12: 'AmbientSound.prototype._draw',
+		v13: 'foundry.canvas.placeables.AmbientSound.prototype._draw',
 	});
 	registerWrapperForVersion(MeasuredTemplate__draw, 'WRAPPER', {
-		v12: 'MeasuredTemplate.prototype.draw',
-		v13: 'foundry.canvas.placeables.MeasuredTemplate.prototype.draw',
+		v12: 'MeasuredTemplate.prototype._draw',
+		v13: 'foundry.canvas.placeables.MeasuredTemplate.prototype._draw',
 	});
 	registerWrapperForVersion(Note__draw, 'WRAPPER', {
-		v12: 'Note.prototype.draw',
-		v13: 'foundry.canvas.placeables.Note.prototype.draw',
+		v12: 'Note.prototype._draw',
+		v13: 'foundry.canvas.placeables.Note.prototype._draw',
 	});
 
 	// Override the AmbientLight refreshControl because it sets the control icon texture manually
