@@ -151,11 +151,18 @@ function drawOptimizedControlIcon({
 	return icon;
 }
 
+function getControlIconSize(): number {
+	if (FOUNDRY_API.generation < 13) {
+		return Math.max(Math.round((canvas.dimensions.size * 0.5) / 20) * 20, 40);
+	}
+	return 60 * canvas.dimensions.uiScale;
+}
+
 function AmbientLight__draw(this: AmbientLight, wrapped: (...args: any[]) => void, ...args: any[]) {
 	const result = wrapped(...args);
 	removeOldControlIcon(this);
 
-	const size = 60 * canvas.dimensions.uiScale;
+	const size = getControlIconSize();
 	this.controlIcon = this.addChild(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.light }));
 
 	return result;
@@ -165,7 +172,7 @@ function AmbientSound__draw(this: AmbientSound, wrapped: (...args: any[]) => voi
 	const result = wrapped(...args);
 	removeOldControlIcon(this);
 
-	const size = 60 * canvas.dimensions.uiScale;
+	const size = getControlIconSize();
 	this.controlIcon = this.addChild(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.sound }));
 
 	return result;
@@ -175,7 +182,7 @@ function MeasuredTemplate__draw(this: MeasuredTemplate, wrapped: (...args: any[]
 	const result = wrapped(...args);
 	removeOldControlIcon(this);
 
-	const size = 60 * canvas.dimensions.uiScale;
+	const size = getControlIconSize();
 	this.controlIcon = this.addChild(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.template }));
 
 	return result;
