@@ -1,3 +1,7 @@
+## 0.11.5
+
+- Fix issue with note labels being placed under control icons
+
 ## 0.11.4
 
 - Fix issue with control icons in Foundry v12
