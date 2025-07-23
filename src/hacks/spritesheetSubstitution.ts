@@ -133,8 +133,11 @@ function removeOldControlIcon(container: PIXI.Container & { controlIcon: Control
 		return 0;
 	}
 	const oldControlIcon = container.controlIcon;
-	const index = container.getChildIndex(oldControlIcon);
-	container.removeChild(oldControlIcon);
+	let index = 0;
+	try {
+		index = container.getChildIndex(oldControlIcon);
+		container.removeChild(oldControlIcon);
+	} catch {}
 	return index;
 }
 

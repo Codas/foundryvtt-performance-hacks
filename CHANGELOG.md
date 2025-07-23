@@ -1,3 +1,7 @@
+## 0.11.6
+
+- Fix more issues with ControlIcon replacement
+
 ## 0.11.5
 
 - Fix issue with note labels being placed under control icons
