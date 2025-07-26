@@ -129,11 +129,13 @@ class OptimizedControlIcon extends ControlIcon {
 }
 
 function removeOldControlIcon(container: PIXI.Container & { controlIcon: ControlIcon | OptimizedControlIcon }): number {
-	if (container.controlIcon instanceof OptimizedControlIcon) {
-		return 0;
-	}
 	const oldControlIcon = container.controlIcon;
-	let index = 0;
+	let index = -1;
+
+	if (!(container.controlIcon instanceof OptimizedControlIcon)) {
+		return index;
+	}
+
 	try {
 		index = container.getChildIndex(oldControlIcon);
 		container.removeChild(oldControlIcon);
@@ -166,6 +168,9 @@ function getControlIconSize(): number {
 function AmbientLight__draw(this: AmbientLight, wrapped: (...args: any[]) => void, ...args: any[]) {
 	const result = wrapped(...args);
 	const index = removeOldControlIcon(this);
+	if (index < 0) {
+		return;
+	}
 
 	const size = getControlIconSize();
 	this.controlIcon = this.addChildAt(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.light }), index);
@@ -176,6 +181,9 @@ function AmbientLight__draw(this: AmbientLight, wrapped: (...args: any[]) => voi
 function AmbientSound__draw(this: AmbientSound, wrapped: (...args: any[]) => void, ...args: any[]) {
 	const result = wrapped(...args);
 	const index = removeOldControlIcon(this);
+	if (index < 0) {
+		return;
+	}
 
 	const size = getControlIconSize();
 	this.controlIcon = this.addChildAt(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.sound }), index);
@@ -186,6 +194,9 @@ function AmbientSound__draw(this: AmbientSound, wrapped: (...args: any[]) => voi
 function MeasuredTemplate__draw(this: MeasuredTemplate, wrapped: (...args: any[]) => void, ...args: any[]) {
 	const result = wrapped(...args);
 	const index = removeOldControlIcon(this);
+	if (index < 0) {
+		return;
+	}
 
 	const size = getControlIconSize();
 	this.controlIcon = this.addChildAt(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.template }), index);
@@ -196,6 +207,9 @@ function MeasuredTemplate__draw(this: MeasuredTemplate, wrapped: (...args: any[]
 function Note__draw(this: Note, wrapped: (...args: any[]) => void, ...args: any[]) {
 	const result = wrapped(...args);
 	const index = removeOldControlIcon(this);
+	if (index < 0) {
+		return;
+	}
 
 	const { texture, iconSize } = this.document;
 	this.controlIcon = this.addChildAt(

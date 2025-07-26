@@ -1,3 +1,7 @@
+## 0.11.7
+
+- Fix even more issues with ControlIcon replacement
+
 ## 0.11.6
 
 - Fix more issues with ControlIcon replacement
