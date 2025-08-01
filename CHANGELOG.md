@@ -1,3 +1,7 @@
+## 0.11.9
+
+- Skip control icon replacement for measured templates entirely
+
 ## 0.11.7
 
 - Fix even more issues with ControlIcon replacement

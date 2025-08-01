@@ -191,19 +191,6 @@ function AmbientSound__draw(this: AmbientSound, wrapped: (...args: any[]) => voi
 	return result;
 }
 
-function MeasuredTemplate__draw(this: MeasuredTemplate, wrapped: (...args: any[]) => void, ...args: any[]) {
-	const result = wrapped(...args);
-	const index = removeOldControlIcon(this);
-	if (index < 0) {
-		return;
-	}
-
-	const size = getControlIconSize();
-	this.controlIcon = this.addChildAt(drawOptimizedControlIcon({ size, texture: CONFIG.controlIcons.template }), index);
-
-	return result;
-}
-
 function Note__draw(this: Note, wrapped: (...args: any[]) => void, ...args: any[]) {
 	const result = wrapped(...args);
 	const index = removeOldControlIcon(this);
@@ -558,10 +545,6 @@ async function enableSpritesheetSubstitution() {
 	registerWrapperForVersion(AmbientSound__draw, 'WRAPPER', {
 		v12: 'AmbientSound.prototype._draw',
 		v13: 'foundry.canvas.placeables.AmbientSound.prototype._draw',
-	});
-	registerWrapperForVersion(MeasuredTemplate__draw, 'WRAPPER', {
-		v12: 'MeasuredTemplate.prototype._draw',
-		v13: 'foundry.canvas.placeables.MeasuredTemplate.prototype._draw',
 	});
 	registerWrapperForVersion(Note__draw, 'WRAPPER', {
 		v12: 'Note.prototype._draw',
