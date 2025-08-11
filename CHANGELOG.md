@@ -1,3 +1,7 @@
+## 0.11.10
+
+- Increase compatibility with other modules that are also replacing control icons
+
 ## 0.11.9
 
 - Skip control icon replacement for measured templates entirely

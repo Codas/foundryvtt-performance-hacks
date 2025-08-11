@@ -132,7 +132,8 @@ function removeOldControlIcon(container: PIXI.Container & { controlIcon: Control
 	const oldControlIcon = container.controlIcon;
 	let index = -1;
 
-	if (!(container.controlIcon instanceof OptimizedControlIcon)) {
+	const ControlIconClass = FOUNDRY_API.generation < 13 ? ControlIcon : foundry.canvas.containers.ControlIcon;
+	if (oldControlIcon instanceof OptimizedControlIcon || oldControlIcon?.constructor !== ControlIconClass) {
 		return index;
 	}
 
@@ -169,7 +170,7 @@ function AmbientLight__draw(this: AmbientLight, wrapped: (...args: any[]) => voi
 	const result = wrapped(...args);
 	const index = removeOldControlIcon(this);
 	if (index < 0) {
-		return;
+		return result;
 	}
 
 	const size = getControlIconSize();
@@ -182,7 +183,7 @@ function AmbientSound__draw(this: AmbientSound, wrapped: (...args: any[]) => voi
 	const result = wrapped(...args);
 	const index = removeOldControlIcon(this);
 	if (index < 0) {
-		return;
+		return result;
 	}
 
 	const size = getControlIconSize();
@@ -193,9 +194,10 @@ function AmbientSound__draw(this: AmbientSound, wrapped: (...args: any[]) => voi
 
 function Note__draw(this: Note, wrapped: (...args: any[]) => void, ...args: any[]) {
 	const result = wrapped(...args);
+
 	const index = removeOldControlIcon(this);
 	if (index < 0) {
-		return;
+		return result;
 	}
 
 	const { texture, iconSize } = this.document;
