@@ -13,7 +13,7 @@ interface NoiseTextureData {
 
 const FBM_TEXTURE_DATA = {
 	noise: {
-		path: `modules/${NAMESPACE}/dist/noise/tiling-noise.png`,
+		path: `modules/${NAMESPACE}/dist/noise/tiling-noise-256.png`,
 		format: PIXI.FORMATS.RED,
 	},
 };
