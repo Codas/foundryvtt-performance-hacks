@@ -1,3 +1,7 @@
+## 0.11.11
+
+- Fine-tune noise texture size for much better performance without noticably sacrificing fidelity
+
 ## 0.11.10
 
 - Increase compatibility with other modules that are also replacing control icons
