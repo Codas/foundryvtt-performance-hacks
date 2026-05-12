@@ -434,17 +434,17 @@ To understand the following concepts, let us take a brief look at how Foundry re
 
 To actually render this scene as above, several steps are necessary
 
-1. Rendering the background. Token art, litghting etc
+1. Rendering the background. Token art, litghting etc\
    ![Tokens on white background](./img/readmev2/explanation/01-background.webp)
-2. Rendering the grid on a new transparent layer (background kept 50% transparent for reference in this example)
+2. Rendering the grid on a new transparent layer (background kept 50% transparent for reference in this example)\
    ![Grid on top of the tokens](./img/readmev2/explanation/02-grid.webp)
-3. Now the grid is on top of the tokens, which is not our intended final result. So the tokens are drawn again in ERASE mode (this is called the void mesh phase), removing the grid and everything else in the UI layer underneath them. First one River Drake.
+3. Now the grid is on top of the tokens, which is not our intended final result. So the tokens are drawn again in ERASE mode (this is called the void mesh phase), removing the grid and everything else in the UI layer underneath them. First one River Drake.\
    ![Hole punched through the bottom left UI in form of the river drake token](./img/readmev2/explanation/03-hole-punch.webp)
-4. Then that River Drake's UI is drawn
+4. Then that River Drake's UI is drawn\
    ![UI for the river drake on the bottom left](./img/readmev2/explanation/04-first-ui.webp)
-5. Then one by one, all the other tokens are drawn in erase mode with UI elements being drawn in between until all river drakes are done
+5. Then one by one, all the other tokens are drawn in erase mode with UI elements being drawn in between until all river drakes are done\
    ![UI for all the river drakes](./img/readmev2/explanation/05-drake-uis.webp)
-6. Finally, the big token in the center is drawn in erase mode and the UI added
+6. Finally, the big token in the center is drawn in erase mode and the UI added\
    ![UI for all the river drakes](./img/readmev2/explanation/07-gug-ui.webp)
 
 After that, other UI elements like notes and Walls are draw on this texture, which is finally composited with the background to acive the result above.
@@ -689,9 +689,9 @@ In a heavy scene with many tokens, resource bars, and effects all visible, these
 
 Hardware varies. The numbers above are one data point from a heavy late-stage encounter scene. Gains on your machine could be smaller or larger.
 
-### Module-specific hacks
+## Module-specific hacks
 
-#### D&D 5e region markers
+### D&D 5e region markers
 
 Foundry's D&D 5e system provides a special note type: Map Location. These are rendered using expensive PIXI graphics object and more importantly, each with their own blur filter applied, making them very expensive to render.
 
@@ -699,7 +699,7 @@ This hack replaces the graphics + filter stack with an graphics-based approximat
 
 Setting: **Enable D&D 5 specific optimizations**.
 
-#### Ember campaign (experimental)
+### Ember campaign (experimental)
 
 The [Ember campaign](https://foundryvtt.com/packages/ember) ships with a rich set of animated weather and environment shaders. Several of them are implemented in ways that are very expensive on the GPU, especially when multiple of these shaders are active in the same scene. This module replaces a number of those shaders with optimized variants that produce visually practically identical output at a fraction of the GPU cost:
 
