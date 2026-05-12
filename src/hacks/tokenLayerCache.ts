@@ -60,9 +60,9 @@ class TokenLayerCache {
 
 		const needsResize =
 			!this.#voidMaskRT ||
-			this.#voidMaskRT.width !== w ||
-			this.#voidMaskRT.height !== h ||
-			this.#voidMaskRT.resolution !== res
+			Math.ceil(this.#voidMaskRT.width) !== w ||
+			Math.ceil(this.#voidMaskRT.height) !== h ||
+			Math.round(this.#voidMaskRT.resolution * 100) !== Math.round(res * 100)
 
 		if (!needsResize) {
 			return true
@@ -213,8 +213,12 @@ class TokenLayerCache {
 			}
 
 			// Ember dynamic animation: the token's appearance changes each frame
-			// without firing standard hooks.
 			if ((token as any).emberDynamicToken?.animated === true) {
+				return true
+			}
+
+			// Turn marker: animates on the UI layer each frame
+			if ((token as any).turnMarker?.visible === true) {
 				return true
 			}
 		}
