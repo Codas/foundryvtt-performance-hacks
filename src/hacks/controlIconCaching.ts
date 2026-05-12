@@ -85,7 +85,8 @@ function PlaceableObject__onHoverOut(this: any, wrapped: (...args: any[]) => voi
 // #region Enable / disable
 
 const CONTROL_ICON_PATH = {
-	v13: 'foundry.canvas.containers.ControlIcon.prototype._refresh',
+	v13: 'foundry.canvas.containers.ControlIcon.prototype.refresh',
+	v14: 'foundry.canvas.containers.ControlIcon.prototype._refresh',
 }
 
 const HOVER_IN_PATH = {

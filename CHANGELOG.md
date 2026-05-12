@@ -1,4 +1,8 @@
-## 0.12.0
+## 0.12.2
+
+- Fix some errors in Foundry VTT v13
+
+## 0.12.1
 
 - Fix token turn markers not being animated anymore when Token UI Layer cache is enabled
 
