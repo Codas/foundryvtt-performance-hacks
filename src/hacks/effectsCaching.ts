@@ -1,37 +1,33 @@
-import { NAMESPACE } from 'src/constants.ts';
-import { SETTINGS } from 'src/settings/constants.ts';
-import { getSetting } from 'src/settings/settings.ts';
-import { FOUNDRY_API } from 'src/utils/foundryShim.ts';
-import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts';
+import type Token from '@7h3laughingman/foundry-types/client/canvas/placeables/token.mjs'
+import { NAMESPACE } from 'src/constants.ts'
+import { SETTINGS } from 'src/settings/constants.ts'
+import { getSetting } from 'src/settings/settings.ts'
+import { FOUNDRY_API } from 'src/utils/foundryShim.ts'
+import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts'
 
 function refreshEffectCache(object: PIXI.DisplayObject) {
-	object.cacheAsBitmap = false;
-	object.cacheAsBitmapResolution = getBitmapCacheResolution();
-	object.cacheAsBitmap = true;
+	object.cacheAsBitmap = false
+	object.cacheAsBitmapResolution = getBitmapCacheResolution()
+	object.cacheAsBitmap = true
 }
 
 function shouldCacheIndividualEffects() {
-	const effectHider = game.modules.get('effect-hider');
-	if (effectHider && effectHider.active) {
-		return true;
+	const effectHider = game.modules.get('effect-hider')
+	if (effectHider?.active) {
+		return true
 	}
-	return false;
+	return false
 }
 
-async function cacheEffects(this: Token, wrapper: Function, ...args: any[]) {
-	const wrappedResult = wrapper(...args);
-	if (wrappedResult instanceof Promise) {
-		await wrappedResult;
-	}
-
-	const [flags] = args;
+async function cacheEffects(this: Token, ...args: unknown[]) {
+	const [flags] = args as [Record<string, boolean> | undefined]
 	if (flags?.redrawEffects || flags?.refreshEffects) {
 		if (shouldCacheIndividualEffects()) {
-			this.effects.children.forEach((effect) => {
-				refreshEffectCache(effect);
-			});
+			this.effects.children.forEach((effect: PIXI.DisplayObject) => {
+				refreshEffectCache(effect)
+			})
 		} else {
-			refreshEffectCache(this.effects);
+			refreshEffectCache(this.effects)
 		}
 	}
 }
@@ -41,35 +37,82 @@ function isTokenEffectsCachingAvailable() {
 	// for the status effect icons for performance
 	const hasDorakoRadialHud =
 		game.settings.settings.has('pf2e-dorako-ux.moving.adjust-token-effects-hud') &&
-		game.settings.get('pf2e-dorako-ux', 'moving.adjust-token-effects-hud');
+		game.settings.get('pf2e-dorako-ux', 'moving.adjust-token-effects-hud')
 	if (hasDorakoRadialHud) {
-		return false;
+		return false
 	}
 
 	if (game.modules.has('pf2e-effects-halo') && game.modules.get('pf2e-effects-halo')?.active) {
-		return false;
+		return false
 	}
 
-	return true;
+	return true
 }
 
+const APPLY_RENDER_FLAGS_PATH = 'CONFIG.Token.objectClass.prototype._applyRenderFlags'
+
+// Unique ID returned by libWrapper.register, used for targeted unregistration.
+let wrapperRegistrationId: number | undefined
+
+let isEnabled = false
+
 let enableEffectsCaching = () => {
-	if (!isTokenEffectsCachingAvailable()) {
-		return;
+	if (!getSetting(SETTINGS.EffectsCaching)) {
+		return
 	}
 
-	const enabled = getSetting(SETTINGS.TokenBarsCaching);
+	registerEffectsCaching()
+}
 
-	if (!enabled || !FOUNDRY_API.hasCanvas) {
-		return;
+function registerEffectsCaching() {
+	if (isEnabled || !isTokenEffectsCachingAvailable() || !FOUNDRY_API.hasCanvas) {
+		return
 	}
+	isEnabled = true
+	wrapperRegistrationId = libWrapper.register(
+		NAMESPACE,
+		APPLY_RENDER_FLAGS_PATH,
+		async function (this: Token, wrapped: (...args: unknown[]) => unknown, ...args: unknown[]) {
+			const result = wrapped(...args)
+			if (result instanceof Promise) {
+				await result
+			}
+			await cacheEffects.call(this, ...args)
+		},
+		'WRAPPER',
+	)
+}
 
-	libWrapper.register(NAMESPACE, 'CONFIG.Token.objectClass.prototype._applyRenderFlags', cacheEffects, 'WRAPPER');
-};
-export { enableEffectsCaching };
+function unregisterEffectsCaching() {
+	if (!isEnabled) {
+		return
+	}
+	isEnabled = false
+	if (wrapperRegistrationId !== undefined) {
+		libWrapper.unregister(NAMESPACE, wrapperRegistrationId)
+		wrapperRegistrationId = undefined
+	}
+	if (!FOUNDRY_API.hasCanvas) {
+		return
+	}
+	for (const token of canvas?.tokens?.placeables ?? []) {
+		const effects = (token as Token).effects as PIXI.Container | undefined
+		if (!effects) {
+			continue
+		}
+		effects.cacheAsBitmap = false
+		for (const child of effects.children) {
+			if ('cacheAsBitmap' in child) {
+				;(child as PIXI.DisplayObject).cacheAsBitmap = false
+			}
+		}
+	}
+}
+
+export { enableEffectsCaching, registerEffectsCaching, unregisterEffectsCaching }
 
 if (import.meta.hot) {
 	import.meta.hot.accept((newModule) => {
-		enableEffectsCaching = newModule?.foo;
-	});
+		enableEffectsCaching = newModule?.enableEffectsCaching
+	})
 }

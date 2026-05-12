@@ -2,53 +2,63 @@
 	"fvtt-perf-optim": {
 		"settings": {
 			"optimize-interface-layer-clipping": {
-				"name": "Optimiere Render-Reihenfolge von Token UI-Elementen",
-				"hint": "Optimiert, in welcher Reihenfolge die Token UI Elemente gerendert werden für verbessertes Draw Call Batching. Keine optische Beeinflussung der Tokens zu erwarten. Wird benötigt, damit die anderen Einstellungen einen merkbaren Einfluss haben."
+				"name": "Optimierte Render-Reihenfolge von Token UI-Elementen",
+				"hint": "Optimiert, in welcher Reihenfolge die Token UI Elemente gerendert werden für verbessertes Draw Call Batching. Zusammen mit \"Token-Ressourceleisten cachen\" und \"Token-Effekte cachen\" aktivieren für den größten Effekt."
 			},
+
 			"token-bars-caching": {
 				"name": "Token-Ressourceleisten cachen",
 				"hint": "Cacht die Token-Ressourcenleisten, um Draw Batching zu verbessern. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität haben."
 			},
+
 			"token-effects-caching": {
 				"name": "Token-Effekte cachen",
 				"hint": "Cacht die Token-Effektleiste. Kann auf hohen Zoomstufen geringe negative Auswirkung auf die Qualität haben."
 			},
 
-			"spritesheet-substitution": {
-				"name": "Austausch von Texturen mit Spritesheets",
-				"hint": "Tauscht gewisse Icons und andere Grafikelemente von Foundry gegen Spritesheets aus. Dies kann die Leistung und den Ressourcenverbrauch bei der Anzeige von vielen UI Icons für Journals, Lichter, Türen etc. verbessern."
-			},
-			"spritesheet-substitution-custom": {
-				"name": "Eigene Spritesheets",
-				"label": "Verwalte eigene Spritesheets",
-				"hint": "Eigene Spritesheets können verwendet werden, um Grafiken von Effekten, Tiles, Tokens, Szenen und anderen Objekten auszutauschen.",
-				"menu": {
-					"add": "Eigenes Spritesheet hinzufügen",
-					"spritesheet": "Wähle Spritesheet aus",
-					"delete": "Lösche Spritesheet",
-					"title": "Verwalte eigene Spritesheets",
-					"warn-no-src": "Du musst einen Spritesheet-Pfad auswählen, um ihn hinzuzufügen",
-					"warn-no-json": "Die ausgewählte Datei muss eine gültige pixi.js Spritesheet JSON-Datei sein",
-					"warn-invalid-asset": "Die ausgewählte Datei enthält keine gültigen pixi.js Spritesheet-Daten",
-					"warn-init-failed": "Prime Performance: Fehler beim Laden der Standard-Spritesheets. Optimierung durch Spritesheets wird deaktiviert. Bitte prüfe die Konsole auf weitere Details.",
-					"warn-custom-spritesheets-failed": "Prime Performance: Fehler beim Laden von einem oder mehreren eigenen Spritesheets. Bitte prüfe die Konsole auf weitere Details."
-				}
-			},
-			"token-ring-spritesheet-support": {
-				"name": "Unterstützung für Spritesheets im dynamischen Token-Ring",
-				"hint": "Erlaubt es, Token-Grafiken mit dynamischen Ringen durch Spritesheet-Texturen zu ersetzen. Dies ist nur nötig, wenn du dynamische Token-Ringe und den Austausch von Spritesheets verwendest, um Token-Grafiken (subject textures) auszutauschen."
-			},
 			"precomputed-noise-textures": {
 				"name": "Optimierte animierte Lichter",
-				"hint": "Optimiert den Shader von animierten Lichtern (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, Swirling Fog, Vortex) indem vorberechnete Texturen für das FBM Rauschen verwendet werden."
+				"hint": "Aktiviert Shader-Optimierungen für bestimmte animierte Lichter (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, ...). Verbessert die Performance deutlich bei Szenen mit vielen animierten Lichtern."
 			},
+
 			"reduce-lighting-resolution": {
 				"name": "Auflösung der Lichteffekte reduzieren",
-				"hint": "Reduziert die interne Auflösung von Lichteffekten. Verbessert die Performance deutlich, insbesondere wenn viele Lichteffekte oder große Lichtquellen verwendet werden. Die visuelle Beeinträchtigung sollte minimal sein. Die Skalierung für die einzelnen Beleuchtungsebenen kann im separaten Menü konfiguriert werden."
+				"hint": "Reduziert die interne Auflösung von Lichteffekten. Verbessert die Performance deutlich, insbesondere wenn viele Lichteffekte oder große Lichtquellen verwendet werden. V14 implementiert diesen Ansatz bereits für alle Performance-Stufen außer Maximum aber Prime Performance erlaubt granulare Kontrolle über alle Beleuchtungsebenen."
 			},
+
+			"control-icon-caching": {
+				"name": "Control-Icons cachen",
+				"hint": "Cacht Control Icons (Icons für Notizen, Sound- und Zeichenebene). Verbessert die Performance in Szenen mit vielen sichtbaren Notizen und manchen anderen UI-Elementen."
+			},
+
+			"mesh-geometry-fitting": {
+				"name": "Optimierte Geometrie für Tokens und Kacheln",
+				"hint": "Passt die Geometrie von Token- und Kachel-Meshes an den sichtbaren Teil der Textur an. Verringert GPU-Overdraw für Tokens und Kacheln mit transparenten Regionen. Wird automatisch für animierte (Video-)Tokens, Kacheln und in anderen Sonderfällen übersprungen. Experimentelles Feature."
+			},
+
+			"wall-sprite-caching": {
+				"name": "Optimierte Wände-Ebene",
+				"hint": "Optimiert das Zeichnen von Wandsegmenten, indem teure Grafikobjekte durch vorberechnete Sprites ersetzt werden. Verbessert die Performance auf der Wände-Ebene deutlich."
+			},
+
+			"token-layer-cache": {
+				"name": "Token UI-Ebene cachen",
+				"hint": "Rendert alle Token UI-Elemente (Leisten, Namensschilder, Statuseffekte, Void-Meshes) einmalig in eine Textur und verwendet das gecachte Ergebnis jeden Frame. Kann die Performance bei Szenen mit vielen Tokens deutlich verbessern."
+			},
+
+			"ember-shader-optimizations": {
+				"name": "Ember-Shader optimieren",
+				"hint": "Optimiert Shader des Ember-Moduls. Verbessert die Performance in der Regionskarte, Weltkarte und verschiedenen anderen Szenen deutlich."
+			},
+
+			"dnd5e-optimizations": {
+				"name": "D&D 5e spezifische Optimierungen",
+				"hint": "Optimiert D&D 5e spezifische Features. Ersetzt den Map Location note marker mit einer optimierten Version. Verbessert die Performance erheblich in Szenen mit vielen dieser Notizen."
+			},
+
 			"disable-app-v2-background-blur": {
 				"name": "Hintergrund-Blur deaktivieren",
-				"hint": "Deaktiviert die Hintergrund-Blur in App V2 und allen anderen UI-Elementen. Dies kann die Leistung dramatisch verbessern, insbesondere auf schwächeren GPUs und bestimmten Betriebssystemen wie MacOS."
+				"hint": "Deaktiviert die Hintergrund-Blur in App V2 und allen anderen UI-Elementen. Dies kann die Leistung deutlich verbessern, insbesondere für schwächeren GPUs."
 			},
 
 			"custom-render-scale": {

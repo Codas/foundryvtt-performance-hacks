@@ -2,12 +2,14 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"useDefineForClassFields": true,
-		"baseUrl": ".",
 		"rootDir": ".",
+		"paths": {
+			"src/*": ["./src/*"]
+		},
 		"module": "NodeNext",
 		"moduleResolution": "nodenext",
 		"resolveJsonModule": true,
-		"types": ["vite/client", "foundry-pf2e-types"],
+		"types": ["vite/client", "svelte", "vite-plugin-glsl/ext"],
 		"allowImportingTsExtensions": true,
 		"allowJs": true,
 		"checkJs": true,
@@ -30,5 +32,5 @@
 			"path": "./tsconfig.node.json"
 		}
 	],
-	"include": ["src/**/*.ts", "src/**/*.js"]
+	"include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
 }

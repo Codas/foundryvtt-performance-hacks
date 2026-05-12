@@ -1,3 +1,27 @@
+## 0.12.0
+
+### Added
+
+- Compatibility with Foundry VTT version 14
+- Add optimization for wall layer rendering, greatly improving performance when wall layer is active
+- New experimantal hack to fit token and tile meshes tighter to visible areas of textures, reducing overdraw
+- Add performance window / overlay to more accurately meassure impact of various performance settings. Open with `PrimePerformance.overlay.open()`.
+- Add token UI layer super-cache to avoid re-drawing UI layer alltogether under most circumstances
+- Add DND5e specific optimization for the map location marker note.
+- Add a comprehensive suite of Optimizations to shaders in the Ember Campaign
+
+### Improvements
+
+- Out-of-order rendering optimizations now work better for non-standard token UI children used by some systems
+- Control icon caching has been reworked to be simpler and less likely to be impacted by other modules
+- Fixed several bugs and with certain systems
+- Noise texture generation now runs on the GPU on first load instead of loading pre-generated assetes. This enables 3d texture generation which would have been too large to download otherwise.
+
+### Removed
+
+- Custom spritesheet support has been dropped. It added a lot of complexity for little real-world gain
+- Compatibility with Foundry VTT version 12
+
 ## 0.11.11
 
 - Fine-tune noise texture size for much better performance without noticably sacrificing fidelity

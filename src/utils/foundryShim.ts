@@ -1,3 +1,5 @@
+import type { SpriteMesh } from '@7h3laughingman/foundry-types/client/canvas/containers/_module.mjs'
+
 export type ShaderName =
 	| 'AbstractBaseShader'
 	| 'AbstractDarknessLevelRegionShader'
@@ -71,24 +73,23 @@ export type ShaderName =
 	| 'WaveColorationVisionShader'
 	| 'WaveIlluminationShader'
 	| 'WeatherShaderEffect'
-	| 'types';
+	| 'types'
 
 export const FOUNDRY_API = {
-	loadTexture: (src: string) => (game.release.generation < 13 ? loadTexture(src) : foundry.canvas.loadTexture(src)),
-	getTexture: (src: string) => (game.release.generation < 13 ? getTexture(src) : foundry.canvas.getTexture(src)),
-	createSpriteMesh: (texture: PIXI.Texture): SpriteMesh =>
-		game.release.generation < 13 ? new SpriteMesh(texture) : new foundry.canvas.containers.SpriteMesh(texture),
+	loadTexture: (src: string) => foundry.canvas.loadTexture(src),
+	getTexture: (src: string) => foundry.canvas.getTexture(src),
+	createSpriteMesh: (texture: PIXI.Texture): SpriteMesh => new foundry.canvas.containers.SpriteMesh(texture),
 	get game() {
-		return foundry.game ?? game;
+		return foundry.game ?? game
 	},
 	get generation(): number {
-		return game.release.generation;
+		return game.release.generation
 	},
 	get hasCanvas(): boolean {
-		return !game.settings.get('core', 'noCanvas');
+		return !game.settings.get('core', 'noCanvas')
 	},
 
 	getShaderByName: <T extends typeof AbstractBaseShader = typeof AbstractBaseShader>(name: string): T => {
-		return FOUNDRY_API.generation < 13 ? eval(name) : foundry.canvas.rendering.shaders[name];
+		return foundry.canvas.rendering.shaders[name] as T
 	},
-};
+}

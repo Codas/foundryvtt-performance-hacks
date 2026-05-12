@@ -1,11 +1,13 @@
 /* eslint-env node */
-import { type Connect, defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import moduleJSON from './module.json' with { type: 'json' };
+import { svelte } from '@sveltejs/vite-plugin-svelte'
+import { type Connect, defineConfig } from 'vite'
+import glsl from 'vite-plugin-glsl'
+import moduleJSON from './module.json' with { type: 'json' }
 
-const packagePath = `modules/${moduleJSON.id}`;
+const packagePath = `modules/${moduleJSON.id}`
 
-const FOUNDRY_PORT = 29999;
+const FOUNDRY_PORT = 29999
+const FOUNDRY_HOST = process.env.FOUNDRY_HOST ?? 'localhost'
 
 export default defineConfig(({ command: _buildOrServe }) => ({
 	root: 'src',
@@ -13,24 +15,21 @@ export default defineConfig(({ command: _buildOrServe }) => ({
 	cacheDir: '../.vite-cache',
 	publicDir: '../assets',
 
-	esbuild: {
-		target: ['es2022'],
-	},
-
-	resolve: { conditions: ['import', 'browser'] },
+	resolve: { conditions: ['import', 'browser'], tsconfigPaths: true },
 
 	server: {
 		open: '/join',
 		port: 30001,
+		host: '0.0.0.0',
 		proxy: {
 			// Serves static files from main Foundry server.
-			[`^(/${packagePath}/(assets|lang|packs|styles|templates))`]: `http://localhost:${FOUNDRY_PORT}`,
+			[`^(/${packagePath}/(assets|lang|packs|styles|templates))`]: `http://${FOUNDRY_HOST}:${FOUNDRY_PORT}`,
 
 			// All other paths besides package ID path are served from main Foundry server.
-			[`^(?!/${packagePath}/)`]: `http://localhost:${FOUNDRY_PORT}`,
+			[`^(?!/${packagePath}/)`]: `http://${FOUNDRY_HOST}:${FOUNDRY_PORT}`,
 
 			// Enable socket.io from main Foundry server.
-			'/socket.io': { target: `ws://localhost:${FOUNDRY_PORT}`, ws: true },
+			'/socket.io': { target: `ws://${FOUNDRY_HOST}:${FOUNDRY_PORT}`, ws: true },
 		},
 	},
 
@@ -39,6 +38,7 @@ export default defineConfig(({ command: _buildOrServe }) => ({
 		emptyOutDir: true,
 		sourcemap: true,
 		minify: true,
+		target: 'es2024',
 		lib: {
 			entry: 'index.js',
 			formats: ['es'],
@@ -46,24 +46,21 @@ export default defineConfig(({ command: _buildOrServe }) => ({
 		},
 	},
 
-	optimizeDeps: {
-		esbuildOptions: {
-			target: 'es2022',
-		},
-	},
-
 	plugins: [
-		tsconfigPaths(),
+		svelte(),
+		glsl({
+			importKeywords: ['#include', '//#include'],
+		}),
 		{
 			name: 'change-names',
 			configureServer(server) {
-				server.middlewares.use((req: Connect.IncomingMessage & { url?: string }, res, next) => {
+				server.middlewares.use((req: Connect.IncomingMessage & { url?: string }, _res, next) => {
 					if (req.originalUrl === `/${packagePath}/dist/${moduleJSON.id}.js`) {
-						req.url = `/${packagePath}/dist/index.js`;
+						req.url = `/${packagePath}/dist/index.js`
 					}
-					next();
-				});
+					next()
+				})
 			},
 		},
 	],
-}));
+}))

@@ -1,164 +1,202 @@
-import type BaseLightSource from 'foundry-pf2e-types/foundry/client-esm/canvas/sources/base-light-source.js';
-import { NAMESPACE } from 'src/constants.ts';
-import { SETTINGS } from 'src/settings/constants.ts';
-import { getSetting } from 'src/settings/settings.ts';
-import { FOUNDRY_API, type ShaderName } from 'src/utils/foundryShim.ts';
-import { type ShaderModificationData, patchShader } from 'src/utils/patchShader.ts';
-import { registerWrapperForVersion } from 'src/utils/registerWrapper.ts';
+import { NAMESPACE } from 'src/constants.ts'
+import { SETTINGS } from 'src/settings/constants.ts'
+import { getSetting } from 'src/settings/settings.ts'
+import { FOUNDRY_API } from 'src/utils/foundryShim.ts'
+import {
+	type NoiseTextureSpec,
+	ShaderPatcher,
+	type ShaderReplacementMap,
+	ShaderTextureGenerator,
+} from 'src/utils/shaderTextureGenerator.ts'
 
-interface NoiseTextureData {
-	path: string;
-	format: PIXI.FORMATS;
-}
+import genNoiseFrag from 'src/hacks/noiseShaders/genNoise.frag'
+import noiseSamplerFrag from 'src/hacks/shaders/noiseSampler.frag'
 
-const FBM_TEXTURE_DATA = {
+// ============================================================================
+// #region Noise textures
+
+export const NOISE_TEXTURES = {
 	noise: {
-		path: `modules/${NAMESPACE}/dist/noise/tiling-noise-256.png`,
+		fragment: genNoiseFrag,
+		width: 128,
+		height: 128,
 		format: PIXI.FORMATS.RED,
+		wrapMode: PIXI.WRAP_MODES.REPEAT,
+		scaleMode: PIXI.SCALE_MODES.LINEAR,
 	},
-};
+} satisfies Record<string, NoiseTextureSpec>
 
-export const NOISE_TEXTURE_MAP = {
-	ghost: FBM_TEXTURE_DATA.noise,
-	fairy: FBM_TEXTURE_DATA.noise,
-	witchwave: FBM_TEXTURE_DATA.noise,
-	fog: FBM_TEXTURE_DATA.noise,
-	vortex: FBM_TEXTURE_DATA.noise,
-	smokepatch: FBM_TEXTURE_DATA.noise,
-	hole: FBM_TEXTURE_DATA.noise,
-	dome: FBM_TEXTURE_DATA.noise,
-	roiling: FBM_TEXTURE_DATA.noise,
-	starlight: FBM_TEXTURE_DATA.noise,
-	flame: FBM_TEXTURE_DATA.noise,
-	magicalGloom: FBM_TEXTURE_DATA.noise,
-} satisfies Record<string, NoiseTextureData>;
+export type NoiseTextureKey = keyof typeof NOISE_TEXTURES
 
-const NOISE_TEXTURE_URLS = Array.from(new Set(Object.values(NOISE_TEXTURE_MAP)));
+export const noiseTextureGenerator = new ShaderTextureGenerator(NOISE_TEXTURES)
 
-interface ShaderPatches {
-	shader: ShaderName;
-	replacements: ShaderModificationData;
+// #endregion
+
+// ============================================================================
+// #region Noise shader replacements
+
+const NOISE_REGEX = /float noise\(in vec2 uv\)[\s\S]*?\}/
+
+export const NOISE_SHADER_REPLACEMENTS = {
+	noise: {
+		textures: ['noise'],
+		regex: NOISE_REGEX,
+		optimizedShader: noiseSamplerFrag.trim(),
+		samplerNames: { noise: 'noiseTexture' },
+	},
+} satisfies ShaderReplacementMap<NoiseTextureKey>
+
+export type NoiseReplacementKey = keyof typeof NOISE_SHADER_REPLACEMENTS
+
+// #endregion
+
+// ============================================================================
+// #region Apply patcherToShaderClass
+
+export function applyPatcherToShaderClass(
+	ShaderClass: any,
+	patcher: ShaderPatcher<any, any>,
+	source: string,
+	gl?: WebGL2RenderingContext,
+): string {
+	const patched = patcher.apply()
+
+	if (patcher.applied.length === 0) {
+		return source
+	}
+
+	if (ShaderClass.defaultUniforms && gl) {
+		patcher.patchUniforms(ShaderClass.defaultUniforms, gl)
+	}
+
+	const origPreRender = ShaderClass.prototype._preRender
+	ShaderClass.prototype._preRender = function (this: any, ...args: any[]) {
+		origPreRender?.call(this, ...args)
+		const context = (this.renderer?.gl ?? (canvas.app?.renderer as PIXI.Renderer | undefined)?.gl) as
+			| WebGL2RenderingContext
+			| undefined
+		patcher.patchUniforms(this.uniforms, context)
+	}
+
+	return patched
 }
 
-function AdaptiveLightingShader__updateCommonUniforms(
-	this: BaseLightSource<any>,
-	wrapped: (...args: any) => void,
-	shader: any,
-) {
-	wrapped(shader);
-	const u = shader.uniforms;
-	const animationType: string | undefined = this.animation?.type;
-	if (!animationType) {
-		return;
-	}
-	const noiseTextureData = NOISE_TEXTURE_MAP[animationType];
-	if (!noiseTextureData) {
-		return;
-	}
-	u.fbmTexture = FOUNDRY_API.getTexture(noiseTextureData.path);
+// #endregion
+
+// ============================================================================
+// #region Patched shader names
+
+const PATCHED_SHADER_NAMES = [
+	'GhostLightIlluminationShader',
+	'GhostLightColorationShader',
+	'FairyLightIlluminationShader',
+	'FairyLightColorationShader',
+	'BewitchingWaveIlluminationShader',
+	'BewitchingWaveColorationShader',
+	'FogColorationShader',
+	'VortexIlluminationShader',
+	'VortexColorationShader',
+	'SmokePatchIlluminationShader',
+	'SmokePatchColorationShader',
+	'BlackHoleDarknessShader',
+	'LightDomeColorationShader',
+	'RoilingDarknessShader',
+	'StarLightColorationShader',
+	'FlameColorationShader',
+	'MagicalGloomDarknessShader',
+] as const
+
+function makePatcher(ShaderClass: any, source?: string) {
+	return new ShaderPatcher<NoiseTextureKey, NoiseReplacementKey>(
+		noiseTextureGenerator,
+		NOISE_SHADER_REPLACEMENTS,
+		ShaderClass,
+		source,
+	)
 }
 
-function AdaptiveLightingShader__updateDarknessUniforms(this: BaseLightSource<any>, wrapped: (...args: any) => void) {
-	wrapped();
-	const u = this.layers.darkness?.shader?.uniforms;
-	const animationType: string | undefined = this.animation?.type;
-	if (!animationType) {
-		return;
-	}
-	const noiseTextureData = NOISE_TEXTURE_MAP[animationType];
-	if (!noiseTextureData) {
-		return;
-	}
-	u.fbmTexture = FOUNDRY_API.getTexture(noiseTextureData.path);
-}
-
-function getOptimizedNoise(period: number) {
-	const periodFloat = (1 / period).toFixed(2);
-	return `
-	uniform sampler2D fbmTexture;
-	float noise(in vec2 uv) {
-		vec4 color = texture2D(fbmTexture, uv * ${periodFloat});
-		return color.r;
-	}
-	`;
-}
-
-function patchShaderFBM() {
-	const noise = FOUNDRY_API.getShaderByName('GhostLightIlluminationShader').NOISE;
-	const optimizedNoise = getOptimizedNoise(12);
-
-	const shaders = [
-		'GhostLightIlluminationShader',
-		'GhostLightColorationShader',
-		'FairyLightIlluminationShader',
-		'FairyLightColorationShader',
-		'BewitchingWaveIlluminationShader',
-		'BewitchingWaveColorationShader',
-		'FogColorationShader',
-		'VortexIlluminationShader',
-		'VortexColorationShader',
-		'SmokePatchIlluminationShader',
-		'SmokePatchColorationShader',
-		'BlackHoleDarknessShader',
-		'LightDomeColorationShader',
-		'RoilingDarknessShader',
-		'StarLightColorationShader',
-		'FlameColorationShader',
-		'MagicalGloomDarknessShader',
-	] as const;
-	const shaderPatchData = shaders.map((shaderName) => ({
-		shader: shaderName,
-		replacements: {
-			fragment: [[noise, optimizedNoise]],
-		},
-	})) satisfies ShaderPatches[];
-	for (const { shader, replacements } of shaderPatchData) {
-		patchShader(shader, replacements);
-	}
-}
-
-async function enablePrecomputedNoiseTextures() {
-	const enabled = getSetting(SETTINGS.PrecomputedNoiseTextures);
-
-	if (!enabled || !FOUNDRY_API.hasCanvas) {
-		return;
-	}
-
-	// make sure basis transcoder is enabled (it is by default in v13+)
-	if (FOUNDRY_API.generation < 13) {
-		CONFIG.Canvas.transcoders.basis = true;
-	}
-
-	registerWrapperForVersion(AdaptiveLightingShader__updateCommonUniforms, 'WRAPPER', {
-		v12: 'foundry.canvas.sources.BaseLightSource.prototype._updateCommonUniforms',
-		v13: 'foundry.canvas.sources.BaseLightSource.prototype._updateCommonUniforms',
-	});
-	registerWrapperForVersion(AdaptiveLightingShader__updateDarknessUniforms, 'WRAPPER', {
-		v12: 'foundry.canvas.sources.PointDarknessSource.prototype._updateDarknessUniforms',
-		v13: 'foundry.canvas.sources.PointDarknessSource.prototype._updateDarknessUniforms',
-	});
-
-	patchShaderFBM();
-
-	Hooks.on('canvasInit', () => {
-		for (const noiseTextureData of NOISE_TEXTURE_URLS) {
-			canvas.sceneTextures[noiseTextureData.path] = noiseTextureData;
+function patchShadersV13(): void {
+	for (const shaderName of PATCHED_SHADER_NAMES) {
+		const ShaderClass = FOUNDRY_API.getShaderByName(shaderName)
+		if (!ShaderClass) {
+			console.warn(`[PrimePerformance] precomputedNoiseTextures: shader class not found: ${shaderName}`)
+			continue
 		}
-	});
+		const source: string = ShaderClass.fragmentShader
+		const patcher = makePatcher(ShaderClass, source)
+		const patched = patcher.apply()
+		patcher.patchUniforms(ShaderClass.defaultUniforms)
+		ShaderClass.fragmentShader = patched
 
-	await Promise.all(
-		NOISE_TEXTURE_URLS.map(async ({ path, format }) => {
-			const texture = await PIXI.Assets.load(path);
-			if (!(texture instanceof PIXI.Texture)) {
-				return;
-			}
-			texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-			texture.baseTexture.format = format;
-			texture.baseTexture.scaleMode = PIXI.SCALE_MODES.LINEAR;
-			texture.baseTexture.alphaMode = PIXI.ALPHA_MODES.NPM;
-			texture.baseTexture.mipmap = PIXI.MIPMAP_MODES.OFF;
-		}),
-	);
+		libWrapper.register(
+			NAMESPACE,
+			`foundry.canvas.rendering.shaders.${shaderName}.prototype.update`,
+			function (this: any, wrapped: (...args: any[]) => string, ...args: any[]): any {
+				this.uniforms.noiseTexture = noiseTextureGenerator.getTexture('noise')
+				return wrapped(...args)
+			},
+			'WRAPPER',
+		)
+	}
 }
 
-export { enablePrecomputedNoiseTextures };
+function patchShadersV14(): void {
+	for (const shaderName of PATCHED_SHADER_NAMES) {
+		const ShaderClass = FOUNDRY_API.getShaderByName(shaderName)
+		if (!ShaderClass) {
+			console.warn(`[PrimePerformance] precomputedNoiseTextures: shader class not found: ${shaderName}`)
+			continue
+		}
+
+		const basePath = `foundry.canvas.rendering.shaders.${shaderName}`
+		const patcher = makePatcher(ShaderClass)
+
+		libWrapper.register(
+			NAMESPACE,
+			`${basePath}.prototype.update`,
+			function (this: any, wrapped: (...args: any[]) => string, ...args: any[]): any {
+				patcher.patchUniforms(this.uniforms)
+				return wrapped(...args)
+			},
+			'WRAPPER',
+		)
+		libWrapper.register(
+			NAMESPACE,
+			`${basePath}._createFragmentShader`,
+			function (this: any, wrapped: (...args: any[]) => string, ...args: any[]): string {
+				const source = wrapped(...args)
+				patcher.setSource(source)
+				const patchedFragment = patcher.apply('noise')
+				return patchedFragment
+			},
+			'WRAPPER',
+		)
+	}
+}
+
+// #endregion
+
+// ============================================================================
+// #region Enable PrecomputedNoiseTextures
+
+export function enablePrecomputedNoiseTextures(): void {
+	if (!getSetting(SETTINGS.PrecomputedNoiseTextures) || !FOUNDRY_API.hasCanvas) {
+		return
+	}
+
+	Hooks.once('canvasInit', () => {
+		const renderer = canvas.app?.renderer as PIXI.Renderer | undefined
+		if (!renderer) {
+			return
+		}
+		noiseTextureGenerator.generate(renderer)
+
+		if (FOUNDRY_API.generation >= 14) {
+			patchShadersV14()
+		} else {
+			patchShadersV13()
+		}
+	})
+}
+
+// #endregion

@@ -3,51 +3,62 @@
 		"settings": {
 			"optimize-interface-layer-clipping": {
 				"name": "Optimize Token UI Render Batching",
-				"hint": "Optimizes render batching of Token UI elements. No visual degradation expected. Required in order for the token bars and effects caching settings to have a noticeable impact."
+				"hint": "Optimizes render batching of the token UI by reordering draw calls for individual UI elements across token boundaries. Enable together with \"Cache Token Resource Bars\" and \"token-effects-caching\" for highest impact."
 			},
+
 			"token-bars-caching": {
 				"name": "Cache Token Resource Bars",
-				"hint": "Caches token resource bars to textures. Very minor visual degradation on high zoom levels expected."
+				"hint": "Caches token resource bars to textures. Very minor visual degradation on high zoom levels possible."
 			},
+
 			"token-effects-caching": {
 				"name": "Cache Token Effects",
-				"hint": "Caches the token effects bar. Very minor visual degradation on high zoom levels expected."
+				"hint": "Caches the token effects bar. Very minor visual degradation on high zoom levels possible."
 			},
+
 			"precomputed-noise-textures": {
 				"name": "Optimize animated lights",
-				"hint": "Optimizes the shader of certain animated lights (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, Swirling Fog, Vortex) by utilizing precomputed FBM noise textures. The visual impact is minimal, but the performance impact is significant, especially on lower-end GPUs."
+				"hint": "Enable shader optimizatios of certain animated lights (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, ...). Greatly improves performance for scenes with many animated lights."
 			},
+
 			"reduce-lighting-resolution": {
 				"name": "Scale Lighting Effects Resolution",
-				"hint": "Reduces the internal resolution of lighting effects to improve performance. This can dramatically improve performance, especially when using many lights or large light sources. The visual impact should be minimal, except for some very high zoom levels and some lighting effects like hexa dome that have very clear outlines. You can configure the render scale for the individual lighting layers in the settings menu."
+				"hint": "Reduces the internal resolution of lighting effects to improve performance. V14 implements this approach for performance levels other than maximum, so activating this option in V14 only enables granular control for all lighting layers."
 			},
-			"spritesheet-substitution": {
-				"name": "Texture Replacement with Spritesheets",
-				"hint": "Substitutes core SVG icons and other graphic elements with optimized spritesheets. This can improve performance and resource usage when displaying many UI icons for journals, lights, doors, etc."
+
+			"control-icon-caching": {
+				"name": "Cache Control Icons",
+				"hint": "Caches control icons (notes, sounds, drawings) as bitmaps. Reduces them each to a single draw call that batches with all other icons, regardless of count."
 			},
-			"spritesheet-substitution-custom": {
-				"name": "Custom Spritesheets",
-				"label": "Manage Custom Spritesheets",
-				"hint": "Custom spritesheets can be used to replace more core or custom Icons and textures, for example custom condition marker, token art or tiles for improved performance",
-				"menu": {
-					"add": "Add Custom Spritesheet",
-					"spritesheet": "Select Custom Spritesheet",
-					"delete": "Delete Custom Spritesheet",
-					"title": "Manage Custom Spritesheets",
-					"warn-no-src": "You must select a spritesheet source to add it",
-					"warn-no-json": "The file you select must be a valid pixi.js spritesheet JSON file",
-					"warn-inalid-asset": "The file you select does not contain valid pixi.js spritesheet data",
-					"warn-init-failed": "Prime Performance: Failed to load default icon substitution spritesheets. Spritesheet optimizations will be disabled. Please check the console for more details.",
-					"warn-custom-spritesheets-failed": "Prime Performance: Failed to load one or more custom spritesheet. Please check the console for more details."
-				}
+
+			"mesh-geometry-fitting": {
+				"name": "Fit Token & Tile Mesh Geometry",
+				"hint": "Fits the render geometry of tokens and tiles to a tight polygon that matches the visible (non-transparent) area of their texture. This reduces GPU overdraw for tokens and tiles with large transparent regions, particularly large circular token art. Skipped automatically for animated (video) tokens, tiles and under other special circumstances. Somewhat experimental."
 			},
-			"token-ring-spritesheet-support": {
-				"name": "Dynamic Token Spritesheet Support",
-				"hint": "Allows tokens with dynamic rings to be replaced with spritesheet textures. This is only needed if you use dynamic token rings and the spritesheet substitution feature to replace token textures."
+
+			"wall-sprite-caching": {
+				"name": "Cache Wall Graphics as Sprites",
+				"hint": "Optimizes drawing of wall UI segments by replacing the PIXI.Graphics objects with pre-baked sprites. Dramatically increaes performance when the walls layer is active."
 			},
+
+			"token-layer-cache": {
+				"name": "Cache Token UI Layer",
+				"hint": "Renders all token UI elements (bars, nameplates, status effects, void meshes) to texture once per change, then applies the cached result every frame. Can greatly improve performance for scenes with many tokens."
+			},
+
+			"ember-shader-optimizations": {
+				"name": "Optimize Ember Shaders",
+				"hint": "Optimizes shaders from the Ember module. Dramatically improves performance in the region map, world map and various other scenes."
+			},
+
+			"dnd5e-optimizations": {
+				"name": "Enable D&D 5e specific optimizations",
+				"hint": "Optimizes D&D 5e specific features. replaces the Map Location note marker with an optimized version. Greatly improves performance in scenes with many Map Location notes."
+			},
+
 			"disable-app-v2-background-blur": {
 				"name": "Disable background blur effects",
-				"hint": "Disables the background blur effects in the app v2 and all other UI elements. This can dramatically improve performance, especially on lower-end GPUs and certain operating systems like MacOS."
+				"hint": "Disables the background blur effects in the app v2 and all other UI elements. This can dramatically improve performance, especially on lower-end GPUs."
 			},
 
 			"custom-render-scale": {

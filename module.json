@@ -1,9 +1,11 @@
 {
 	"id": "fvtt-perf-optim",
 	"title": "Prime Performance",
-	"version": "0.11.11",
+	"version": "0.12.0",
 	"description": "Provides a collection of unofficial performance optimizations and hacks for foundry vtt.",
-	"esmodules": ["dist/fvtt-perf-optim.js"],
+	"esmodules": [
+		"dist/fvtt-perf-optim.js"
+	],
 	"languages": [
 		{
 			"lang": "en",
@@ -36,11 +38,13 @@
 			"flags": {}
 		}
 	],
-	"styles": ["styles/disable-blur.css"],
+	"styles": [
+		"styles/disable-blur.css"
+	],
 	"compatibility": {
 		"minimum": "12.324",
-		"verified": "13.345",
-		"maximum": "13"
+		"verified": "14.361",
+		"maximum": "14"
 	},
 	"relationships": {
 		"requires": [
@@ -65,6 +69,6 @@
 	"bugs": "https://github.com/Codas/foundryvtt-performance-hacks/issues",
 	"readme": "https://github.com/Codas/foundryvtt-performance-hacks/blob/main/README.md",
 	"changelog": "https://github.com/Codas/foundryvtt-performance-hacks/releases",
-	"manifest": "https://raw.githubusercontent.com/Codas/foundryvtt-performance-hacks/main/module.json",
-	"download": "https://github.com/Codas/foundryvtt-performance-hacks/aaprchive/refs/heads/main.zip"
+	"manifest": "https://github.com/Codas/foundryvtt-performance-hacks/releases/latest/download/module.json",
+	"download": "https://github.com/Codas/foundryvtt-performance-hacks/releases/latest/download/module.zip"
 }

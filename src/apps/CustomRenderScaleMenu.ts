@@ -1,10 +1,9 @@
-import { NAMESPACE } from 'src/constants.ts';
-import { configureEffectsResolution } from 'src/hacks/reduceLightingResolution.ts';
-import { RENDER_SCALE_DEFAULTS, SETTINGS } from 'src/settings/constants.ts';
-import { getSetting } from 'src/settings/settings.ts';
-import { FOUNDRY_API } from 'src/utils/foundryShim.ts';
+import { NAMESPACE } from 'src/constants.ts'
+import { redrawLightingEffects } from 'src/hacks/reduceLightingResolution.ts'
+import { RENDER_SCALE_DEFAULTS, SETTINGS } from 'src/settings/constants.ts'
+import { getSetting } from 'src/settings/settings.ts'
 
-const fields = foundry.data.fields;
+const fields = foundry.data.fields
 
 export class CustomRenderScaleConfig extends foundry.applications.api.HandlebarsApplicationMixin(
 	foundry.applications.api.ApplicationV2,
@@ -27,7 +26,7 @@ export class CustomRenderScaleConfig extends foundry.applications.api.Handlebars
 		actions: {
 			reset: CustomRenderScaleConfig.#onReset,
 		},
-	};
+	}
 
 	static override PARTS = {
 		body: {
@@ -37,7 +36,7 @@ export class CustomRenderScaleConfig extends foundry.applications.api.Handlebars
 		footer: {
 			template: 'templates/generic/form-footer.hbs',
 		},
-	};
+	}
 
 	static #schema = new fields.SchemaField({
 		background: new fields.NumberField({
@@ -68,41 +67,36 @@ export class CustomRenderScaleConfig extends foundry.applications.api.Handlebars
 			step: 5,
 			initial: RENDER_SCALE_DEFAULTS.darkness,
 		}),
-	});
+	})
 
-	/**
-	 * The data schema for the core.uiConfig setting.
-	 * @type {SchemaField}
-	 */
 	static get schema() {
-		return CustomRenderScaleConfig.#schema;
+		return CustomRenderScaleConfig.#schema
 	}
 
-	static #localized = false;
+	static #localized = false
 
-	/** @inheritDoc */
 	override async _preFirstRender(_context: any, _options: any) {
-		const LocalizationHelper: Localization = FOUNDRY_API.generation >= 13 ? foundry.helpers.Localization : Localization;
-		await super._preFirstRender(_context, _options);
+		await super._preFirstRender(_context, _options)
 
 		if (!CustomRenderScaleConfig.#localized) {
-			LocalizationHelper.localizeDataModel(
-				{ schema: CustomRenderScaleConfig.#schema },
-				{ prefixes: ['fvtt-perf-optim.settings.custom-render-scale.menu'] },
-			);
-			CustomRenderScaleConfig.#localized = true;
+			foundry.helpers.Localization.localizeDataModel({ schema: CustomRenderScaleConfig.#schema } as any, {
+				prefixes: [`${NAMESPACE}.settings.${SETTINGS.CustomRenderScale}.menu`],
+			})
+			CustomRenderScaleConfig.#localized = true
 		}
 	}
 
-	#setting: typeof RENDER_SCALE_DEFAULTS | undefined;
+	// The setting value captured when the form was first opened -- used for Reset and cancel.
+	#originalSetting: typeof RENDER_SCALE_DEFAULTS = RENDER_SCALE_DEFAULTS
 
-	override async _prepareContext(options: any) {
+	override async _prepareContext(options: any): Promise<any> {
 		if (options.isFirstRender) {
-			this.#setting = getSetting<typeof RENDER_SCALE_DEFAULTS>(SETTINGS.CustomRenderScale) ?? RENDER_SCALE_DEFAULTS;
+			this.#originalSetting =
+				getSetting<typeof RENDER_SCALE_DEFAULTS>(SETTINGS.CustomRenderScale) ?? RENDER_SCALE_DEFAULTS
 		}
 
 		return {
-			renderScale: this.#setting,
+			renderScale: getSetting<typeof RENDER_SCALE_DEFAULTS>(SETTINGS.CustomRenderScale) ?? RENDER_SCALE_DEFAULTS,
 			fields: CustomRenderScaleConfig.#schema.fields,
 			buttons: [
 				{
@@ -118,39 +112,45 @@ export class CustomRenderScaleConfig extends foundry.applications.api.Handlebars
 					action: 'confirm',
 				},
 			],
-		};
-	}
-
-	static async #onSubmit() {
-		game.settings.set(NAMESPACE, SETTINGS.CustomRenderScale, this.#setting);
-		const enabled = getSetting<boolean>(SETTINGS.ReduceLightingResolution);
-		configureEffectsResolution(enabled ? this.#setting : null);
-	}
-
-	static async #onReset() {
-		this.#setting = RENDER_SCALE_DEFAULTS;
-	}
-
-	override _onClose(options: any) {
-		super._onClose(options);
-		if (!options.submitted) {
-			const enabled = getSetting<boolean>(SETTINGS.ReduceLightingResolution);
-			const renderScale = getSetting<typeof RENDER_SCALE_DEFAULTS>(SETTINGS.CustomRenderScale);
-			configureEffectsResolution(enabled ? renderScale : null);
 		}
 	}
 
-	/* -------------------------------------------- */
+	// Persist the final form values on submit.
+	static async #onSubmit(
+		this: CustomRenderScaleConfig,
+		_event: Event,
+		_form: HTMLFormElement,
+		formData: { object: Record<string, unknown> },
+	) {
+		const newScale = foundry.utils.expandObject(formData.object) as typeof RENDER_SCALE_DEFAULTS
+		game.settings.set(NAMESPACE, SETTINGS.CustomRenderScale, newScale)
+	}
 
-	/** @override */
+	// Reset the form to the values from when it was opened.
+	static async #onReset(this: CustomRenderScaleConfig) {
+		game.settings.set(NAMESPACE, SETTINGS.CustomRenderScale, CustomRenderScaleConfig.#originalSetting)
+		CustomRenderScaleConfig.render()
+	}
+
+	// On close without submit, restore the original setting and force a redraw so
+	// the canvas reverts immediately rather than waiting for the next layer draw.
+	override _onClose(options: any) {
+		super._onClose(options)
+		if (!options.submitted) {
+			game.settings.set(NAMESPACE, SETTINGS.CustomRenderScale, this.#originalSetting)
+			redrawLightingEffects()
+		}
+	}
+
+	// Write the setting on every change for live canvas preview.
+	// The resolution getter in reduceLightingResolution.ts reads from the setting
+	// directly, so the next rendered frame picks up the new value automatically.
 	override _onChangeForm(_formConfig: any, _event: any) {
-		const FormDataExtendedConstructor =
-			FOUNDRY_API.generation >= 13 ? foundry.applications.ux.FormDataExtended : FormDataExtended;
-
-		const dataElement = FOUNDRY_API.generation >= 13 ? this.form : this.element;
-		const formData = new FormDataExtendedConstructor(dataElement);
-
-		this.#setting = foundry.utils.expandObject(formData.object) as typeof RENDER_SCALE_DEFAULTS;
-		configureEffectsResolution(this.#setting);
+		if (!this.form) {
+			return
+		}
+		const formData = new foundry.applications.ux.FormDataExtended(this.form)
+		const newScale = foundry.utils.expandObject(formData.object) as typeof RENDER_SCALE_DEFAULTS
+		game.settings.set(NAMESPACE, SETTINGS.CustomRenderScale, newScale)
 	}
 }
