@@ -5,7 +5,7 @@ import { getSetting } from 'src/settings/settings.ts'
 import { FOUNDRY_API } from 'src/utils/foundryShim.ts'
 import { getBitmapCacheResolution } from 'src/utils/getBitmapCacheResolution.ts'
 
-import radialGradientShadowFrag from 'src/hacks/shaders/radialGradientShadow.frag'
+import radialGradientShadowFrag from './shaders/radialGradientShadow.frag'
 
 // ============================================================================
 // #region Radial gradient shadow mesh
@@ -13,11 +13,8 @@ import radialGradientShadowFrag from 'src/hacks/shaders/radialGradientShadow.fra
 /**
  * Custom shader subclass for custom gradient-based drop shadow.
  */
-class RadialGradientShadowShaderClass extends foundry.canvas.rendering.shaders.BaseSamplerShader {
-	static override classPluginName = null
-
-	static _createVertexShader() {
-		return `
+class RadialGradientShadowShaderClass extends foundry.canvas.rendering.shaders.AbstractBaseShader {
+	static override vertexShader = `
 		precision mediump float;
 		attribute vec2 aVertexPosition;
 		varying vec2 vTextureCoord;
@@ -28,14 +25,11 @@ class RadialGradientShadowShaderClass extends foundry.canvas.rendering.shaders.B
 			gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
 		}
 	`
-	}
 
-	static _createFragmentShader() {
-		return radialGradientShadowFrag
-	}
+	// TODO v15: move to _createFragmentShader
+	static override fragmentShader = radialGradientShadowFrag
 
-	static override defaultUniforms = {
-		...super.defaultUniforms,
+	static override defaultUniforms: Record<string, unknown> = {
 		innerRadius: 0,
 		outerRadius: 1,
 		shadowColor: [0, 0, 0],
@@ -71,82 +65,46 @@ function buildShadowMesh(
 	return mesh
 }
 
+function withControlIconCaching(container: PIXI.Container, callback: () => void) {
+	if (!getSetting(SETTINGS.ControlIconCaching)) {
+		callback()
+	}
+
+	container.cacheAsBitmap = false
+	callback()
+	container.cacheAsBitmapResolution = getBitmapCacheResolution()
+	container.cacheAsBitmap = true
+	managedIcons.add(container)
+}
+
 // #endregion
 
 // ============================================================================
-// #region MapLocationControlIcon draw / refresh
-//
-// Stock dnd5e's MapLocationControlIcon.renderMarker is called every refresh and actually adds
-// children every time. We fix this by splitting everything up into draw and refresh as it should
-// be.
+// #region MapLocationControlIcon renderMarker (DnD5e only)
 
-function MapLocationControlIcon_draw(this: any, wrapped: (...args: any[]) => Promise<any>, ...args: any[]) {
-	return Promise.resolve(wrapped(...args)).then(() => {
-		if (this.shadow && !(this.shadow instanceof foundry.canvas.containers.QuadMesh)) {
-			const idx = this.getChildIndex(this.shadow)
-			this.removeChild(this.shadow)
-			// Placeholder geometry; _refresh sets the real position/scale/uniforms.
-			this.shadow = this.addChildAt(buildShadowMesh(0, 0, 1, 2, this.style.shadowColor, 0.25), idx)
+function MapLocationControlIcon_renderMarker(this: any, wrapped: (...args: any[]) => void, ...args: any[]) {
+	withControlIconCaching(this, () => {
+		this.removeChildren()
+		wrapped(...args)
+		this.removeChild(this.shadow)
+
+		const _cx = this.radius + 8
+		const _cy = this.radius + 8
+		const _innerR = this.radius + 8
+		const _outerR = _innerR + 40
+		this.shadow = this.addChildAt(buildShadowMesh(_cx, _cy, _innerR, _outerR, this.style.shadowColor, 0.25), 0)
+
+		if (game.release.generation >= 14) {
+			this.x = -this.radius
+			this.y = -this.radius
 		}
 	})
 }
 
-function MapLocationControlIcon_refresh(this: any) {
-	this.radius = this.size / 2
-	this.circle = [this.radius, this.radius, this.radius + 8]
-	this.backgroundColor = this.style.backgroundColor
-	this._borderColor = this.style.borderHoverColor
-
-	this.eventMode = 'static'
-	this.interactiveChildren = false
-	this.hitArea = new PIXI.Circle(...this.circle)
-	this.cursor = 'pointer'
-
-	// Shadow mesh
-	const innerR = this.radius + 8
-	const outerR = innerR + 40
-	const cx = this.radius + 8
-	const cy = this.radius + 8
-	this.shadow.shader.uniforms.innerRadius = innerR
-	this.shadow.shader.uniforms.outerRadius = outerR
-	this.shadow.position.set(cx - outerR, cy - outerR)
-	this.shadow.scale.set(outerR * 2, outerR * 2)
-
-	// 3D extrude effect
-	this.extrude
-		.clear()
-		.beginFill(this.style.borderColor, 1.0)
-		.drawCircle(this.radius + 2, this.radius + 2, this.radius + 9)
-		.endFill()
-
-	// Background
-	this.bg
-		.clear()
-		.beginFill(this.backgroundColor, 1.0)
-		.lineStyle(2, this.style.borderColor, 1.0)
-		.drawCircle(...this.circle)
-		.endFill()
-
-	// Text
-	this.text.text = this.code
-	this.text.style = this._getTextStyle(this.code.length, this.size)
-	this.text.position.set(this.radius, this.radius)
-
-	// Note5e._drawControlIcon offsets the icon by (-iconSize/2, -iconSize/2) once at
-	// creation so the bg drawn at (radius, radius) lands on the note's world position.
-	// That offset is never updated on resize, so we keep it in sync here.
-	this.x = -this.radius
-	this.y = -this.radius
-
-	foundry.canvas.interaction.MouseInteractionManager.emulateMoveEvent()
-
-	// Re-apply bitmap caching if enabled.
-	if (getSetting(SETTINGS.ControlIconCaching)) {
-		this.cacheAsBitmap = false
-		this.cacheAsBitmapResolution = getBitmapCacheResolution()
-		this.cacheAsBitmap = true
-		managedIcons.add(this)
-	}
+function MapLocationControlIcon_refresh(this: any, wrapped: (...args: any[]) => void, ...args: any[]) {
+	wrapped(...args)
+	this.removChildren()
+	this.renderMarker()
 }
 
 // #endregion
@@ -166,16 +124,19 @@ function registerDnD5eOptimizations() {
 	isEnabled = true
 	libWrapper.register(
 		NAMESPACE,
-		'game.system.canvas.MapLocationControlIcon.prototype._draw',
-		MapLocationControlIcon_draw,
+		'game.system.canvas.MapLocationControlIcon.prototype.renderMarker',
+		MapLocationControlIcon_renderMarker,
 		'WRAPPER',
 	)
-	libWrapper.register(
-		NAMESPACE,
-		'game.system.canvas.MapLocationControlIcon.prototype._refresh',
-		MapLocationControlIcon_refresh,
-		'OVERRIDE',
-	)
+
+	// if (game.release.generation === 14) {
+	// 	libWrapper.register(
+	// 		NAMESPACE,
+	// 		'game.system.canvas.MapLocationControlIcon.prototype.refresh',
+	// 		MapLocationControlIcon_refresh,
+	// 		'WRAPPER',
+	// 	)
+	// }
 }
 
 function unregisterDnD5eOptimizations() {
@@ -183,8 +144,10 @@ function unregisterDnD5eOptimizations() {
 		return
 	}
 	isEnabled = false
-	libWrapper.unregister(NAMESPACE, 'game.system.canvas.MapLocationControlIcon.prototype._draw')
-	libWrapper.unregister(NAMESPACE, 'game.system.canvas.MapLocationControlIcon.prototype._refresh')
+	libWrapper.unregister(NAMESPACE, 'game.system.canvas.MapLocationControlIcon.prototype.renderMarker')
+	if (game.release.generation === 14) {
+		libWrapper.unregister(NAMESPACE, 'game.system.canvas.MapLocationControlIcon.prototype.refresh')
+	}
 }
 
 function enableDnD5eOptimizations() {
