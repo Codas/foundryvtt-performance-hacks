@@ -1,3 +1,7 @@
+## 0.12.3
+
+- Remove token layer UI caching for now
+
 ## 0.12.2
 
 - Fix some errors in Foundry VTT v13
