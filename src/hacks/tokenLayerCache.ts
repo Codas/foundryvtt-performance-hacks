@@ -30,6 +30,8 @@ class TokenLayerCache {
 	#uiBlitSprite: PIXI.Sprite | null = null
 
 	#valid = false
+	// The render target that was active when we last baked
+	#bakedForRT: PIXI.RenderTexture | null = null
 
 	invalidate() {
 		this.#valid = false
@@ -45,6 +47,7 @@ class TokenLayerCache {
 		this.#voidBlitSprite = null
 		this.#uiBlitSprite = null
 		this.#valid = false
+		this.#bakedForRT = null
 	}
 
 	// Resize both RTs if the sourceFrame has changed.
@@ -221,12 +224,17 @@ class TokenLayerCache {
 			if ((token as any).turnMarker?.visible === true) {
 				return true
 			}
+
+			if ((token as any).controlled && (token as any).hasSight) {
+				return true
+			}
 		}
 		return false
 	}
 
 	renderFrame(container: PIXI.Container, renderer: PIXI.Renderer) {
 		if (!this.ensureRenderTextureSize(renderer)) {
+			originalRenders.get(container)?.call(container, renderer)
 			return
 		}
 
@@ -238,10 +246,17 @@ class TokenLayerCache {
 			return
 		}
 
+		const currentRT = renderer.renderTexture.current ?? null
+
+		if (this.#valid && currentRT !== this.#bakedForRT) {
+			this.#valid = false
+		}
+
 		if (!this.#valid) {
 			this.#bakeVoidMask(container, renderer)
 			this.#bakeTokenUi(container, renderer)
 			this.#valid = true
+			this.#bakedForRT = currentRT
 		}
 
 		this.#blit(renderer)

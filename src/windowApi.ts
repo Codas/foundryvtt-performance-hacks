@@ -9,7 +9,7 @@ import {
 } from './hacks/gpuTimingDebug.ts'
 import { toggleMeshDebug } from './hacks/meshGeometryFitting.ts'
 import { registerTokenBarsCaching, unregisterTokenBarsCaching } from './hacks/tokenBarsCaching.ts'
-import { registerTokenLayerCache, unregisterTokenLayerCache } from './hacks/tokenLayerCache.ts'
+// import { registerTokenLayerCache, unregisterTokenLayerCache } from './hacks/tokenLayerCache.ts'
 import { registerWallSpriteCaching, unregisterWallSpriteCaching } from './hacks/wallSpriteCaching.ts'
 
 const PrimePerformanceApi = {
@@ -42,10 +42,10 @@ const PrimePerformanceApi = {
 		enable: registerWallSpriteCaching,
 		disable: unregisterWallSpriteCaching,
 	},
-	tokenLayerCache: {
-		enable: registerTokenLayerCache,
-		disable: unregisterTokenLayerCache,
-	},
+	// tokenLayerCache: {
+	// 	enable: registerTokenLayerCache,
+	// 	disable: unregisterTokenLayerCache,
+	// },
 } as const
 
 declare global {

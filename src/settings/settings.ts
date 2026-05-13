@@ -13,7 +13,7 @@ import {
 	unregisterLightingWrappers,
 } from 'src/hacks/reduceLightingResolution.ts'
 import { registerTokenBarsCaching, unregisterTokenBarsCaching } from 'src/hacks/tokenBarsCaching.ts'
-import { registerTokenLayerCache, unregisterTokenLayerCache } from 'src/hacks/tokenLayerCache.ts'
+// import { registerTokenLayerCache, unregisterTokenLayerCache } from 'src/hacks/tokenLayerCache.ts'
 import { registerWallSpriteCaching, unregisterWallSpriteCaching } from 'src/hacks/wallSpriteCaching.ts'
 import { RENDER_SCALE_DEFAULTS, SETTINGS } from './constants.ts'
 
@@ -156,24 +156,23 @@ Hooks.on('init', () => {
 
 	// #endregion
 
-	// #region Token UI layer cache
-	game.settings.register(NAMESPACE, SETTINGS.TokenLayerCache, {
-		name: `${NAMESPACE}.settings.${SETTINGS.TokenLayerCache}.name`,
-		hint: `${NAMESPACE}.settings.${SETTINGS.TokenLayerCache}.hint`,
-		scope: 'client',
-		config: true,
-		requiresReload: false,
-		onChange: (enabled) => {
-			if (enabled) {
-				registerTokenLayerCache()
-			} else {
-				unregisterTokenLayerCache()
-			}
-		},
-		type: Boolean,
-		default: true,
-	})
-
+	// #region Token UI layer cache (disabled)
+	// game.settings.register(NAMESPACE, SETTINGS.TokenLayerCache, {
+	// 	name: `${NAMESPACE}.settings.${SETTINGS.TokenLayerCache}.name`,
+	// 	hint: `${NAMESPACE}.settings.${SETTINGS.TokenLayerCache}.hint`,
+	// 	scope: 'client',
+	// 	config: true,
+	// 	requiresReload: false,
+	// 	onChange: (enabled) => {
+	// 		if (enabled) {
+	// 			registerTokenLayerCache()
+	// 		} else {
+	// 			unregisterTokenLayerCache()
+	// 		}
+	// 	},
+	// 	type: Boolean,
+	// 	default: true,
+	// })
 	// #endregion
 
 	// #region Wall layer caching

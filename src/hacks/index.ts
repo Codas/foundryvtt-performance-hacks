@@ -11,7 +11,6 @@ import { enableMeshGeometryFitting } from './meshGeometryFitting.ts'
 import { enablePrecomputedNoiseTextures } from './precomputedNoiseTextures.ts'
 import { enableReducedLightingResolution } from './reduceLightingResolution.ts'
 import { enableTokenBarsCaching } from './tokenBarsCaching.ts'
-import { enableTokenLayerCache } from './tokenLayerCache.ts'
 import { enableWallSpriteCaching } from './wallSpriteCaching.ts'
 
 Hooks.once('setup', () => {
@@ -19,7 +18,6 @@ Hooks.once('setup', () => {
 	enableControlIconCaching()
 	enableDnD5eOptimizations()
 	enableGeneralizedOooRendering()
-	enableTokenLayerCache()
 	enableEffectsCaching()
 	enableTokenBarsCaching()
 	enableMeshGeometryFitting()
