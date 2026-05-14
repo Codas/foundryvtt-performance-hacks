@@ -633,7 +633,10 @@ function tryApplyGeometryFitting(mesh: PrimarySpriteMesh, isAnimated: boolean, r
 		existingData.src = poly.key
 	}
 
-	const data = existingData ?? meshFitData.get(mesh)!
+	const data = existingData ?? meshFitData.get(mesh)
+	if (!data) {
+		return
+	}
 
 	// Pre-compute per-vertex ring UV expansions for the new polygon.
 	if (ring) {
@@ -735,9 +738,11 @@ export function getTokenMeshWorldPolygon(token: unknown): Float32Array | null {
 
 const TOKEN_REFRESH_MESH_PATH = 'CONFIG.Token.objectClass.prototype._refreshMesh'
 const TILE_REFRESH_MESH_PATH = 'CONFIG.Tile.objectClass.prototype._refreshMesh'
+const TOKEN_RING_PACKER_PATH = 'foundry.canvas.rendering.shaders.TokenRingSamplerShader._packInterleavedGeometry'
 
 let tokenWrapperRegistrationId: number | undefined
 let tileWrapperRegistrationId: number | undefined
+let tokenRingPackerRegistrationId: number | undefined
 
 let isEnabled = false
 
@@ -762,6 +767,45 @@ function registerMeshGeometryFitting() {
 	}
 
 	isEnabled = true
+	tokenRingPackerRegistrationId = libWrapper.register(
+		NAMESPACE,
+		TOKEN_RING_PACKER_PATH,
+		function (
+			this: { vertexSize: number },
+			wrapped: (element: any, attributeBuffer: any, indexBuffer: Uint16Array, aIndex: number, iIndex: number) => void,
+			element: any,
+			attributeBuffer: any,
+			indexBuffer: Uint16Array,
+			aIndex: number,
+			iIndex: number,
+		) {
+			wrapped.call(this, element, attributeBuffer, indexBuffer, aIndex, iIndex)
+
+			const mesh = element.object as PrimarySpriteMesh | undefined
+			const fittedRingUVs = mesh ? meshFitData.get(mesh)?.ringUVs : undefined
+			if (!fittedRingUVs) {
+				return
+			}
+
+			const vertexData = element.vertexData as Float32Array | undefined
+			const tokenRing = (mesh as any).object?.ring as TokenRing | undefined
+			if (!vertexData || (tokenRing?.maskUVs?.length ?? 0) >= vertexData.length) {
+				return
+			}
+
+			// No-mask dynamic rings use Foundry's shared 4-vertex nullUvs array. Fitted meshes have
+			// more vertices. Need to clear the extra mask attribute slots instead of letting
+			// undefined become NaN...
+			const { float32View } = attributeBuffer
+			const maskOffset = this.vertexSize - 14 + 4
+			for (let i = 0, j = maskOffset; i < vertexData.length; i += 2, j += this.vertexSize) {
+				const k = aIndex + j
+				float32View[k] = 0
+				float32View[k + 1] = 0
+			}
+		},
+		'WRAPPER',
+	)
 	tokenWrapperRegistrationId = libWrapper.register(
 		NAMESPACE,
 		TOKEN_REFRESH_MESH_PATH,
@@ -810,6 +854,10 @@ function unregisterMeshGeometryFitting() {
 	if (tileWrapperRegistrationId !== undefined) {
 		libWrapper.unregister(NAMESPACE, tileWrapperRegistrationId)
 		tileWrapperRegistrationId = undefined
+	}
+	if (tokenRingPackerRegistrationId !== undefined) {
+		libWrapper.unregister(NAMESPACE, tokenRingPackerRegistrationId)
+		tokenRingPackerRegistrationId = undefined
 	}
 
 	for (const mesh of getFittedMeshes()) {

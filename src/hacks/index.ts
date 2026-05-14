@@ -15,6 +15,7 @@ import { enableWallSpriteCaching } from './wallSpriteCaching.ts'
 
 Hooks.once('setup', () => {
 	setupWindowApi()
+	// enableTokenRingShaderDebugTint()
 	enableControlIconCaching()
 	enableDnD5eOptimizations()
 	enableGeneralizedOooRendering()
