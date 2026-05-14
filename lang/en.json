@@ -18,7 +18,7 @@
 
 			"precomputed-noise-textures": {
 				"name": "Optimize animated lights",
-				"hint": "Enable shader optimizatios of certain animated lights (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, ...). Greatly improves performance for scenes with many animated lights."
+				"hint": "Enable shader optimizations of certain animated lights (Bewitching Wave, Fairy Light, Ghostly Light, Smoke Patch, ...). Greatly improves performance for scenes with many animated lights."
 			},
 
 			"reduce-lighting-resolution": {
@@ -38,7 +38,7 @@
 
 			"wall-sprite-caching": {
 				"name": "Cache Wall Graphics as Sprites",
-				"hint": "Optimizes drawing of wall UI segments by replacing the PIXI.Graphics objects with pre-baked sprites. Dramatically increaes performance when the walls layer is active."
+				"hint": "Optimizes drawing of wall UI segments by replacing the PIXI.Graphics objects with pre-baked sprites. Dramatically increases performance when the walls layer is active."
 			},
 
 			"token-layer-cache": {
@@ -53,7 +53,7 @@
 
 			"dnd5e-optimizations": {
 				"name": "Enable D&D 5e specific optimizations",
-				"hint": "Optimizes D&D 5e specific features. replaces the Map Location note marker with an optimized version. Greatly improves performance in scenes with many Map Location notes."
+				"hint": "Optimizes D&D 5e specific features. Replaces the Map Location note marker with an optimized version. Greatly improves performance in scenes with many Map Location notes."
 			},
 
 			"disable-app-v2-background-blur": {
