@@ -3,6 +3,7 @@
 - Updated Polish translations. Thank you @Lioheart!
 - Fixed typos in english translations. Thank you @nschoenwald
 - Fix issue with rendering artifacts in tokens with dynamic token ring. Thanks @nschoenwald!
+- Added warning when ember optimizations are enabled and a untested version of ember is detected
 
 ## 0.12.4
 

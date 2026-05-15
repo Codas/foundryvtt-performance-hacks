@@ -48,7 +48,8 @@
 
 			"ember-shader-optimizations": {
 				"name": "Optimize Ember Shaders",
-				"hint": "Optimizes shaders from the Ember module. Dramatically improves performance in the region map, world map and various other scenes."
+				"hint": "Optimizes shaders from the Ember module. Dramatically improves performance in the region map, world map and various other scenes.",
+				"emberVersionWarning": "Prime Performance and especially Ember shader optimizations are only tested with Ember version 0.5.1. Please DISABLE THIS MODULE before reporting any issues to the Ember team."
 			},
 
 			"dnd5e-optimizations": {

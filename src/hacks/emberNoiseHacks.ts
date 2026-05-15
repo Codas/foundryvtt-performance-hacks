@@ -1,3 +1,4 @@
+import { NAMESPACE } from 'src/constants.ts'
 import { SETTINGS } from 'src/settings/constants.ts'
 import { getSetting } from 'src/settings/settings.ts'
 import { FOUNDRY_API } from 'src/utils/foundryShim.ts'
@@ -275,17 +276,27 @@ function patchPollenGlitterShader() {
 // #region Register EmberNoiseHack
 
 function registerEmberNoiseHack() {
-	const isEmber = !!game.modules.get('ember')?.active
+	const emberModule = game.modules.get('ember')
+	const isEmber = !!emberModule?.active
 
 	if (!isEmber) {
 		return
 	}
 
-	const enabled = getSetting(SETTINGS.PrecomputedNoiseTextures)
 	const emberEnabled = getSetting(SETTINGS.EmberShaderOptimizations)
 
-	if (!enabled || !emberEnabled || !FOUNDRY_API.hasCanvas) {
+	if (!emberEnabled || !FOUNDRY_API.hasCanvas) {
 		return
+	}
+
+	// Warn if Ember version > 0.5.1 (only tested against that version)
+	if (emberModule.version && foundry.utils.isNewerVersion(emberModule.version, '0.5.0')) {
+		Hooks.once('ready', () => {
+			ui.notifications?.warn(`${NAMESPACE}.settings.${SETTINGS.EmberShaderOptimizations}.emberVersionWarning`, {
+				permanent: true,
+				localize: true,
+			})
+		})
 	}
 
 	// apply pixi 3d textures hack
