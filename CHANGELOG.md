@@ -1,3 +1,9 @@
+## 0.12.5
+
+- Updated Polish translations. Thank you @Lioheart!
+- Fixed typos in english translations. Thank you @nschoenwald
+- Fix issue with rendering artifacts in tokens with dynamic token ring. Thanks @nschoenwald!
+
 ## 0.12.4
 
 - Finally manage to support both v13 and v14?
