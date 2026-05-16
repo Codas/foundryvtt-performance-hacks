@@ -48,7 +48,8 @@
 
 			"ember-shader-optimizations": {
 				"name": "Optymalizacja shaderów Ember",
-				"hint": "Optymalizuje shadery z modułu Ember. Znacznie poprawia wydajność w mapie regionu, mapie świata i wielu innych scenach."
+				"hint": "Optymalizuje shadery z modułu Ember. Znacznie poprawia wydajność w mapie regionu, mapie świata i wielu innych scenach.",
+				"emberVersionWarning": "Optymalizacje funkcji Prime Performance, a zwłaszcza szaderów Ember, zostały przetestowane wyłącznie w wersji Ember 0.5.1. Prosimy o WYŁĄCZENIE TEGO MODUŁU przed zgłoszeniem jakichkolwiek problemów zespołowi Ember."
 			},
 
 			"dnd5e-optimizations": {
