@@ -1,3 +1,8 @@
+## 0.12.6
+- Updated Polish translations. Thank you @Lioheart!
+- Fix issue with backdrop blur removal not working in certain circumstances
+
+
 ## 0.12.5
 
 - Updated Polish translations. Thank you @Lioheart!
