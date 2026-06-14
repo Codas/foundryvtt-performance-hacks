@@ -1,11 +1,9 @@
 {
 	"id": "fvtt-perf-optim",
 	"title": "Prime Performance",
-	"version": "0.12.6",
+	"version": "0.12.7",
 	"description": "Provides a collection of unofficial performance optimizations and hacks for foundry vtt.",
-	"esmodules": [
-		"dist/fvtt-perf-optim.js"
-	],
+	"esmodules": ["dist/fvtt-perf-optim.js"],
 	"languages": [
 		{
 			"lang": "en",
@@ -38,9 +36,7 @@
 			"flags": {}
 		}
 	],
-	"styles": [
-		"styles/disable-blur.css"
-	],
+	"styles": ["styles/disable-blur.css"],
 	"compatibility": {
 		"minimum": "12.324",
 		"verified": "14.361",

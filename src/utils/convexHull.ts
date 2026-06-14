@@ -268,6 +268,51 @@ function hullWithPadding(hull: Float32Array, paddingUV: number): Float32Array {
 // #endregion
 
 // ============================================================================
+// #region Mesh clipping to original bounding box
+
+/**
+ * Input polygon is assumed to be in CCW order
+ * Returns a new flat array (may be empty if the polygon is fully outside).
+ */
+function clipPolygonToHalfPlane(pts: number[], ax: number, ay: number, c: number): number[] {
+	const result: number[] = []
+	const n = pts.length >> 1
+	if (n === 0) return result
+
+	for (let i = 0; i < n; i++) {
+		const x1 = pts[i * 2]
+		const y1 = pts[i * 2 + 1]
+		const x2 = pts[((i + 1) % n) * 2]
+		const y2 = pts[((i + 1) % n) * 2 + 1]
+		const d1 = ax * x1 + ay * y1 - c // <= 0 means inside
+		const d2 = ax * x2 + ay * y2 - c
+
+		if (d1 <= 0) result.push(x1, y1) // current vertex is inside
+
+		if ((d1 < 0 && d2 > 0) || (d1 > 0 && d2 < 0)) {
+			// Edge crosses the boundary — insert the exact intersection point.
+			const t = d1 / (d1 - d2)
+			result.push(x1 + t * (x2 - x1), y1 + t * (y2 - y1))
+		}
+	}
+	return result
+}
+function clipToUnitSquare(pts: Float32Array): Float32Array {
+	if (pts.length < 6) return pts
+	let poly = Array.from(pts)
+	poly = clipPolygonToHalfPlane(poly, -1, 0, 0) // x >= 0  →  -x <= 0
+	if (poly.length < 6) return new Float32Array(poly)
+	poly = clipPolygonToHalfPlane(poly, 1, 0, 1) //  x <= 1
+	if (poly.length < 6) return new Float32Array(poly)
+	poly = clipPolygonToHalfPlane(poly, 0, -1, 0) // y >= 0  →  -y <= 0
+	if (poly.length < 6) return new Float32Array(poly)
+	poly = clipPolygonToHalfPlane(poly, 0, 1, 1) //  y <= 1
+	return new Float32Array(poly)
+}
+
+// #endregion
+
+// ============================================================================
 // #region Public API
 
 /**
@@ -279,7 +324,7 @@ export function getBlobOutlinePoints(image: HTMLImageElement | ImageBitmap): Flo
 	if (raw.length === 0) {
 		return raw
 	}
-	return simplifyConvexHull(hullWithPadding(raw, HULL_PADDING), HULL_SIMPLIFY_TARGET)
+	return clipToUnitSquare(simplifyConvexHull(hullWithPadding(raw, HULL_PADDING), HULL_SIMPLIFY_TARGET))
 }
 
 /**
@@ -337,7 +382,9 @@ export function computeUnionHull(rawPointSets: Float32Array[]): Float32Array {
 	if (allPoints.length === 0) {
 		return new Float32Array(0)
 	}
-	return simplifyConvexHull(hullWithPadding(convexHull(allPoints), HULL_PADDING), HULL_SIMPLIFY_TARGET)
+	return clipToUnitSquare(
+		simplifyConvexHull(hullWithPadding(convexHull(allPoints), HULL_PADDING), HULL_SIMPLIFY_TARGET),
+	)
 }
 
 // #endregion

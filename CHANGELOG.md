@@ -1,7 +1,9 @@
+## 0.12.7
+- Fix edge-case issues with optimized meshes exceeding original mesh bounds
+
 ## 0.12.6
 - Updated Polish translations. Thank you @Lioheart!
 - Fix issue with backdrop blur removal not working in certain circumstances
-
 
 ## 0.12.5
 
