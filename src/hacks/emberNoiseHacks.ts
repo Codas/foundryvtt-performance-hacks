@@ -18,6 +18,7 @@ const patchedShaders = new WeakSet<object>()
 // #endregion
 
 const NOISE_REGEX = /float noise\(in vec2 uv\)[\s\S]*?\}/
+const KNOWN_GOOD_EMBER_VERSION = '0.6.0'
 
 // ============================================================================
 // #region Patch KaleidoscopeSamplerShader
@@ -320,7 +321,7 @@ function showEmberVersionWarning(currentVersion: string) {
 }
 
 function checkEmberVersion(currentVersion: string | null) {
-	if (!game.user.isGM || !currentVersion || !foundry.utils.isNewerVersion(currentVersion, '0.5.0')) {
+	if (!game.user.isGM || !currentVersion || !foundry.utils.isNewerVersion(currentVersion, KNOWN_GOOD_EMBER_VERSION)) {
 		return
 	}
 
