@@ -49,7 +49,15 @@
 			"ember-shader-optimizations": {
 				"name": "Optimize Ember Shaders",
 				"hint": "Optimizes shaders from the Ember module. Dramatically improves performance in the region map, world map and various other scenes.",
-				"emberVersionWarning": "Prime Performance and especially Ember shader optimizations are only tested with Ember version 0.5.1. Please DISABLE THIS MODULE before reporting any issues to the Ember team."
+				"emberVersionWarningTitle": "Prime Performance: Unverified Ember Version",
+				"emberVersionWarningMessage": "Prime Performance's Ember shader optimizations have not been verified with Ember {currentVersion}. Due to Ember's rapid development, these optimizations may not work correctly with this version. Please disable Prime Performance before reporting related issues to the Ember team.",
+				"emberVersionWarningSuppress": "Suppress Warnings for Ember {currentVersion}",
+				"emberVersionWarningSuppressed": "Warnings for Ember {currentVersion} and earlier versions have been suppressed."
+			},
+
+			"ember-version-warning-suppressed-through": {
+				"name": "Suppress Ember Warnings Through Version",
+				"hint": "Do not show compatibility warnings for this Ember version or any earlier version. Clear the field to restore all warnings."
 			},
 
 			"dnd5e-optimizations": {

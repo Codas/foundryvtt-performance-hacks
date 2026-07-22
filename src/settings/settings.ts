@@ -232,6 +232,15 @@ Hooks.on('init', () => {
 		default: true,
 	})
 
+	game.settings.register(NAMESPACE, SETTINGS.EmberVersionWarningSuppressedThrough, {
+		name: `${NAMESPACE}.settings.${SETTINGS.EmberVersionWarningSuppressedThrough}.name`,
+		hint: `${NAMESPACE}.settings.${SETTINGS.EmberVersionWarningSuppressedThrough}.hint`,
+		scope: 'world',
+		config: !!game.modules.get('ember')?.active,
+		type: String,
+		default: '',
+	})
+
 	// #endregion
 
 	// #region Disable App V2 background blur

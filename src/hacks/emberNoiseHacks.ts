@@ -273,6 +273,68 @@ function patchPollenGlitterShader() {
 // #endregion
 
 // ============================================================================
+// #region Ember version warning
+
+function showEmberVersionWarning(currentVersion: string) {
+	const localizationPrefix = `${NAMESPACE}.settings.${SETTINGS.EmberShaderOptimizations}`
+	const format = (key: string) =>
+		foundry.utils.escapeHTML(game.i18n.localize(`${localizationPrefix}.${key}`, { currentVersion }))
+	const buttonAction = 'suppress-ember-version-warning'
+
+	document.addEventListener('click', async (event) => {
+		if (!(event.target instanceof Element)) {
+			return
+		}
+		const button = event.target.closest<HTMLButtonElement>(`button[data-action="${buttonAction}"]`)
+		const version = button?.dataset.emberVersion
+		if (!button || !version || !game.user.isGM) {
+			return
+		}
+
+		button.disabled = true
+		try {
+			const currentSuppressedThrough = getSetting<string>(SETTINGS.EmberVersionWarningSuppressedThrough)
+			if (!currentSuppressedThrough || foundry.utils.isNewerVersion(version, currentSuppressedThrough)) {
+				await game.settings.set(NAMESPACE, SETTINGS.EmberVersionWarningSuppressedThrough, version)
+			}
+			button.textContent = game.i18n.localize(`${localizationPrefix}.emberVersionWarningSuppressed`, {
+				currentVersion: version,
+			})
+		} catch (error) {
+			button.disabled = false
+			console.error('[PrimePerformance] Failed to suppress Ember version warnings', error)
+		}
+	})
+
+	ChatMessage.create({
+		content: `
+			<h3>${format('emberVersionWarningTitle')}</h3>
+			<p>${format('emberVersionWarningMessage')}</p>
+			<button type="button" data-action="${buttonAction}" data-ember-version="${foundry.utils.escapeHTML(currentVersion)}">
+				${format('emberVersionWarningSuppress')}
+			</button>
+		`,
+		speaker: { alias: 'Prime Performance' },
+		whisper: [game.user.id],
+	})
+}
+
+function checkEmberVersion(currentVersion: string | null) {
+	if (!game.user.isGM || !currentVersion || !foundry.utils.isNewerVersion(currentVersion, '0.5.0')) {
+		return
+	}
+
+	const suppressedThrough = getSetting<string>(SETTINGS.EmberVersionWarningSuppressedThrough)
+	if (suppressedThrough && !foundry.utils.isNewerVersion(currentVersion, suppressedThrough)) {
+		return
+	}
+
+	Hooks.once('ready', () => showEmberVersionWarning(currentVersion))
+}
+
+// #endregion
+
+// ============================================================================
 // #region Register EmberNoiseHack
 
 function registerEmberNoiseHack() {
@@ -289,15 +351,7 @@ function registerEmberNoiseHack() {
 		return
 	}
 
-	// Warn if Ember version > 0.5.1 (only tested against that version)
-	if (emberModule.version && foundry.utils.isNewerVersion(emberModule.version, '0.5.0')) {
-		Hooks.once('ready', () => {
-			ui.notifications?.warn(`${NAMESPACE}.settings.${SETTINGS.EmberShaderOptimizations}.emberVersionWarning`, {
-				permanent: true,
-				localize: true,
-			})
-		})
-	}
+	checkEmberVersion(emberModule.version)
 
 	// apply pixi 3d textures hack
 	applyPixi3DPatch()

@@ -11,6 +11,7 @@ export enum SETTINGS {
 	WallSpriteCaching = 'wall-sprite-caching',
 	TokenLayerCache = 'token-layer-cache',
 	EmberShaderOptimizations = 'ember-shader-optimizations',
+	EmberVersionWarningSuppressedThrough = 'ember-version-warning-suppressed-through',
 	DnD5eOptimizations = 'dnd5e-optimizations',
 }
 
