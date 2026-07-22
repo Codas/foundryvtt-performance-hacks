@@ -26,18 +26,6 @@ export function applyPixi3DPatch(): void {
 }
 
 /**
- * Return the index one past the last non-null entry in boundTextures, which is where we can safely
- * bind a 3D texture without conflicting with PixiJS's tracking.
- */
-function findUnitAfterPixi(boundTex: unknown[] | undefined): number {
-	if (!boundTex) {
-		return 0
-	}
-	const lastIdx = boundTex.findLastIndex((tex) => !!tex)
-	return lastIdx === -1 ? 0 : lastIdx + 1
-}
-
-/**
  * Patch ShaderSystem.prototype.syncUniformGroup to:
  * 1. Detect our PIXI3DTexture instances in uniforms
  * 2. Bind them as TEXTURE_3D to their reserved unit
@@ -62,6 +50,7 @@ function patchShaderSystem(): void {
 		syncData?: any,
 	) {
 		const gl = this.gl as WebGL2RenderingContext
+		const textureSystem = (this as any).renderer?.texture
 
 		// Unbind TEXTURE_3D from units used in the previous draw. As PIXI does not know about our
 		// 3d textures, it will freely reuse these for 2d texture bindings, causing gl errors
@@ -71,6 +60,9 @@ function patchShaderSystem(): void {
 			gl.bindTexture(gl.TEXTURE_3D, null)
 		}
 		prev3DUnitsMap.delete(this)
+		if (prev3DUnits.length > 0) {
+			textureSystem.currentLocation = -1
+		}
 
 		// remove PIXI3DTexture entries from uniforms so that the original syncUniformGroup doesn't
 		// see them
@@ -106,9 +98,13 @@ function patchShaderSystem(): void {
 			return
 		}
 
-		// Place 3D textures at units after the highest unit PIXI is currently using.
-		const boundTex: unknown[] | undefined = (this as any).renderer?.texture?.boundTextures
-		let cursor = findUnitAfterPixi(boundTex)
+		// Pixi assigns sampler units sequentially through syncData.textureCount for the current shader.
+		// Its boundTextures array also contains stale bindings from prior draws and cannot be used here.
+		let cursor = syncData?.textureCount ?? 0
+		const maxTextureUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS) as number
+		if (cursor + removed.length > maxTextureUnits) {
+			throw new Error('[PrimePerformance] No texture units available for 3D shader textures')
+		}
 		const used3DUnits: number[] = []
 
 		for (const { key, val } of removed) {
@@ -116,7 +112,6 @@ function patchShaderSystem(): void {
 			used3DUnits.push(unit)
 
 			gl.activeTexture(gl.TEXTURE0 + unit)
-			gl.bindTexture(gl.TEXTURE_2D, null)
 			gl.bindTexture(val.target, val.glTexture)
 
 			const loc = gl.getUniformLocation(webglProgram, key)
@@ -126,6 +121,10 @@ function patchShaderSystem(): void {
 				console.warn('[pixi-patch] getUniformLocation returned null for', key)
 			}
 		}
+		if (syncData) {
+			syncData.textureCount = cursor
+		}
+		textureSystem.currentLocation = -1
 
 		// Remember which units we occupied so they can be cleared before the next draw.
 		prev3DUnitsMap.set(this, used3DUnits)
