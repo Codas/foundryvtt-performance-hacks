@@ -1,3 +1,9 @@
+## 0.12.8
+- Change ember version warning to a GM-only chat message and allow to mark the current version as working to reduce the version warning spamm. Thank you @thepting for the suggestion.
+- Fix some edge case issues with optimnized ember noise textures
+- Mark version 0.6.0 of ember as a known working version
+- Fix rescaling tokens using the subject scale breaking when "Fit Token & Tile Mesh Geometry" is active. Thank you @nschoenwald for the report.
+
 ## 0.12.7
 - Fix edge-case issues with optimized meshes exceeding original mesh bounds
 
