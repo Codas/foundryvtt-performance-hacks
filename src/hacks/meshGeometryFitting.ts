@@ -228,9 +228,10 @@ function getOrComputeRingPolygon(texture: PIXI.Texture, ring: TokenRing): Polygo
 		return null
 	}
 
-	// Cache key incorporates both the subject texture and the ring/bkg frame names
-	// so different ring sizes on the same art get separate hulls.
-	const key = `${sk.key}|ring:${ring.ringName}|bkg:${ring.bkgName}`
+	// The fitted hull depends on both ring asset frames and their current subject/ring scaling.
+	const key =
+		`${sk.key}|ring:${ring.ringName}|bkg:${ring.bkgName}` +
+		`|textureScale:${ring.textureScaleAdjustment}|scale:${ring.scaleCorrection}`
 
 	if (polygonCache.has(key)) {
 		const cached = polygonCache.get(key) ?? null
@@ -737,10 +738,12 @@ export function getTokenMeshWorldPolygon(token: unknown): Float32Array | null {
 // #region Registration
 
 const TOKEN_REFRESH_MESH_PATH = 'CONFIG.Token.objectClass.prototype._refreshMesh'
+const TOKEN_REFRESH_SIZE_PATH = 'CONFIG.Token.objectClass.prototype._refreshSize'
 const TILE_REFRESH_MESH_PATH = 'CONFIG.Tile.objectClass.prototype._refreshMesh'
 const TOKEN_RING_PACKER_PATH = 'foundry.canvas.rendering.shaders.TokenRingSamplerShader._packInterleavedGeometry'
 
 let tokenWrapperRegistrationId: number | undefined
+let tokenSizeWrapperRegistrationId: number | undefined
 let tileWrapperRegistrationId: number | undefined
 let tokenRingPackerRegistrationId: number | undefined
 
@@ -818,6 +821,18 @@ function registerMeshGeometryFitting() {
 		},
 		'WRAPPER',
 	)
+	tokenSizeWrapperRegistrationId = libWrapper.register(
+		NAMESPACE,
+		TOKEN_REFRESH_SIZE_PATH,
+		async function (this: Token, wrapped: (...args: unknown[]) => unknown, ...args: unknown[]) {
+			const result = wrapped(...args)
+			if (result instanceof Promise) {
+				await result
+			}
+			_refreshMesh_token.call(this)
+		},
+		'WRAPPER',
+	)
 	tileWrapperRegistrationId = libWrapper.register(
 		NAMESPACE,
 		TILE_REFRESH_MESH_PATH,
@@ -850,6 +865,10 @@ function unregisterMeshGeometryFitting() {
 	if (tokenWrapperRegistrationId !== undefined) {
 		libWrapper.unregister(NAMESPACE, tokenWrapperRegistrationId)
 		tokenWrapperRegistrationId = undefined
+	}
+	if (tokenSizeWrapperRegistrationId !== undefined) {
+		libWrapper.unregister(NAMESPACE, tokenSizeWrapperRegistrationId)
+		tokenSizeWrapperRegistrationId = undefined
 	}
 	if (tileWrapperRegistrationId !== undefined) {
 		libWrapper.unregister(NAMESPACE, tileWrapperRegistrationId)
