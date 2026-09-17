@@ -65,9 +65,17 @@ function buildShadowMesh(
 	return mesh
 }
 
+function updateShadowMesh(mesh: any, cx: number, cy: number, innerRadius: number, outerRadius: number) {
+	mesh.shader.uniforms.innerRadius = innerRadius
+	mesh.shader.uniforms.outerRadius = outerRadius
+	mesh.position.set(cx - outerRadius, cy - outerRadius)
+	mesh.scale.set(outerRadius * 2, outerRadius * 2)
+}
+
 function withControlIconCaching(container: PIXI.Container, callback: () => void) {
 	if (!getSetting(SETTINGS.ControlIconCaching)) {
 		callback()
+		return
 	}
 
 	container.cacheAsBitmap = false
@@ -80,7 +88,7 @@ function withControlIconCaching(container: PIXI.Container, callback: () => void)
 // #endregion
 
 // ============================================================================
-// #region MapLocationControlIcon renderMarker (DnD5e only)
+// #region MapLocationControlIcon renderMarker (DnD5e < 6.0 on FVTT v13)
 
 function MapLocationControlIcon_renderMarker(this: any, wrapped: (...args: any[]) => void, ...args: any[]) {
 	withControlIconCaching(this, () => {
@@ -101,10 +109,52 @@ function MapLocationControlIcon_renderMarker(this: any, wrapped: (...args: any[]
 	})
 }
 
-function MapLocationControlIcon_refresh(this: any, wrapped: (...args: any[]) => void, ...args: any[]) {
+// #endregion
+
+// ============================================================================
+// #region MapLocationControlIcon _refresh (DnD5e 6.0+ on FVTT v14)
+//
+// In dnd5e 6.0+, MapLocationControlIcon extends ControlIcon and implements
+// _refresh() instead of renderMarker(). The stock _refresh uses a plain
+// PIXI.Graphics with BlurFilter(16) as the drop shadow, which prevents bitmap
+// caching because pixi v7 cannot cache containers that have filters in their
+// subtree. We replace the stock shadow with our gradient QuadMesh shader which
+// has no filters, and then apply bitmap caching.
+
+function MapLocationControlIcon__refresh(this: any, wrapped: (...args: any[]) => void, ...args: any[]) {
+	// Disable the stock blur-filter shadow before wrapped() runs so that
+	// hasFiltersInSubtree (in controlIconCaching.ts) does not detect a filter.
+	if (this.shadow && !(this.shadow instanceof foundry.canvas.containers.QuadMesh)) {
+		this.shadow.filters = null
+		this.shadow.visible = false
+	}
+
 	wrapped(...args)
-	this.removChildren()
-	this.renderMarker()
+
+	// After stock _refresh: install or update our gradient shadow mesh.
+	const innerR = this.radius + 8
+	const outerR = innerR + 40
+	const cx = this.radius + 8
+	const cy = this.radius + 8
+
+	if (this._ppShadow instanceof foundry.canvas.containers.QuadMesh) {
+		updateShadowMesh(this._ppShadow, cx, cy, innerR, outerR)
+	} else {
+		// Insert gradient shadow behind everything else (index 0).
+		this._ppShadow = this.addChildAt(buildShadowMesh(cx, cy, innerR, outerR, this.style.shadowColor, 0.25), 0)
+	}
+
+	// Re-apply correct position offset (stock _refresh on v14 doesn't do this).
+	this.x = -this.radius
+	this.y = -this.radius
+
+	// Apply bitmap caching (withControlIconCaching runs callback inline here).
+	if (getSetting(SETTINGS.ControlIconCaching)) {
+		this.cacheAsBitmap = false
+		this.cacheAsBitmapResolution = getBitmapCacheResolution()
+		this.cacheAsBitmap = true
+		managedIcons.add(this)
+	}
 }
 
 // #endregion
@@ -114,40 +164,54 @@ function MapLocationControlIcon_refresh(this: any, wrapped: (...args: any[]) => 
 
 let isEnabled = false
 
+// Track which wrapper path we actually registered, so we can unregister it cleanly.
+let registeredPath: string | null = null
+
 function registerDnD5eOptimizations() {
 	if (isEnabled) {
 		return
 	}
-	if (typeof game.system?.canvas?.MapLocationControlIcon !== 'function') {
+	const IconClass = game.system?.canvas?.MapLocationControlIcon
+	if (typeof IconClass !== 'function') {
 		return
 	}
-	isEnabled = true
-	libWrapper.register(
-		NAMESPACE,
-		'game.system.canvas.MapLocationControlIcon.prototype.renderMarker',
-		MapLocationControlIcon_renderMarker,
-		'WRAPPER',
-	)
 
-	// if (game.release.generation === 14) {
-	// 	libWrapper.register(
-	// 		NAMESPACE,
-	// 		'game.system.canvas.MapLocationControlIcon.prototype.refresh',
-	// 		MapLocationControlIcon_refresh,
-	// 		'WRAPPER',
-	// 	)
-	// }
+	try {
+		if (typeof IconClass.prototype.renderMarker === 'function') {
+			// dnd5e < 6.0 (FVTT v13 era): wrap renderMarker
+			const path = 'game.system.canvas.MapLocationControlIcon.prototype.renderMarker'
+			libWrapper.register(NAMESPACE, path, MapLocationControlIcon_renderMarker, 'WRAPPER')
+			registeredPath = path
+		} else if (typeof IconClass.prototype._refresh === 'function') {
+			// dnd5e 6.0+ (FVTT v14 era): wrap _refresh
+			const path = 'game.system.canvas.MapLocationControlIcon.prototype._refresh'
+			libWrapper.register(NAMESPACE, path, MapLocationControlIcon__refresh, 'WRAPPER')
+			registeredPath = path
+		} else {
+			// No known method to wrap; do nothing so module stays functional.
+			console.warn(
+				'[PrimePerformance] dnd5eOptimizations: MapLocationControlIcon has no known wrappable method (renderMarker or _refresh). Skipping.',
+			)
+			return
+		}
+		isEnabled = true
+	} catch (err) {
+		// Log but never let this crash the setup hook.
+		console.error('[PrimePerformance] dnd5eOptimizations: failed to register wrapper:', err)
+	}
 }
 
 function unregisterDnD5eOptimizations() {
-	if (!isEnabled) {
+	if (!isEnabled || !registeredPath) {
 		return
 	}
 	isEnabled = false
-	libWrapper.unregister(NAMESPACE, 'game.system.canvas.MapLocationControlIcon.prototype.renderMarker')
-	if (game.release.generation === 14) {
-		libWrapper.unregister(NAMESPACE, 'game.system.canvas.MapLocationControlIcon.prototype.refresh')
+	try {
+		libWrapper.unregister(NAMESPACE, registeredPath)
+	} catch (err) {
+		console.warn('[PrimePerformance] dnd5eOptimizations: failed to unregister wrapper:', err)
 	}
+	registeredPath = null
 }
 
 function enableDnD5eOptimizations() {
