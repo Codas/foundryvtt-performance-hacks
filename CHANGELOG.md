@@ -1,3 +1,6 @@
+## 0.12.9
+- Fix DnD 5e specific optimizations for DnD 5e System v6
+
 ## 0.12.8
 - Change ember version warning to a GM-only chat message and allow to mark the current version as working to reduce the version warning spamm. Thank you @thepting for the suggestion.
 - Fix some edge case issues with optimnized ember noise textures
