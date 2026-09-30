@@ -1,0 +1,85 @@
+{
+	"fvtt-perf-optim": {
+		"settings": {
+			"optimize-interface-layer-clipping": {
+				"name": "Ottimizza il rendering dell'interfaccia dei Token",
+				"hint": "Ottimizza il raggruppamento del rendering degli elementi UI dei Token. Non sono previsti peggioramenti visivi. Necessario affinché le impostazioni di caching delle barre e degli effetti dei token abbiano un impatto evidente."
+			},
+			"token-bars-caching": {
+				"name": "Cache delle barre risorse dei Token",
+				"hint": "Memorizza le barre delle risorse dei token come texture. È previsto un degrado visivo molto lieve a livelli di zoom elevati."
+			},
+			"token-effects-caching": {
+				"name": "Cache degli effetti dei Token",
+				"hint": "Memorizza nella cache la barra degli effetti dei token. È previsto un degrado visivo molto lieve a livelli di zoom elevati."
+			},
+			"precomputed-noise-textures": {
+				"name": "Ottimizza le luci animate",
+				"hint": "Ottimizza lo shader di alcune luci animate (Onda Incantata, Luce Fatata, Luce Spettrale, Macchia di Fumo, Nebbia Turbinante, Vortice) utilizzando texture di rumore FBM precomputate. L'impatto visivo è minimo, ma il guadagno in prestazioni è significativo, soprattutto su GPU meno potenti."
+			},
+			"reduce-lighting-resolution": {
+				"name": "Riduci la risoluzione degli effetti di illuminazione",
+				"hint": "Riduce la risoluzione interna degli effetti di illuminazione per migliorare le prestazioni. Può migliorare notevolmente le performance, soprattutto con molte luci o sorgenti luminose grandi. L’impatto visivo dovrebbe essere minimo, eccetto a livelli di zoom molto elevati e per alcuni effetti come la cupola esagonale, che hanno contorni molto netti. È possibile configurare la scala di rendering per i singoli livelli di illuminazione nel menu impostazioni."
+			},
+			"spritesheet-substitution": {
+				"name": "Sostituzione texture con spritesheet",
+				"hint": "Sostituisce le icone SVG di base e altri elementi grafici con spritesheet ottimizzati. Questo può migliorare le prestazioni e l’uso delle risorse durante la visualizzazione di molte icone UI per diari, luci, porte, ecc."
+			},
+			"spritesheet-substitution-custom": {
+				"name": "Spritesheet personalizzati",
+				"label": "Gestisci Spritesheet Personalizzati",
+				"hint": "Gli spritesheet personalizzati possono essere usati per sostituire ulteriori icone e texture base o personalizzate, ad esempio segnalini di condizione, arte dei token o tiles, per migliorare le prestazioni.",
+				"menu": {
+					"add": "Aggiungi Spritesheet Personalizzato",
+					"spritesheet": "Seleziona Spritesheet Personalizzato",
+					"delete": "Elimina Spritesheet Personalizzato",
+					"title": "Gestisci Spritesheet Personalizzati",
+					"warn-no-src": "Devi selezionare una sorgente spritesheet per aggiungerla",
+					"warn-no-json": "Il file selezionato deve essere un file JSON valido di spritesheet pixi.js",
+					"warn-inalid-asset": "Il file selezionato non contiene dati di spritesheet pixi.js validi",
+					"warn-init-failed": "Prime Performance: impossibile caricare gli spritesheet di sostituzione delle icone predefiniti. Le ottimizzazioni con spritesheet saranno disabilitate. Controlla la console per maggiori dettagli.",
+					"warn-custom-spritesheets-failed": "Prime Performance: impossibile caricare uno o più spritesheet personalizzati. Controlla la console per maggiori dettagli."
+				}
+			},
+			"token-ring-spritesheet-support": {
+				"name": "Supporto Spritesheet dinamici per i Token",
+				"hint": "Permette ai token con anelli dinamici di essere sostituiti con texture da spritesheet. Necessario solo se usi anelli dinamici dei token e la funzione di sostituzione con spritesheet per le texture dei token."
+			},
+			"disable-app-v2-background-blur": {
+				"name": "Disabilita effetti di sfocatura dello sfondo",
+				"hint": "Disabilita gli effetti di sfocatura dello sfondo nell’app v2 e in tutti gli altri elementi UI. Può migliorare notevolmente le prestazioni, soprattutto su GPU meno potenti e sistemi operativi come MacOS."
+			},
+
+			"custom-render-scale": {
+				"name": "Scala di rendering degli effetti di illuminazione",
+				"label": "Configura la Scala di Rendering",
+				"hint": "Configura la scala di rendering per gli effetti di illuminazione sulla griglia. Può migliorare significativamente le prestazioni, soprattutto su GPU meno potenti. L’impatto visivo varia da impercettibile a molto evidente, a seconda del livello di effetti. Attiva \"Riduci la risoluzione degli effetti di illuminazione\" affinché questa configurazione funzioni.",
+				"menu": {
+					"title": "Scala di Rendering Personalizzata",
+					"label": "Scala di Rendering Personalizzata",
+					"description": "Configura scale di rendering individuali per diversi effetti di illuminazione. La scala è un moltiplicatore della risoluzione interna degli effetti. Un valore di 100 significa 100% della risoluzione, quindi nessuna modifica. Un valore di 50 significa che la risoluzione viene dimezzata, e così via.",
+					"confirm": "Conferma",
+					"cancel": "Reimposta",
+					"FIELDS": {
+						"background": {
+							"label": "Sfondo",
+							"hint": "Scala di rendering degli effetti di sfondo. Alto impatto visivo, impatto minimo sulle prestazioni. Valore ottimizzato predefinito: 100%."
+						},
+						"illumination": {
+							"label": "Illuminazione",
+							"hint": "Scala di rendering degli effetti di illuminazione. Impatto visivo molto basso, impatto medio sulle prestazioni. Valore ottimizzato predefinito: 40%."
+						},
+						"coloration": {
+							"label": "Colorazione",
+							"hint": "Scala di rendering degli effetti di colorazione. Impatto visivo da medio a molto alto, a seconda della tecnica. Alto impatto sulle prestazioni. Valore ottimizzato predefinito: 100%."
+						},
+						"darkness": {
+							"label": "Oscurità",
+							"hint": "Scala di rendering degli effetti di oscurità. Impatto visivo minimo, impatto minimo sulle prestazioni. Valore ottimizzato predefinito: 50%."
+						}
+					}
+				}
+			}
+		}
+	}
+}
